@@ -15,9 +15,6 @@ declare module "next-auth" {
     }
 }
 
--
-
-
 async function getUser (username: string): Promise<UserType | undefined> {
     try {
         const myreq = `select 

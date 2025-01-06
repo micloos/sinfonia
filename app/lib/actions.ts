@@ -5,10 +5,10 @@ import { mssql } from '@/app/lib/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import md5 from 'md5';
+import { AuthError } from 'next-auth';
 
 
 import { signIn } from '@/auth';
-import  { AuthError } from 'next-auth'; 
 
 const UserFormSchema = z.object({
 	id: z.string(),
@@ -166,9 +166,9 @@ export async function authenticate(
 	formData: FormData,
 ) {
 	console.log ( "DBG: [", Date(),"] lib/actions, authenticate",prevState,formData);
-	{/* try {  */}
+	try {  
 		await signIn('credentials', formData);
-	{/* }} catch(error) {
+	} catch(error) {
 		console.log ( "DBG: [", Date(),"] lib/actions, authenticate error",error);
 		if (error instanceof AuthError) {
 			switch (error.type) {
@@ -179,7 +179,7 @@ export async function authenticate(
 			}
 					}
 		throw error;
-	}*/}
+	}
 }
 
 export async function deleteReuniao (id: string)
