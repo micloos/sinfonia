@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  sinfonia:
+    image: sinfonia
+    build: .
+    container_name: sinfonia
+    env_file: ".env"
+    environment:
+      NODE_ENV: production
+    
+  nginx: 
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certificates/privkey.pem:/etc/nginx/ssl/privkey.pem
+      - ./certificates/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+    depends_on:
+      - sinfonia
