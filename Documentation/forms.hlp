@@ -1,0 +1,18 @@
+Usuarios:
+   create-form  -> const [state, formAction] = useActionState(createUser, initialState);
+   actions:  export type UserState = {}
+             export async function createUser (prevState: UserState, formData: FormData)
+{
+    return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields, failed to create',
+	}
+return {
+			message: 'Database Error: Nao criou usuario.'
+		};
+}
+
+Reunioes:
+   create-form -> const [state, formAction] = useActionState(createReuniao, initialState);
+   actions: export type ReuniaoState = {}
+            export async function createReuniao (prevState: ReuniaoState, formData:FormData)

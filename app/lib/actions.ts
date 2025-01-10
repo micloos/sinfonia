@@ -5,10 +5,11 @@ import { mssql } from '@/app/lib/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import md5 from 'md5';
+{/*
 import { AuthError } from 'next-auth';
-
-
 import { signIn } from '@/auth';
+*/}
+
 
 const UserFormSchema = z.object({
 	id: z.string(),
@@ -31,6 +32,7 @@ const UserFormSchema = z.object({
 	nivel: z.number().min(1).max(3),
 });
 
+
 {/*
 const ParticipanteListSchema = z.object({
 	id: z.number(),
@@ -38,18 +40,7 @@ const ParticipanteListSchema = z.object({
 })
 	*/}
 	
-export type ReuniaoState = {
-	errors?: {
-		d_ini?: string[];
-		d_end?: string[];
-		sala?: string[];
-		id?: number[];
-		predio?: string[];
-		d_lim?: string[];
-		active?: number[];
-	};
-	message?: string | null;
-};
+
 
 export type UserState = {
 	errors?: {
@@ -66,7 +57,7 @@ const CreateUser = UserFormSchema.omit({id: true});
 
 export async function createUser (prevState: UserState, formData: FormData) 
 { 
-	console.log("function createUser, formData=",formData);
+	console.log ( "DBG: [", Date(),"] lib/actions createUser, formData",formData);
 	const validatedFields = CreateUser.safeParse({
 		cpf: formData.get('cpf'),
 		nome: formData.get('nome'),
@@ -74,7 +65,7 @@ export async function createUser (prevState: UserState, formData: FormData)
 		password: formData.get('password'),
 		nivel: formData.get('nivel'),
 	});
-	console.log("functionC createUser, validatedFields=", validatedFields);
+	console.log ( "DBG: [", Date(),"] lib/actions createUser, validateFields",validatedFields);
 
 	if (!validatedFields.success) {
 		console.log("functionC createUser, validatedFields.error", validatedFields.error.flatten().fieldErrors);
@@ -82,7 +73,7 @@ export async function createUser (prevState: UserState, formData: FormData)
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: 'Missing Fields, failed to create',
 		}
-		};
+	}
 	
 	const cpf = validatedFields.data.cpf;
 	const nome = validatedFields.data.nome.toString();
@@ -90,13 +81,13 @@ export async function createUser (prevState: UserState, formData: FormData)
 	const username = validatedFields.data.username.toString();
 	const nivel = validatedFields.data.nivel;
 
-	console.log("function createUser: cpf, password",cpf,password );
+	console.log("DBG: [", Date(),"] lib/actions createUser: cpf, password",cpf,password );
 		
 	try {
 		const myreq = `
-	INSERT INTO REUNIAO_T3100_UsuarioSistemaReuniao (Cd_UsuarioSistemaReuniao, Nm_UsuarioSistemaReuniao, Nr_SenhaAcessoUsuarioSistemaReuniao, Ds_LoginAcessoUsuarioSistemaReuniao, Cd_NivelUsuarioSistema)
-	VALUES (${cpf}, '${nome}', '${password}', '${username}',${nivel})
-	`;
+		INSERT INTO REUNIAO_T3100_UsuarioSistemaReuniao (Cd_UsuarioSistemaReuniao, Nm_UsuarioSistemaReuniao, Nr_SenhaAcessoUsuarioSistemaReuniao, Ds_LoginAcessoUsuarioSistemaReuniao, Cd_NivelUsuarioSistema)
+		VALUES (${cpf}, '${nome}', '${password}', '${username}',${nivel})
+		`;
 	console.log(myreq);
 	const answer = await mssql(myreq);
 	console.log("function createUser: answer=",answer);
@@ -109,7 +100,7 @@ export async function createUser (prevState: UserState, formData: FormData)
 	}
 
 
-	redirect('/administracao/usuarios');
+	redirect('/sinfonia/administracao/usuarios');
 }
 
 const UpdateUser = UserFormSchema.omit({ id: true, cpf: true});
@@ -160,7 +151,7 @@ export async function deleteParticipantesList (id: number)
 	revalidatePath('/administracao/participantes');
 }
 
-
+{/*
 export async function authenticate(
 	prevState: string | undefined,
 	formData: FormData,
@@ -181,6 +172,8 @@ export async function authenticate(
 		throw error;
 	}
 }
+*/}
+
 
 export async function deleteReuniao (id: string)
 {
@@ -195,6 +188,27 @@ export async function escParticipant (id: string)
 	console.log ("escParticipant =", goto);
 	redirect (goto);
 }
+
+export type ReuniaoState = {
+	errors?: {
+		d_ini?: string[];
+		sala?: string[];
+		id?: string[];
+		predio?: string[];
+		d_lim?: string[];
+	};
+	message?: string | null;
+} 
+
+const ReuniaoFormSchema = z.object ({
+	id: z.string(),
+	d_ini: z.string().datetime(),
+	d_lim: z.string().datetime(),
+	predio: z.string().max(40),
+	sala: z.string().max(40),
+	active: z.enum(['S','N']),
+	d_end: z.string().datetime(),
+})
 
 export async function editReuniao (id: string)
 {
@@ -222,11 +236,53 @@ export async function comporPauta (id: string)
 	redirect ('/proto');
 }
 
+const CreateReuniao = ReuniaoFormSchema.omit({active: true, d_end: true});
+
 export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 {
-	console.log("createReuniao prevState",prevState)
-	console.log("createReuniao id=",formData.get('id'));
-	redirect ('/proto');
+	console.log ( "DBG: [", Date(),"] lib/actions createReuniao, formData",formData);	
+	
+	const validatedFields = CreateReuniao.safeParse({
+		id: formData.get('id'),
+		d_ini: formData.get('d_ini'),
+		d_lim: formData.get('d_lim'),
+		predio: formData.get('predio'),
+		sala: formData.get('sala'),
+	});
+
+	console.log ( "DBG: [", Date(),"] lib/actions createReuniao, validatedFields", validatedFields);
+
+	if(!validatedFields.success) {
+		console.log ( "DBG: [", Date(),"] lib/actions createReuniao, validatedFields.error", validatedFields.error.flatten().fieldErrors);
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields, failed to create',
+		}
+	}
+
+	const d_ini = validatedFields.data.d_ini;
+	const d_lim = validatedFields.data.d_lim;
+	const id = validatedFields.data.id;
+	const predio = validatedFields.data.predio;
+	const sala = validatedFields.data.sala;
+	console.log ( "DBG: [", Date(),"] lib/actions createReuniao, d_ini", d_ini);
+	
+	try {
+		const myreq = `
+		INSERT INTO REUNIAO_T1000_Reuniao 
+		    (Cd_Reuniao, Dt_inicialReuniao, Dt_LimiteInclusaoItemReuniao, Ds_SalaReuniao, Ds_PredioSalaReuniao, Ind_ReaberturaReuniao)
+			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N')
+		`;
+		const answer = await mssql(myreq);
+		console.log ( "DBG: [", Date(),"] lib/actions createReuniao, answer", answer);
+	} catch (error) {
+		console.log ( "DBG: [", Date(),"] lib/actions createReuniao, error", error);
+		return {
+			message: 'Database Error: Nao criou Reuniao'
+		};
+	}
+	
+	redirect('/sinfonia/reuniao');
 }
 
 export async function updateReuniao (id: string)

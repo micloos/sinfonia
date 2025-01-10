@@ -1,12 +1,13 @@
 export type Reunioes = {
+	id: number;
 	d_ini: string;
 	d_end: string;
 	sala: string;
-	id: number;
 	predio: string;
 	d_lim: string;
-	active: number;
-};
+	active: string;
+	sequencia: number|null;
+} 
 
 export type LinksType = {
 	name: string;
