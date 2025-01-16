@@ -28,9 +28,8 @@ export default function EditReuniaoForm({
 
   const [reuniaoDate, setReuniaoDate] = useState(new Date(reuniao.d_ini));
   const [docDate, setDocDate] = useState(new Date(reuniao.d_lim));
-  {/* const updateReuniaoWithId = updateReuniao.bind(null, reuniao.id.toString()); */}
-  const updateReuniaoWithId = updateReuniao;
-  const ifactive = (reuniao.active == 1) ? "hidden" : "";
+  const updateReuniaoWithId = updateReuniao.bind(null, reuniao.id.toString());
+  const ifactive = Number(reuniao.active);
   console.log ("ifactive",ifactive)
   const ifsave = (withsavebutton == 0) ? "hidden" : "";
   console.log ("ifsave",ifsave)
@@ -84,14 +83,14 @@ export default function EditReuniaoForm({
           <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
-          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => setReuniaoDate(date)} />
+          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => date && setReuniaoDate(date)} />
         </div>
         
         <div className="mb-2 inline-block w-1/2">
         <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
-            <DatePicker disabled={withsavebutton == 0} locale="pt" dateFormat="dd/MM/yy" selected={docDate}  onChange={(date) => setDocDate(date)} />
+            <DatePicker disabled={withsavebutton == 0} locale="pt" dateFormat="dd/MM/yy" selected={docDate}  onChange={(date) => date && setDocDate(date)} />
         </div>
 {/*     <div className="mb-4 inline-block w-2/3">
           <label htmlFor="cpf" className="mb-2 block text-sm font-medium">
@@ -156,7 +155,7 @@ export default function EditReuniaoForm({
           >
           Voltar
           </Link>
-          <Button className = {`${ifsave}`} disabled={reuniao.active == 0} type="submit">Salvar</Button>
+          <Button className = {`${ifsave}`} disabled={Number(reuniao.active) == 0} type="submit">Salvar</Button>
          </div>
        </div>
        </div>
