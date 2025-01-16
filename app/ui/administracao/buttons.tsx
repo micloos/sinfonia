@@ -37,7 +37,7 @@ export function DeleteUser({ cpf }: { cpf: string }) {
   );
 }
 
-export function DeleteParticipantesList({ id }: { id: number }) {
+export function DeleteParticipante({ id }: { id: number }) {
 	const deleteParticipantesListWithId = deleteParticipantesList.bind(null, id);
   return (
     <form action={deleteParticipantesListWithId}>
@@ -49,7 +49,7 @@ export function DeleteParticipantesList({ id }: { id: number }) {
   );
 }
 
-export function UpdateParticipantesList({ id }: { id: number }) {
+export function UpdateParticipante({ id }: { id: number }) {
   return (
     <Link
       href={`/administracao/participantes/${id}/edit`}
@@ -60,7 +60,7 @@ export function UpdateParticipantesList({ id }: { id: number }) {
   );
 }
 
-export function CreateParticipantesList() {
+export function CreateParticipante() {
   return (
     <Link
       href="/administracao/participantes/criar"
@@ -72,8 +72,8 @@ export function CreateParticipantesList() {
   );
 }
 
-export function AddParticipante({ id, reuniao_id }: { id: number, reuniao_id: number }) {
-  console.log('Add participante: ',id,' to reuniao ',reuniao_id);
+export function AddParticipante({ id, rid }: { id: number, rid: number }) {
+  console.log('Add participante: ',id,' to reuniao ',rid);
   return (
     <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Apagar</span>

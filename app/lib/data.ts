@@ -232,41 +232,8 @@ export async function fetchParticipantesPages (query: string) {
 	}
 }
 
-export async function fetchParticipantesListPages (query: string) {
-	try {
-		const myreq = `SELECT COUNT(*) as n 
-		             FROM REUNIAO_T4000_Participantes 
-					 where 
-					   Nm_Participante like '%QQQ%' 
-					`.replace(/QQQ/g,query);
-		console.log(myreq);
-		const count = await mssql(myreq) as Numres[] ;
-	const totalPages = Math.ceil(Number(count[0].n) / ITEMS_PER_PAGE);
-	return totalPages;
-	} catch (error) {
-		console.error('Database error', error);
-		throw new Error('Failed to fetch total number of users');
-	}
-}
 
-export async function fetchParticipantes (query: string) {
-	try {
-		const myreq = `SELECT 
-						Cd_Participante as id,
-						Nm_participante as name
-					FROM REUNIAO_T4000_Participantes 
-					WHERE
-					  Nm_Participante like '%PPP%'
-					`.replace(/PPP/g,query);
-		const participantes = await mssql(myreq);
-		return participantes;
-	} catch(error) {
-		console.log ('Database error', error);
-		throw new Error('Failed to fetch Participant number');
-	}
-}
-
-export async function fetchFilteredParticipantesList (
+export async function fetchFilteredParticipantes (
 	query: string, 
 	currentPage: number,
 )  {

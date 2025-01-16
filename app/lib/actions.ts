@@ -184,7 +184,7 @@ export async function deleteReuniao (id: string)
 export async function escParticipant (id: string)
 {
 	console.log("escParticipant",id);
-	const goto =  "/reuniao/participantes/"+id+"/edit";
+	const goto =  "/reuniao/"+id+"participantes/";
 	console.log ("escParticipant =", goto);
 	redirect (goto);
 }
