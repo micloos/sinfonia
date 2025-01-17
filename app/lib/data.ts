@@ -245,7 +245,7 @@ export async function fetchFilteredParticipantes (
 				FROM REUNIAO_T4000_Participantes as u					
 				WHERE 
 					u.Nm_Participante like '%QQQ%' 
-					order by u.Nm_Participante
+					order by Dt_Atualizacao DESC
 					offset OOO rows 
 					fetch next LLL rows only
 				`.replace(/QQQ/g,query).replace (/LLL/g,ITEMS_PER_PAGE.toString()).replace (/OOO/g,offset.toString());
