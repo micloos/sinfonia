@@ -1,6 +1,7 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteUser, deleteFromParticipantesList } from '@/app/lib/actions';
+import { mylog } from '@/app/lib/mylogger';
 
 export function CreateUser() {
   return (
@@ -73,10 +74,10 @@ export function CreateParticipante() {
 }
 
 export function AddParticipante({ id, rid }: { id: number, rid: number }) {
-  console.log('Add participante: ',id,' to reuniao ',rid);
+  mylog("DBG",'/app/ui/administracao/button', 'AddParticipante' , "{id, reuniao_id}=", {id, reuniao_id});
   return (
     <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Apagar</span>
+        <span className="sr-only">Adicionar a Reuniao</span>
         <PlusIcon className="w-5" />
     </button>
   )

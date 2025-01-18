@@ -1,22 +1,13 @@
 import UserForm from '@/app/ui/administracao/usuarios/create-form';
 import { fetchNiveis } from '@/app/lib/data';
+import { mylog } from '@/app/lib/mylogger';
 
 export default async function Page() {
   const niveis = await fetchNiveis();
-  console.log(niveis);
+  mylog("DBG",'/app/ui/administracao/usuarios/create-form', 'Page' , "niveis=",niveis);
   
   return (
     <main>
-      {/* <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Users', href: '/administracao/usuarios' },
-          {
-            label: 'Edit User',
-            href: `/administracao/usuarios/${id}/edit`,
-            active: true,
-          },
-        ]}
-      /> */}
       <UserForm niveis={niveis} /> 
     </main>
   );
