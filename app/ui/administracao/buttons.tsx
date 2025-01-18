@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteUser, deleteParticipantesList } from '@/app/lib/actions';
+import { deleteUser, deleteFromParticipantesList } from '@/app/lib/actions';
 
 export function CreateUser() {
   return (
@@ -38,7 +38,7 @@ export function DeleteUser({ cpf }: { cpf: string }) {
 }
 
 export function DeleteParticipante({ id }: { id: number }) {
-	const deleteParticipantesListWithId = deleteParticipantesList.bind(null, id);
+	const deleteParticipantesListWithId = deleteFromParticipantesList.bind(null, id);
   return (
     <form action={deleteParticipantesListWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">

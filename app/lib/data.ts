@@ -1,5 +1,6 @@
 import { mssql } from '@/app/lib/db';
 import { UserType, Niveis, Numres, Reunioes } from '@/app/lib/definitions';
+import { mylog } from './mylogger';
 
 
 
@@ -15,7 +16,7 @@ export async function fetchReunioesPages (query: string, active:number) {
 		const totalPages = Math.ceil(count[0].n / ITEMS_PER_PAGE);
 		return (totalPages);
 	} catch (error) {
-		console.log ( "DBG: [", Date(),"] app/lib/data fetchReunioesPages error",error);
+		mylog ("ERROR", "app/lib/dat", "fetchReunioesPages","error=",error);
 		throw new Error('Failed to fetch Reunioes pages');
 	} 
 }
@@ -33,7 +34,7 @@ export async function fetchNextReuniao ()
 		const nextreuniao = await mssql(myreq) as correctanswer[];
 		return (nextreuniao[0].n);
 	} catch(error) {
-		console.log ( "DBG: [", Date(),"] app/lib/data fetchNextReuniao error",error);
+		mylog ("ERROR", "app/lib/dat", "fetchNextReuniao","error=",error);
 		throw new Error('Failed to fetch next Reuniao');		
 	}
 }
@@ -59,7 +60,7 @@ export async function fetchReuniaoById (
 			reunioes[0]
 		)
 	} catch (error) {
-		console.log ( "DBG: [", Date(),"] app/lib/data fetchReuniaoById error",error);
+		mylog ("ERROR", "app/lib/dat", "fetchReuniaoById","error=",error);
 		throw new Error('Failed to fetch Reunioes');
 	}
 }
@@ -76,7 +77,7 @@ export async function fetchParticipantesByReuniao (id: number)
 		const participantes = await mssql(myreq);
 		return (participantes)
 	} catch (error) {
-		console.log ( "DBG: [", Date(),"] app/lib/data fetchParticipantesByReuniao error",error);
+		mylog ("ERROR", "app/lib/dat", "fetchParticipantesByReuniao","error=",error);
 		throw new Error('Failed to fetch Reunioes');
 	}
 }
@@ -106,14 +107,14 @@ export async function fetchFilteredReunioes (
 					offset OOO rows 
 					fetch next LLL rows only
 					`.replace(/OOO/g,offset.toString()).replace(/LLL/g,ITEMS_PER_PAGE.toString()).replace(/PPP/g,query).replace(/AAA/g,active);
-		console.log ( "DBG: [", Date(),"] app/lib/data fetchfilteredReunioes myreq",myreq.replace(/\s/g," "));
+		mylog ("DBG", "app/lib/dat", "fetchFilteredReunioes","myreq=", myreq.replace(/\s/g," "));
 		const reunioes = await mssql(myreq);
-		console.log ( "DBG: [", Date(),"] app/lib/data fetchfilteredReunioes reunioes",reunioes);
+		mylog ("DBG", "app/lib/dat", "fetchFilteredReunioes","reunioes=", reunioes);
 		return (
 			reunioes
 		)
 	} catch (error) {
-		console.log('Database Error:',error);
+		mylog ("ERROR", "app/lib/dat", "fetchFilteredReunioes","error=",error);
 		throw new Error('Failed to fetch Reunioes');
 	}
 }
@@ -126,7 +127,7 @@ export async function fetchNiveis () {
 	const niveis = await mssql(myreq) as Niveis[];
 	return niveis;
 	} catch (error) {
-		console.log ('Database error', error);
+		mylog ("ERROR", "app/lib/dat", "fetchNiveis","error=",error);
 		throw new Error('Failed to fetch niveis list');
 	}
 }
@@ -147,7 +148,7 @@ export async function fetchUsersPages (query: string) {
 	const totalPages = Math.ceil(Number(count[0].n) / ITEMS_PER_PAGE);
 	return totalPages;
 	} catch (error) {
-		console.error('Database error', error);
+		mylog ("ERROR", "app/lib/dat", "fetchUsersPages","error=",error);
 		throw new Error('Failed to fetch total number of users');
 	}
 }
@@ -183,7 +184,7 @@ export async function fetchFilteredUsers (
 		users
 	)
 	} catch(error) {
-		console.log('Database Error:',error);
+		mylog ("ERROR", "app/lib/dat", "fetchFilteredUsers","error=",error);
 		throw new Error('Failed to fetch total number of users');
 	}
 }	
@@ -208,7 +209,7 @@ export async function fetchUserById (id: string) {
 			user[0]
 		)
 	} catch(error) {
-		console.log('Database Error:',error);
+		mylog ("ERROR", "app/lib/dat", "fetchUserById","error=",error);
 		throw new Error('Failed to fecth User');
 	}
 }
@@ -227,19 +228,16 @@ export async function fetchParticipantesPages (query: string) {
 		const totalPages = Math.ceil(Number(count[0].n / ITEMS_PER_PAGE));
 		return totalPages;
 	} catch(error) {
-		console.log ('Database error', error);
+		mylog ("ERROR", "app/lib/dat", "fetchParticipantesPages","error=",error);
 		throw new Error('Failed to fetch Participant number');
 	}
 }
 
 
-export async function fetchFilteredParticipantes (
-	query: string, 
-	currentPage: number,
-)  {
-        const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+export async function fetchFilteredParticipantes (query: string, currentPage: number) {
 	try {
-	const myreq = `SELECT  
+        	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+		const myreq = `SELECT  
 	                     u.Nm_Participante as name,
 						 u.Cd_Participante as id
 				FROM REUNIAO_T4000_Participantes as u					
@@ -255,7 +253,7 @@ export async function fetchFilteredParticipantes (
 		participantes
 	)
 	} catch(error) {
-		console.log('Database Error:',error);
+		mylog ("ERROR", "app/lib/dat", "fetchParticipantes","error=",error);
 		throw new Error('Failed to fetch total number of users');
 	}
 }	

@@ -20,17 +20,6 @@ console.log("Page edit Reuniao, reuniao=",reuniao)
   }
   return (
     <main>
-      {/* <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Users', href: '/administracao/usuarios' },
-          {
-            label: 'Edit User',
-            href: `/administracao/usuarios/${id}/edit`,
-            active: true,
-          },
-        ]}
-      /> 
-      */}
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
     </main>
   );
