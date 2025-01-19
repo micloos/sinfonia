@@ -12,6 +12,7 @@ import { useActionState, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
+import { mylog } from '@/app/lib/mylogger';
 import { pt } from 'date-fns/locale/pt';
 registerLocale('pt',pt);
 
@@ -21,7 +22,7 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
   
   const [reuniaoDate, setReuniaoDate] = useState(new Date());
   const [state, formAction] = useActionState(createReuniao, initialState);
-  console.log("reuniao create form state=",state);
+  mylog("DBG",'/app/ui/reuniao/create-form', 'ReuniaoForm' , "state=", state);
   const [docDate, setDocDate] = useState(new Date());
   return (
     <form action={formAction}>

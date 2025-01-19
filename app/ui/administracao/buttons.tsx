@@ -6,7 +6,7 @@ import { mylog } from '@/app/lib/mylogger';
 export function CreateUser() {
   return (
     <Link
-      href="/administracao/usuarios/criar"
+      href="/sinfonia/administracao/usuarios/criar"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">Criar Usuário</span>{' '}
@@ -18,7 +18,7 @@ export function CreateUser() {
 export function UpdateUser({ cpf }: { cpf: string }) {
   return (
     <Link
-      href={`/administracao/usuarios/${cpf}/edit`}
+      href={`/sinfonia/administracao/usuarios/${cpf}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -53,7 +53,7 @@ export function DeleteParticipante({ id }: { id: number }) {
 export function UpdateParticipante({ id }: { id: number }) {
   return (
     <Link
-      href={`/administracao/participantes/${id}/edit`}
+      href={`/sinfonia/administracao/participantes/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -64,7 +64,7 @@ export function UpdateParticipante({ id }: { id: number }) {
 export function CreateParticipante() {
   return (
     <Link
-      href="/administracao/participantes/criar"
+      href="/sinfonia/administracao/participantes/criar"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">Criar Participante</span>{' '}
@@ -74,7 +74,7 @@ export function CreateParticipante() {
 }
 
 export function AddParticipante({ id, rid }: { id: number, rid: number }) {
-  mylog("DBG",'/app/ui/administracao/button', 'AddParticipante' , "{id, reuniao_id}=", {id, reuniao_id});
+  mylog("DBG",'/app/ui/administracao/button', 'AddParticipante' , "{id, rid}=", {id, rid});
   return (
     <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Adicionar a Reuniao</span>

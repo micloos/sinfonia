@@ -128,7 +128,7 @@ export async function deleteUser (cpf: string)
 	const myreq = `DELETE from REUNIAO_T3100_UsuarioSistemaReuniao where Cd_UsuarioSistemaReuniao = ${cpf}` ;
 	mylog ("DBG", "app/lib/actions", "deleteUser", "myreq=",myreq);
 	await mssql(myreq);
-	revalidatePath('/administracao/usuarios');
+	revalidatePath('/sinfonia/administracao/usuarios');
 }
 
 export async function deleteFromParticipantesList (id: number) 
@@ -136,7 +136,7 @@ export async function deleteFromParticipantesList (id: number)
 	const myreq = `DELETE from REUNIAO_T4000_Participantes where Cd_Participante = ${id}` ;
 	mylog ("DBG", "app/lib/actions", "deleteFromParticipantesList", "myreq=",myreq);
 	await mssql(myreq);
-	revalidatePath('/administracao/participantes');
+	revalidatePath('/sinfonia/administracao/participantes');
 }
 
 {/*
@@ -184,6 +184,12 @@ export async function deleteReuniao (id: string)
 	redirect ('/proto');
 }
 
+export async function participantes (id: string)
+{
+	mylog ("DBG", "app/lib/actions", "participantes", "id=",id);
+	const goto =  "/sinfonia/reuniao/participantes/"+id+"/edit";
+	redirect (goto);
+}
 export async function escParticipant (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "participantes", "id=",id);

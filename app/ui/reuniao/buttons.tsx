@@ -1,7 +1,8 @@
 import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteReuniao, editReuniao, escParticipant, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/actions';
+import { deleteReuniao, editReuniao, escParticipant, participantes, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/actions';
 import Tooltip from '@mui/material/Tooltip';
+import { mylog } from '@/app/lib/mylogger';
 
 export function CreateReuniao() {
   return (
@@ -29,11 +30,26 @@ export function DeleteReuniao({ id }: { id: string }) {
   );
 }
 
-export function EscParticipant({ id, active}: { id: string, active: string }) {
-	const escParticipantWithId = escParticipant.bind(null, id);
-  console.log('PArticipante active',active)
+export function UpdateReuniao({ id, active }: { id: string, active: string }) {
+  mylog("DBG",'/app/ui/reuniao/buttons', 'UpdateReuniao' , "active=", active);
+  const editReuniaoWithId = editReuniao.bind(null, id);
   return (
-    <form action={escParticipantWithId}>
+    <form action={editReuniaoWithId} >
+    <Tooltip title="Editar">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Editar</span>  
+      <PencilIcon className="w-5" />
+      </button>             
+    </Tooltip>
+    </form>
+  );
+}
+
+export function Participantes({ id, active}: { id: string, active: string }) {
+	const participantesWithId = participantes.bind(null, id);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'Participantes' , "active=", active);
+  return (
+    <form action={participantesWithId}>
       <Tooltip title="Participantes">
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Participantes</span>
@@ -44,9 +60,24 @@ export function EscParticipant({ id, active}: { id: string, active: string }) {
   );
 }
 
+export function EscParticipant({ id, active}: { id: string, active: string }) {
+  const escParticipantWithId = escParticipant.bind(null, id);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'EscParticipantes' , "active=", active);
+  return (
+    <form action={escParticipantWithId}>
+      <Tooltip title="Participantes">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Participantes</span>
+        <PlusIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+}
+
 export function EscOrdemDoDia({ id, active }: { id: string, active: string }) {
 	const escOrdemDoDiaWithId = escOrdemDoDia.bind(null, id);
-  console.log("EscOrdemDoDia", active);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'EscOrdemDoDia' , "active=", active);
   return (
     <form action={escOrdemDoDiaWithId}>
       <Tooltip title="Ordem do Dia">
@@ -86,7 +117,7 @@ export function ReativarReuniao({ id, active }: { id: string, active: string }) 
 }
 
 export function ComporPauta({id,active}: {id: string, active: string }) {
-  console.log("ComporPauta", active);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'ComporPauta' , "active=", active);
   const comporPautaWithId = comporPauta.bind(null, id);
   return (
     <form action={comporPautaWithId}>
@@ -100,25 +131,12 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
   );
 }
 
-export function UpdateReuniao({ id, active }: { id: string, active: string }) {
-  console.log("UpdateReuniao", active);
-  const editReuniaoWithId = editReuniao.bind(null, id);
-  return (
-    <form action={editReuniaoWithId} >
-    <Tooltip title="Editar">
-      <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Editar</span>  
-      <PencilIcon className="w-5" />
-      </button>             
-    </Tooltip>
-    </form>
-  );
-}
+
 
 
 export function DeleteParticipante ({id,active}: {id:number, active:string})
 {
-  console.log("DeleteParticipante", id, active);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'DeleteParticipante' , "{id, active}=", {id, active});
   return (
       <Tooltip title="Excluir">
       <button className="rounded-md border p-2 hover:bg-gray-100" >

@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { links } from '@/app/lib/nav';
 import clsx from 'clsx';
+import { mylog } from '../lib/mylogger';
 
 export default function TopNav () {
 	const pathname = usePathname();
-  console.log('Top Nav for pathname:',pathname);
+  mylog("DBG",'/app/ui/topnav', 'TopNav' , "pathname=", pathname);
 
   return (
     <nav className="flex-wrap pl-60">
@@ -29,11 +30,6 @@ export default function TopNav () {
           </Link>
         );
       })}
-      {/*		
-	      links.map((link) => {
-	      return ("<li> "+ link.name + " </li>");
-              });
-      */} 
       </ul>
    </nav>
   );

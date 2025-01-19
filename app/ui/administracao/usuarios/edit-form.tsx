@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateUser } from '@/app/lib/actions';
+import { mylog } from '@/app/lib/mylogger';
 
 
 export default function EditUserForm({
@@ -19,8 +20,7 @@ export default function EditUserForm({
   user: UserType;
   niveis: Niveis[];
 }) {
-  console.log("Edit User Form user:", user);
-  console.log("Edit User Form niveis:", niveis);
+  mylog("DBG",'/app/ui/administracao/edit-form', 'AddParticipante' , "{user, niveis}=", {user, niveis});
 
   const updateUserWithId = updateUser.bind(null, user.cpf.toString());
   return (
@@ -117,7 +117,7 @@ export default function EditUserForm({
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/administracao/usuarios"
+          href="/sinfonia/administracao/usuarios"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Voltar

@@ -10,11 +10,7 @@ export default async function ReunioesTable({
   query: string;
   currentPage: number;
 }) {
-	console.log('app/ui/reuniao/table  query ',query,"currentPage ",currentPage);
   const reunioes = await fetchFilteredReunioes(query, currentPage, 'N') as Reunioes[];
-  console.log('app/ui/reuniao/table reunioes',reunioes); 
-  
-
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full">
