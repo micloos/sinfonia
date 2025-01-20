@@ -1,6 +1,7 @@
 import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteReuniao, editReuniao, escParticipant, participantes, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/actions';
+import { deleteReuniao, editReuniao, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/reuniao/actions';
+import { escParticipant, participantes } from '@/app/lib/participantes/actions';
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
 

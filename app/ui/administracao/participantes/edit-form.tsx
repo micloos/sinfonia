@@ -1,25 +1,26 @@
-'use client'
+'use client';
 
+import { ParticipanteType } from '@/app/lib/definitions';
 import {
   UserIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button'; 
-import { createParticipante, ParticipanteState } from '@/app/lib/participantes/actions'; 
-import { useActionState } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/app/ui/button';
+import { updateParticipante } from '@/app/lib/participantes/actions';
 import { mylog } from '@/app/lib/mylogger';
+import { useRouter } from 'next/navigation';
 
 
-
-export default function UserForm() {
-  const initialState: ParticipanteState = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createParticipante, initialState);
-  const router = useRouter();
-
-  mylog("DBG",'/app/ui/administracao/participantes/create-form', 'UserForm' , "Begin", "");
-
+export default function EditParticipanteForm({
+  user,
+}: {
+  user: ParticipanteType;
+}) {
+  mylog("DBG",'/app/ui/administracao/participantes/edit-form', 'EditParticipanteForm' , "user=", user);
+  const router= useRouter();
+  const updateParticipanteWithId = updateParticipante.bind(null, user.id.toString());
   return (
-     <form action={formAction}>
+    <form action={updateParticipanteWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <div className="mb-4 inline-block w-2/3">
          
@@ -32,29 +33,25 @@ export default function UserForm() {
                 id="nome"
                 name="nome"
                 type="string"
-                defaultValue=""
+                defaultValue={user.name}
                 placeholder="Nome"
                 className="peer inline w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby='name-error'
               />
               <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <input id="id" name="id" type="hidden" value={user.id} />
             </div>
           </div>
         </div>
-        <div id="name-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.nome &&
-              state.errors.nome.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))
-            }
-        </div>
-      </div>
+      </div>  
       <div className="mt-6 flex justify-end gap-4">
+        <Link
+          href="/sinfonia/administracao/usuarios"
+          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+        >
         <button type="button" onClick={() => router.back()}>
-          Voltar
+            Voltar
         </button>
+        </Link>
         <Button type="submit">Salvar</Button>
       </div>
     </form>

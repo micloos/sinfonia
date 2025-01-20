@@ -7,13 +7,16 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/oldbutton';
-import { updateReuniao } from '@/app/lib/actions';
+import { updateReuniao } from '@/app/lib/reuniao/actions';
 import { useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale,} from  "react-datepicker";
 import { pt } from 'date-fns/locale/pt';
+import { mylog } from '@/app/lib/mylogger';
 registerLocale('pt',pt);
+
+const filename = 'app/ui/reuniao/edit-form';
 
 export default function EditReuniaoForm({
   reuniao,
@@ -24,17 +27,18 @@ export default function EditReuniaoForm({
   withsavebutton: number;
   withbackbutton: number
 }) {
-  console.log("Edit Reuniao Form user:", reuniao);
+  const functionname = 'EditReuniaoForm';
+  mylog('DBG', filename, functionname, 'reuniao=',reuniao);
 
   const [reuniaoDate, setReuniaoDate] = useState(new Date(reuniao.d_ini));
   const [docDate, setDocDate] = useState(new Date(reuniao.d_lim));
   const updateReuniaoWithId = updateReuniao.bind(null, reuniao.id.toString());
   const ifactive = Number(reuniao.active);
-  console.log ("ifactive",ifactive)
+  mylog('DBG', filename, functionname, 'ifactive=',ifactive);
   const ifsave = (withsavebutton == 0) ? "hidden" : "";
-  console.log ("ifsave",ifsave)
+  mylog('DBG', filename, functionname, 'ifsave=',ifsave);
   const ifback = (withbackbutton == 0) ? "hidden" : "";
-  console.log("ifback = ",ifback);
+  mylog('DBG', filename, functionname, 'ifback=',ifback);
   return (
     <form action={updateReuniaoWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">

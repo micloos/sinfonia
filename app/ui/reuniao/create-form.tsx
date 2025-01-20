@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/oldbutton';
-import { createReuniao, ReuniaoState } from '@/app/lib/actions';
+import { createReuniao, ReuniaoState } from '@/app/lib/reuniao/actions';
 import { Reunioes } from '@/app/lib/definitions'; 
 import { useActionState, useState } from 'react';
 import DatePicker from "react-datepicker";

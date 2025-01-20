@@ -1,6 +1,6 @@
 import { UpdateParticipante, DeleteParticipante, AddParticipante } from '@/app/ui/administracao/buttons';
 import { fetchFilteredParticipantes } from '@/app/lib/data';
-import { ParticipanteList } from '@/app/lib/definitions';
+import { ParticipanteType } from '@/app/lib/definitions';
 import { mylog } from '@/app/lib/mylogger';
 
 const filename = "/app/ui/administracao/participantes/table";
@@ -16,10 +16,10 @@ export default async function ParticipantesTable({
   rid: number;
 }) {
   const functionName = 'ParticipantesTable';
-  const participantes = await fetchFilteredParticipantes(query, currentPage) as ParticipanteList[];
+  const participantes = await fetchFilteredParticipantes(query, currentPage) as ParticipanteType[];
 
-  mylog('DBG', filename, functionName, 'Participantes',participantes)
-  mylog('DBG', filename, functionName, 'reuniao id=',rid)
+  mylog('DBG', filename, functionName, 'Participantes',participantes);
+  mylog('DBG', filename, functionName, 'reuniao id=',rid);
 
   return (
     <div className="mt-6 flow-root">
@@ -37,7 +37,7 @@ export default async function ParticipantesTable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {participantes?.map((user : ParticipanteList) => (
+              {participantes?.map((user : ParticipanteType) => (
                 <tr
                   key={user.name}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"

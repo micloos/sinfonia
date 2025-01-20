@@ -1,5 +1,5 @@
 import { mssql } from '@/app/lib/db';
-import { UserType, Niveis, Numres, Reunioes } from '@/app/lib/definitions';
+import { UserType, Niveis, Numres, Reunioes, ParticipanteType } from '@/app/lib/definitions';
 import { mylog } from './mylogger';
 
 
@@ -253,7 +253,26 @@ export async function fetchFilteredParticipantes (query: string, currentPage: nu
 		participantes
 	)
 	} catch(error) {
-		mylog ("ERROR", "app/lib/dat", "fetchParticipantes","error=",error);
-		throw new Error('Failed to fetch total number of users');
+		mylog ("ERROR", "app/lib/data", "fetchParticipantes","error=",error);
+		throw new Error('Failed to fetch all Participantes');
 	}
 }	
+
+export async function fetchParticipanteById (id: string) {
+	const nid = Number(id);
+	try {
+		const myreq = `SELECT
+		    Cd_Participante as id,
+			Nm_Participante as name
+		FROM app/lib/participantes/actions.ts
+		WHERE
+			Cd_Participante = ${nid} `
+		const participante = await mssql(myreq) as ParticipanteType[];
+		return (
+			participante[0]
+		)
+	} catch(error) {
+		mylog ("ERROR", "app/lib/data", "fetchParticipanteById","error=",error);
+		throw new Error('Failed to fetch ParticipanteById');
+	}
+}

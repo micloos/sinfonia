@@ -5,7 +5,9 @@ import Search from '@/app/ui/search';
 {/* import { Suspense } from 'react'; */}
 import { fetchParticipantesPages } from '@/app/lib/data';
 import { CreateParticipante } from '@/app/ui/administracao/buttons';
+import { mylog } from '@/app/lib/mylogger';
 
+const filename = 'app/sinfonia/administracao/participantes/page';
 
 export default async function Page(props:  {
 				  searchParams?: Promise<{
@@ -22,9 +24,9 @@ export default async function Page(props:  {
 					  const rid = Number(searchParams?.rid) || 0;
 					  if (rid > 0)
 					  {
-						console.log ('rid =',rid);
+						mylog('DBG', filename, 'Page', 'rid',rid);
 					  } else {
-						console.log ('No reuniao');
+						mylog('DBG', filename, 'Page', 'No Reuniao',"");
 					  }
 
 					  const query = searchParams?.query || ''; 

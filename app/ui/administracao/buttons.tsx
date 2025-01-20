@@ -1,6 +1,7 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteUser, deleteFromParticipantesList } from '@/app/lib/actions';
+import { deleteUser } from '@/app/lib/usuarios/actions';
+import { deleteFromParticipantesList } from '@/app/lib/participantes/actions';
 import { mylog } from '@/app/lib/mylogger';
 
 export function CreateUser() {

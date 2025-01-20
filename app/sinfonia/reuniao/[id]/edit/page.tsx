@@ -1,12 +1,14 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
 import { fetchReuniaoById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
+import { mylog } from '@/app/lib/mylogger';
  
+const filename = 'app/sinfonia/reuniao/[id]/edit/page';
+
 export default async function Page(props: {params: Promise<{ id: string }> }) {
   const params = await props.params;
-  console.log("Edit Reuniao params= ",params)
+  mylog('DBG', filename, 'Page', 'params=',params);
   const id = params.id;
-  console.log(id);
   const [reuniao] = await Promise.all([
 	  fetchReuniaoById(id),
   ]);
@@ -14,7 +16,7 @@ export default async function Page(props: {params: Promise<{ id: string }> }) {
 const withbackbutton = 1;
 const withsavebutton = Number(reuniao.active);
 
-console.log("Page edit Reuniao, reuniao=",reuniao)
+mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   if (!reuniao) {
 	  notFound();
   }

@@ -49,7 +49,7 @@ export type Participantes = {
 	name: string;
 }
 
-export type ParticipanteList = {
+export type ParticipanteType = {
 	id: number;
 	name: string;
 }

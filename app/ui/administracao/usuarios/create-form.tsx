@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link'; 
 import { Button } from '@/app/ui/button'; 
-import { createUser, UserState } from '@/app/lib/actions'; 
+import { createUser, UserState } from '@/app/lib/usuarios/actions'; 
 import { useActionState } from 'react';
 import { mylog } from '@/app/lib/mylogger';
 
