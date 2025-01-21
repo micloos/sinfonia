@@ -14,19 +14,19 @@ export default async function Page(props: {
 	}) 
 {
 	const searchParams = await props.searchParams;
-	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "searchParams=", searchParams);
+	mylog("DBG",'/app/sinfonia/reuniao/fechadas/page', 'Page' , "searchParams=", searchParams);
 	const query = searchParams?.query || ''; 
 	const currentPage = Number(searchParams?.page) || 1;
-	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "query=", query);
+	mylog("DBG",'/app/sinfonia/reuniao/fechadas/page', 'Page' , "query=", query);
 	const totalPages = await fetchReunioesPages(query,1);
-	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "totalPages=", totalPages);
+	mylog("DBG",'/app/sinfonia/reuniao/fechadas/page', 'Page' , "totalPages=", totalPages);
 	return (
 <div className="w-full">
 	<div className="mt-4 flex w-4/5 items-center justify-between gap-2 md:mt-8">
 	   <Search placeholder="Procurar..." />
 	   <CreateReuniao />	   
 	</div>
-	<ReunioesTable query={query} currentPage={currentPage} activer='N'  />
+	<ReunioesTable query={query} currentPage={currentPage} activer='S' />
 	<div className="mt-5 flex w-full justify-center">
 	  <Pagination totalPages={totalPages} />
 	</div>

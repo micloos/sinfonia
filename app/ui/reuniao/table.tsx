@@ -6,11 +6,13 @@ import * as moment from 'moment';
 export default async function ReunioesTable({
   query,
   currentPage,
+  activer,
 }: {
   query: string;
   currentPage: number;
+  activer: string;
 }) {
-  const reunioes = await fetchFilteredReunioes(query, currentPage, 'N') as Reunioes[];
+  const reunioes = await fetchFilteredReunioes(query, currentPage, activer ) as Reunioes[];
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full">

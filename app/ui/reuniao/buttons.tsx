@@ -69,7 +69,7 @@ export function EscParticipant({ id, active}: { id: string, active: string }) {
       <Tooltip title="Participantes">
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Participantes</span>
-        <PlusIcon className="w-5" />
+        <UserGroupIcon className="w-5" />
       </button>
       </Tooltip>
     </form>

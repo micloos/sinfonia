@@ -11,7 +11,6 @@ import { mylog } from '../mylogger';
 export async function deleteReuniao (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "deleteReuniao", "id=",id);
-	{/*
 	const myreq = `
 			DELETE FROM REUNIAO_T1000_Reuniao
 			WHERE Cd_Reuniao = ${id}
@@ -25,8 +24,6 @@ export async function deleteReuniao (id: string)
 	} finally {
 		redirect ('/sinfonia/reuniao');
 	}
-       */}
-	redirect ('/proto');
 }
 
 export type ReuniaoState = {
