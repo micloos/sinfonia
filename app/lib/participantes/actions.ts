@@ -6,6 +6,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
 
+const filename = 'app/lib/participantes/actions'
+
 {/* Participantes Usuais */}
 
 const ParticipanteFormSchema = z.object({
@@ -23,7 +25,7 @@ export type ParticipanteState = {
 export async function deleteFromParticipantesList (id: number) 
 {
 	const myreq = `DELETE from REUNIAO_T4000_Participantes where Cd_Participante = ${id}` ;
-	mylog ("DBG", "app/lib/actions", "deleteFromParticipantesList", "myreq=",myreq);
+	mylog ("DBG", filename, "deleteFromParticipantesList", "myreq=",myreq);
 	await mssql(myreq);
 	revalidatePath('/sinfonia/administracao/participantes');
 }
@@ -34,15 +36,15 @@ const CreateParticipante = ParticipanteFormSchema.omit({id: true})
 
 export async function createParticipante (prevState: ParticipanteState, formData:FormData)
 {
-	mylog("DBG","app/lib/actions","createParticipantes","formdata=",formData);
+	mylog("DBG",filename,"createParticipantes","formdata=",formData);
 	const validatedFields = CreateParticipante.safeParse({
 		nome: formData.get('nome'),
 	});
 	
-	mylog ("DBG", "app/lib/actions", "createParticipante", "validatedFields=",validatedFields);
+	mylog ("DBG", filename, "createParticipante", "validatedFields=",validatedFields);
 
 	if(!validatedFields.success) {
-		mylog ("ERROR", "app/lib/actions", "createParticipante", "validatedFields=", validatedFields.error.flatten().fieldErrors);
+		mylog ("ERROR", filename, "createParticipante", "validatedFields=", validatedFields.error.flatten().fieldErrors);
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: 'Missing Fields, failed to create',
@@ -50,7 +52,7 @@ export async function createParticipante (prevState: ParticipanteState, formData
 	}
 
 	const nome = validatedFields.data.nome;
-	mylog ("DBG", "app/lib/actions", "createParticipante", "nome=",nome);
+	mylog ("DBG", filename, "createParticipante", "nome=",nome);
 
 	try {
 		const myreq = `
@@ -58,10 +60,11 @@ export async function createParticipante (prevState: ParticipanteState, formData
 		(Nm_Participante)
 		VALUES ('${nome}')
 		`;
+		mylog ("DBG", filename, "createParticipante","myreq=",myreq.replace(/\s/g," "));
 		const answer = await mssql(myreq);
-		mylog ("DBG", "app/lib/actions", "createParticipante", "answer=",answer);
+		mylog ("DBG", filename, "createParticipante", "answer=",answer);
 	} catch (error) {
-		mylog ("ERROR", "app/lib/actions", "createParticipante", "error=",error);
+		mylog ("ERROR", filename, "createParticipante", "error=",error);
 		return {
 			message: 'Database Error: Nao criou Participante'
 		};
@@ -74,14 +77,14 @@ export async function createParticipante (prevState: ParticipanteState, formData
 
 export async function participantes (id: string)
 {
-	mylog ("DBG", "app/lib/actions", "participantes", "id=",id);
+	mylog ("DBG", filename, "participantes", "id=",id);
 	const goto =  "/sinfonia/reuniao/participantes/"+id+"/edit";
 	redirect (goto);
 }
 
 export async function escParticipant (id: string)
 {
-	mylog ("DBG", "app/lib/actions", "participantes", "id=",id);
+	mylog ("DBG", filename, "participantes", "id=",id);
 	const goto =  "/sinfonia/reuniao/participantes/"+id+"/edit";
 	redirect (goto);
 }
@@ -95,7 +98,7 @@ export async function updateParticipante (id: string, formData:FormData) {
 	});
 	
 	if(!validatedFields.success) {
-		mylog ("ERROR", "app/lib/actions", "updateParticipante", "validatedFields=", validatedFields.error.flatten().fieldErrors);
+		mylog ("ERROR", filename, "updateParticipante", "validatedFields=", validatedFields.error.flatten().fieldErrors);
 		{/*
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
