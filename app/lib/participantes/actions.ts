@@ -89,4 +89,44 @@ export async function escParticipant (id: string)
 export async function updateParticipante (id: string, formData:FormData) {
 	mylog("DBG","app/lib/participantes/actions","updateParticipantes","formdata=",formData);
 	mylog("DBG","app/lib/participantes/actions","updateParticipantes","id=",id);
+
+	const validatedFields = CreateParticipante.safeParse({
+		nome: formData.get('nome'),
+	});
+	
+	if(!validatedFields.success) {
+		mylog ("ERROR", "app/lib/actions", "updateParticipante", "validatedFields=", validatedFields.error.flatten().fieldErrors);
+		{/*
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields, failed to create',
+		}
+			*/}
+		return
+	}
+	const nome = validatedFields.data.nome;
+	const nid = Number(id);
+
+	try {
+		const myreq =`
+		UPDATE REUNIAO_T4000_Participantes 
+		SET
+		   Nm_Participante = '${nome}'
+		WHERE
+		   Cd_Participante = ${nid}
+		`
+		mylog("DBG","app/lib/participantes/actions","updateParticipantes","myreq=",myreq.replace(/\s/g," "));
+		const answer = await mssql(myreq);
+		mylog("DBG","app/lib/participantes/actions","updateParticipantes","answer=",answer);
+	} catch(error) {
+		mylog("ERROR","app/lib/participantes/actions","updateParticipantes","error=",error);
+		return 
+		{/*
+			message: 'Database Error: Nao Salvou Participante'
+		*/}
+	}
+
+	revalidatePath('/sinfonia/administracao/participantes');
+	redirect('/sinfonia/administracao/participantes');
+	
 }

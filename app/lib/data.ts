@@ -264,10 +264,12 @@ export async function fetchParticipanteById (id: string) {
 		const myreq = `SELECT
 		    Cd_Participante as id,
 			Nm_Participante as name
-		FROM app/lib/participantes/actions.ts
+		FROM REUNIAO_T4000_Participantes
 		WHERE
-			Cd_Participante = ${nid} `
+			Cd_Participante = ${nid} `;
+		mylog("DBG","app/lib/data", "fetchParticipanteById","myreq=",myreq.replace(/\s/g," "));
 		const participante = await mssql(myreq) as ParticipanteType[];
+		mylog("DBG","app/lib/data", "fetchParticipanteById","participante=",participante);
 		return (
 			participante[0]
 		)
