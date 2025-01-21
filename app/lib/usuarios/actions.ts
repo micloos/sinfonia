@@ -50,7 +50,7 @@ export async function createUser (prevState: UserState, formData: FormData)
 		nome: formData.get('nome'),
 		username: formData.get('username'),
 		password: formData.get('password'),
-		nivel: formData.get('nivel'),
+		nivel: Number(formData.get('nivel')),
 	});
 	mylog ("DBG", "app/lib/actions", "createUser", "validatedFields=",validatedFields);
 
