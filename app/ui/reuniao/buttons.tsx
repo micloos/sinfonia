@@ -94,7 +94,7 @@ export function EscOrdemDoDia({ id, active }: { id: string, active: string }) {
 export function ReativarReuniao({ id, active }: { id: string, active: string }) {
 	const reativarReuniaoWithId = reativarReuniao.bind(null, id);
 
-  if (active === 'N') {
+  if (active === 'S') {
   return (
     <form action={reativarReuniaoWithId}>
       <Tooltip title="Reativar">
