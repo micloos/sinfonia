@@ -2,6 +2,7 @@ import ReuniaoForm from '@/app/ui/reuniao/edit-form';
 import { fetchReuniaoById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
+import ParticipantesByReuniao from '@/app/ui/reuniao/participantes/table';
  
 const filename = 'app/sinfonia/reuniao/[id]/edit/page';
 
@@ -23,6 +24,9 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
+      <ParticipantesByReuniao rid={Number(id)} />
     </main>
+    
+    
   );
 }
