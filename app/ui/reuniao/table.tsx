@@ -76,7 +76,7 @@ export default async function ReunioesTable({
                   </td>
                   <td className="px-0 py-3">
                     {/*moment(reuniao.d_end).format('DD/MM/YY HH:mm')*/}
-                    {reuniao.d_end? moment.default(reuniao.d_end).format('DD/MM/YY HH:mm'):'Sem'}
+                    {reuniao.d_end? moment.default(reuniao.d_end).format('DD/MM/YY'):'Sem'}
                   </td>
                   <td className="py-3">
 		                {reuniao.predio}
