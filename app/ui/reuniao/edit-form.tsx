@@ -33,7 +33,7 @@ export default function EditReuniaoForm({
   const [reuniaoDate, setReuniaoDate] = useState(new Date(reuniao.d_ini));
   const [docDate, setDocDate] = useState(new Date(reuniao.d_lim));
   const updateReuniaoWithId = updateReuniao.bind(null, reuniao.id.toString());
-  const ifactive = Number(reuniao.active);
+  const ifactive = (reuniao.active == 'N')? "hidden": "";
   mylog('DBG', filename, functionname, 'ifactive=',ifactive);
   const ifsave = (withsavebutton == 0) ? "hidden" : "";
   mylog('DBG', filename, functionname, 'ifsave=',ifsave);

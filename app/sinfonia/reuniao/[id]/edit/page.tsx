@@ -15,7 +15,7 @@ export default async function Page(props: {params: Promise<{ id: string }> }) {
   ]);
 
 const withbackbutton = 1;
-const withsavebutton = Number(reuniao.active);
+const withsavebutton = reuniao.active==='N'?1:0;
 
 mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   if (!reuniao) {
