@@ -1,7 +1,9 @@
 import { UpdateReuniao, DeleteReuniao, EscParticipant, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
 import { fetchFilteredReunioes } from '@/app/lib/data';
 import { Reunioes } from '@/app/lib/definitions';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
+
+const tz ="UTC";
 
 export default async function ReunioesTable({
   query,
@@ -69,7 +71,7 @@ export default async function ReunioesTable({
                   </td>
                   <td className="py-3 pr-0">
                     <div className="flex justify-start gap-3">
-                      {moment.default(reuniao.d_ini).format('DD/MM/YY HH:mm')}
+                      {moment.tz(reuniao.d_ini,tz).format('DD/MM/YY HH:mm')}
                     </div>
                   </td>
                   <td className="px-0 py-3">
@@ -83,7 +85,7 @@ export default async function ReunioesTable({
                     {reuniao.sala} 
                   </td>
                   <td className="py-3">
-                    {moment.default(reuniao.d_lim).format('DD/MM/YY HH:mm')} 
+                    {moment.tz(reuniao.d_lim,tz).format('DD/MM/YY HH:mm')} 
                   </td>
                   
                 </tr>
