@@ -14,17 +14,24 @@ export default async function Page(props: {params: Promise<{ id: string }> }) {
 	  fetchReuniaoById(id),
   ]);
 
+  mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
+  
 const withbackbutton = 1;
 const withsavebutton = reuniao.active==='N'?1:0;
+const rid=Number(id);
+
+mylog('DBG',filename,"Page","rid=",rid);
 
 mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
+
+
   if (!reuniao) {
 	  notFound();
   }
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <ParticipantesByReuniao rid={Number(id)} />
+      <ParticipantesByReuniao rid={rid} editable={withsavebutton} />
     </main>
     
     

@@ -75,17 +75,12 @@ export async function createParticipante (prevState: ParticipanteState, formData
 }
 
 
-export async function participantes (id: string)
-{
-	mylog ("DBG", filename, "participantes", "id=",id);
-	const goto =  "/sinfonia/reuniao/participantes/"+id+"/edit";
-	redirect (goto);
-}
 
-export async function escParticipant (id: string)
+
+export async function escParticipant (id: number)
 {
 	mylog ("DBG", filename, "participantes", "id=",id);
-	const goto =  "/sinfonia/reuniao/participantes/"+id+"/edit";
+	const goto =  "/sinfonia/reuniao/"+id+"/participantes?rid="+id;
 	redirect (goto);
 }
 
@@ -132,4 +127,15 @@ export async function updateParticipante (id: string, formData:FormData) {
 	revalidatePath('/sinfonia/administracao/participantes');
 	redirect('/sinfonia/administracao/participantes');
 	
+}
+
+export async function deleteParticipantFromReuniao (id: number, rid: number) {
+	mylog("DBG",filename,'deleteParticipantFromReuniao','id=',id);
+	const myreq = `DELETE FROM REUNIAO_T1600_ParticipanteReuniao where Cd_ParticipanteReuniao = ${id}`;
+	mylog("DBG",filename,'deleteParticipantFromReuniao','myreq=',myreq);
+	const answer = mssql(myreq);
+	mylog("DBG",filename,'deleteParticipantFromReuniao','answer=',answer);
+
+	revalidatePath('/sinfonia/reuniao/'+rid.toString()+'/edit');
+	redirect('/sinfonia/reuniao/'+rid.toString()+'/edit');
 }

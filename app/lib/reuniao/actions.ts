@@ -5,6 +5,7 @@ import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
 
+const filename="/app/lib/reuniao/actions"
 
 {/* Reunioes */}
 
@@ -52,6 +53,39 @@ export async function editReuniao (id: string)
 	mylog ("DBG", "app/lib/actions", "editReuniao", "id=",id);
 	const goto =  "/sinfonia/reuniao/"+id+"/edit";
 	redirect (goto);
+}
+
+type numericanswer = { n : number};
+type charanswer = { s : string};
+
+export async function addParticipanteToReuniao (id: number, rid: number ){
+	mylog("DBG",filename,"addParticipantesToReuniao","{id,rid}=",{id,rid} );
+	const nextCdArr = await mssql("select max(Cd_ParticipanteReuniao) +1 as n FROM REUNIAO_T1600_ParticipanteReuniao") as numericanswer[];
+	const nextCd = nextCdArr[0].n;
+	mylog("DBG",filename,"addParticipanteToReuniao","nextCd=",nextCd);
+	const userName = await mssql (`select Nm_Participante as s from REUNIAO_T4000_Participantes where Cd_Participante = ${id}`) as charanswer[];
+	mylog("DBG",filename,'addParticipanteToReuniao',"userName=",userName);
+	const myreq = `select Nm_ParticipanteReuniao as s from REUNIAO_T1600_ParticipanteReuniao where Nm_ParticipanteReuniao = '${userName[0].s}' and Cd_Reuniao = ${rid}`;
+	mylog("DBG",filename,'addParticipanteToReuniao',"myreq=",myreq);
+	const vazio = await mssql (myreq) as charanswer[];
+	if (vazio.length==0) {
+		mylog("DBG",filename,'addParticipanteToReuniao',"Pronto para inserir o participante ",userName[0].s);
+		const myreq = `insert into REUNIAO_T1600_ParticipanteReuniao (Cd_Reuniao,Nm_ParticipanteReuniao,Cd_ParticipanteReuniao,Ds_PosicaoParticipanteReuniao) values (${rid},'${userName[0].s}',${nextCd},'Default')`;
+		mylog("DBG",filename,'addParticipanteToReuniao',"myreq=",myreq);
+		const ans = await mssql(myreq);
+		mylog("DBG",filename,'addParticipanteToReuniao',"ans=",ans);
+	} else {
+		mylog("DBG",filename,'addParticipanteToReuniao',"Participante ja existente",vazio.length);
+	}
+redirect ("/sinfonia/reuniao/"+rid.toString()+"/edit")
+
+}
+
+export async function setReuniaoFuncao(pid: number, funcao: string) {
+	mylog("DBG",filename,'setReuniaoFuncao','{pid, funcao}=',{pid,funcao});
+	const myreq = `UPDATE REUNIAO_T1600_ParticipanteReuniao SET Ds_PosicaoParticipanteReuniao = '${funcao}' WHERE Cd_ParticipanteReuniao=${pid}`;
+	const ans = await mssql(myreq);
+	mylog("DBG",filename,'setReuniaoFuncao','ans=',ans);
 }
 
 export async function escOrdemDoDia (id: string)

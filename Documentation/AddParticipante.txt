@@ -1,0 +1,8 @@
+Page edit reuniao ->  /app/ui/reuniao/buttons AddParticipanteToReuniao rid=1
+Aperta Bottom
+    app/lib/participantes/actions participantes id= 1
+    app/sinfonia/reuniao/[id]/participantes/page Page rid 1
+    /app/ui/administracao/participantes/table ParticipantesTable Participantes [....]
+    /app/ui/administracao/participantes/table ParticipantesTable reuniao id= 1
+    [Buttons AddParticipante id:709, rid:1, .....]
+        

@@ -1,7 +1,8 @@
 import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/reuniao/actions';
-import { escParticipant, participantes } from '@/app/lib/participantes/actions';
+import { escParticipant, deleteParticipantFromReuniao  } from '@/app/lib/participantes/actions';
+import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
 
@@ -62,7 +63,7 @@ export function Participantes({ id, active}: { id: string, active: string }) {
 }
 
 export function EscParticipant({ id, active}: { id: string, active: string }) {
-  const escParticipantWithId = escParticipant.bind(null, id);
+  const escParticipantWithId = escParticipant.bind(null, Number(id));
   mylog("DBG",'/app/ui/reuniao/buttons', 'EscParticipantes' , "active=", active);
   return (
     <form action={escParticipantWithId}>
@@ -132,7 +133,44 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
   );
 }
 
+export function AddParticipantToReuniao({ rid, editable }: { rid: number, editable: number }) {
+  const escParticipantWithId = escParticipant.bind(null, rid);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'AddParticipanteToReuniao' , "rid=", rid);
+  if (editable==1){
+  return (
+    <form action={escParticipantWithId}>
+      <Tooltip title="Participantes">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Participantes</span>
+        <PlusIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+} else {
+  return (<p></p>);
+}
+}
 
+export function DeleteParticipantFromReuniao({id, editable, rid}: {id: number, editable: number, rid:number}) {
+  const deleteParticipantFromReuniaoWithId = deleteParticipantFromReuniao.bind(null,id,rid);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'DeleteParticipantFromReuniao' , "id=", {id,rid});
+  if (editable==1) {
+    return(
+      <form action={deleteParticipantFromReuniaoWithId}>
+      <Tooltip title="Excluir">
+
+      <button className="rounded-md border p-2 hover:bg-gray-100" >
+        <span className="sr-only">OrdemDoDia</span>
+        <TrashIcon className="w-5" />
+      </button>
+      </Tooltip>
+      </form>
+    )
+  } else {
+    return (<p/>)
+  }
+}
 
 
 export function DeleteParticipante ({id,active}: {id:number, active:string})

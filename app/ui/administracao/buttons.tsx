@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { deleteUser } from '@/app/lib/usuarios/actions';
 import { deleteFromParticipantesList } from '@/app/lib/participantes/actions';
 import { mylog } from '@/app/lib/mylogger';
+import { addParticipanteToReuniao } from '@/app/lib/reuniao/actions';
 
 export function CreateUser() {
   return (
@@ -76,10 +77,13 @@ export function CreateParticipante() {
 
 export function AddParticipante({ id, rid }: { id: number, rid: number }) {
   mylog("DBG",'/app/ui/administracao/button', 'AddParticipante' , "{id, rid}=", {id, rid});
+  const addParticipanteWithReuniao = addParticipanteToReuniao.bind(null,id,rid);
   return (
+    <form action={addParticipanteWithReuniao}>
     <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Adicionar a Reuniao</span>
         <PlusIcon className="w-5" />
     </button>
+    </form>
   )
 }
