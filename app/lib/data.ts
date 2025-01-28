@@ -5,14 +5,17 @@ import { mylog } from './mylogger';
 
 
 const ITEMS_PER_PAGE = 5;
-
+const filename='/app/lib/data';
 
 {/* Reunioes */}
 
 export async function fetchReunioesPages (query: string, active:number) {
+	mylog("DBG",filename,'fetchReunioesPages','active=',active);
+	const reabertura = (active==0)?'N':'S';
+	const myreq = `SELECT COUNT(*) as n FROM REUNIAO_T1000_Reuniao where Ind_ReaberturaReuniao='${reabertura}'`;
 	try {
-		const myreq = "SELECT COUNT(*) as n FROM REUNIAO_T1000_Reuniao".replace(/AAA/g,active.toString()).replace(/QQQ/g,query);
 		const count = await mssql(myreq) as Numres[] ;
+		mylog("DBG",filename,'fetchReunioesPages','number of records=',count[0].n);
 		const totalPages = Math.ceil(count[0].n / ITEMS_PER_PAGE);
 		return (totalPages);
 	} catch (error) {
