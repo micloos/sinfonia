@@ -18,7 +18,7 @@ export default async function Page(props: {
 	const query = searchParams?.query || ''; 
 	const currentPage = Number(searchParams?.page) || 1;
 	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "query=", query);
-	const totalPages = await fetchReunioesPages(query,1);
+	const totalPages = await fetchReunioesPages(query,0);
 	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "totalPages=", totalPages);
 	return (
 <div className="w-full">
