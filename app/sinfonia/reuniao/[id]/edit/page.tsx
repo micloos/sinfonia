@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
 import ParticipantesByReuniao from '@/app/ui/reuniao/participantes/table';
 import Pagination from '@/app/ui/pagination';
-import { useSearchParams } from 'next/navigation';
+
  
 const filename = 'app/sinfonia/reuniao/[id]/edit/page';
 
