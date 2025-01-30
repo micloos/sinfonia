@@ -68,15 +68,32 @@ export async function fetchReuniaoById (
 	}
 }
 
-export async function fetchParticipantesByReuniao (id: number)
+export async function fetchParticipantesByReuniaoPages (id:number)
 {
+	const myreq = `Select count(1) as n from REUNIAO_T1600_ParticipanteReuniao where Cd_Reuniao = ${id}`;
+	const count = await mssql(myreq) as Numres[] ;
+	mylog("DBG","app/lib/data","fetchParticipantesByReuniaoPages","count",count)
+	const totalPages = Math.ceil(Number(count[0].n) / ITEMS_PER_PAGE);
+	return totalPages;
+}
+
+
+export async function fetchParticipantesByReuniao (id: number, currentPage: number)
+{
+	mylog("DBG","app/lib/data","fetchParticipantesByReuniao","{id,currentPage}=",{id,currentPage})
+	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 	try {
 		const myreq = `Select
-		  Cd_ParticipanteReuniao as id,
-		  Nm_ParticipanteReuniao as name,
-		  Ds_PosicaoParticipanteReuniao as title
-		from REUNIAO_T1600_ParticipanteReuniao
-		where Cd_Reuniao = III`.replace(/III/g,id.toString());
+		  part.Cd_ParticipanteReuniao as id,
+		  part.Nm_ParticipanteReuniao as name,
+		  part.Ds_PosicaoParticipanteReuniao as title
+		from REUNIAO_T1600_ParticipanteReuniao as part
+		inner join REUNIAO_T4600_ParticipantePosicao as pos
+		on (part.Ds_PosicaoParticipanteReuniao = pos.Ds_PosicaoParticipanteReuniao)
+		where part.Cd_Reuniao = ${id}
+		order by pos.Cd_Posicao
+		offset ${offset} rows
+		fetch next ${ITEMS_PER_PAGE} rows only`;
 		const participantes = await mssql(myreq);
 		return (participantes)
 	} catch (error) {

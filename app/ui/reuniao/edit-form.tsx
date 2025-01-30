@@ -11,9 +11,11 @@ import { updateReuniao } from '@/app/lib/reuniao/actions';
 import { useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale,} from  "react-datepicker";
+import { registerLocale } from  "react-datepicker";
 import { pt } from 'date-fns/locale/pt';
 import { mylog } from '@/app/lib/mylogger';
+import moment from 'moment-timezone';
+moment.tz.setDefault('UTC');
 registerLocale('pt',pt);
 
 const filename = 'app/ui/reuniao/edit-form';
@@ -29,8 +31,11 @@ export default function EditReuniaoForm({
 }) {
   const functionname = 'EditReuniaoForm';
   mylog('DBG', filename, functionname, 'reuniao=',reuniao);
-
-  const [reuniaoDate, setReuniaoDate] = useState(new Date(reuniao.d_ini));
+  {/* Gambearra mestre */}
+  const initdate = new Date(reuniao.d_ini);
+  initdate.setHours(initdate.getHours()+3);
+  {/* Gambearra mestre fim*/}
+  const [reuniaoDate, setReuniaoDate] = useState(initdate);
   const [docDate, setDocDate] = useState(new Date(reuniao.d_lim));
   const updateReuniaoWithId = updateReuniao.bind(null, reuniao.id.toString());
   const ifactive = (reuniao.active == 'N')? "hidden": "";
@@ -87,14 +92,14 @@ export default function EditReuniaoForm({
           <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
-          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => date && setReuniaoDate(date)} />
+          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt-BR" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => date && setReuniaoDate(date)} />
         </div>
         
         <div className="mb-2 inline-block w-1/2">
         <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
-            <DatePicker disabled={withsavebutton == 0} locale="pt" dateFormat="dd/MM/yy" selected={docDate}  onChange={(date) => date && setDocDate(date)} />
+            <DatePicker disabled={withsavebutton == 0} locale="pt-BR" dateFormat="dd/MM/yy" selected={docDate}  onChange={(date) => date && setDocDate(date)} />
         </div>
 {/*     <div className="mb-4 inline-block w-2/3">
           <label htmlFor="cpf" className="mb-2 block text-sm font-medium">

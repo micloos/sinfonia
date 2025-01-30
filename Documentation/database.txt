@@ -6,3 +6,162 @@ User:  REUNIAO_T3100_UsuarioSistemaReuniao
 	cpf: string; // Cd_UsuariosSistemaReuniao numeric[11,0] Primary Key
 	// id: string;    // Id_Usuario  should rely on default
 	// date: string; // Dt_Atualizacao datetime  should rely on default
+
+Participante Usual: REUNIAO_T4000_Participantes
+	[Cd_Participante] int // PK
+	[Nm_Participante] varchar(200) // Nome
+	[Id_Usuario] Automatic
+	[Dt_Atualizacao] Automatic
+
+Reuniao: REUNIAO_T1000_Reuniao
+	[Cd_Reuniao] [int] NOT NULL,   //  PK
+	[Dt_InicialReuniao] [datetime] NOT NULL,  // Data da reuniao
+ 	[Dt_FinalReuniao] [datetime] NULL,   // Data de enceramento da reuniao (NULL enquanto ativa)
+	[Ds_SalaReuniao] [varchar](100) NULL,
+	[Ds_PredioSalaReuniao] [varchar](100) NULL,
+	[Dt_LimiteInclusaoItemReuniao] [datetime] NOT NULL,  // Data limite de entrega de documentos < Dt_InicialReuniao
+	[Ind_ReaberturaReuniao] [char](1) NOT NULL,    // 'S' Fechada,  'N' Aberta
+	[Nr_SequenciaReaberturaReuniao] [int] NULL, // ??????
+	[Id_Usuario] [varchar](200) NOT NULL, Automatic
+	[Dt_Atualizacao] [datetime] NOT NULL, Automatic
+
+
+ParticipantePorReuniao: REUNIAO_T1600_ParticipanteReuniao 
+	[Cd_Reuniao] [int] NOT NULL,  // FK -> REUNIAO_T1000_Reuniao
+	[Cd_ParticipanteReuniao] [int] NOT NULL,  //  PK
+	[Nm_ParticipanteReuniao] [varchar](100) NOT NULL,
+	[Ds_PosicaoParticipanteReuniao] [varchar](100) NOT NULL,  // Enum
+	[Id_Usuario] [varchar](200) NOT NULL,  Automatic
+	[Dt_Atualizacao] [datetime] NOT NULL,  Automatic
+
+
+
+OrdemDoDia por Reuniao:   REUNIAO_T1500_OrdemDia
+	Cd_Reuniao (FK, int, not null)
+	Cd_OrdemDia (PK, int)
+	Cd_SequenciaOrdemDia (int, not null)  // Begins at 1 for each Reuniao
+	Ds_OrdemDia (text, not null)  // Texto descritivo presente desde o inicio
+	Ds_DeliberacaoOrdemDia (text)  // Texto preenchido durante a reuniao
+	Ds_ComplementarOrdemDia (text)   // Always null
+	Ind_OrdemDiaPublicavel ('S'|'N') // 117 N, o resto S
+	Id_Usuario(varchar(200)   Automatic
+	Dt_Atualizacao(datetime) Automatic
+
+
+Assuntos parametrizaveis:  REUNIAO_T0200_AssuntoReuniao
+    [Cd_AssuntoReuniao] [int] NOT NULL,	           // PK
+	[Ds_AssuntoAtaReuniao] [varchar](200) NOT NULL,   
+	[Ds_AssuntoDeliberacao] [varchar](200) NOT NULL,
+	[Cd_AssuntoReuniaoRetornavel] [int] NULL,    // FK -> Cd_AssuntoReuniao
+	[Cd_ModeloDespacho] [int] NULL,  // FK 
+	[Id_Usuario] [varchar](200) NOT NULL,  Automatic
+	[Dt_Atualizacao] [datetime] NOT NULL,  Automatic
+
+REUNIAO_T1700_ModeloDespacho    //  NAo realmente usado
+	Cd_ModeloDespacho [int] not null // PK
+	Ds_ModeloDespacho   //  modelo x
+	Ds_CaminhoModeloDespacho  // modelo x . cs
+	[Id_Usuario] [varchar](200) NOT NULL,  Automatic
+	[Dt_Atualizacao] [datetime] NOT NULL,  Automatic
+
+REUNIAO_T0400_DownloadDocumentos  //  Pouco usado
+	[idDownloadDocumentos]  // PK
+	[nmDocumento]    // name
+	[dsDocumento]   // Description
+	[dsCaminho]     // FileName
+	[Id_Usuario]    // Automatic
+	[Dt_Atualizacao]  // Automatic
+
+REUNIAO_T0700_TipoExaminadorBanca  // Para Select
+	[Cd_TipoExaminador] int // PK
+	[Nm_TipoExaminador] string // Nome
+	[Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+REUNIAO_T1400_ClassificacaoDeliberacao  // Execucao da reuniao
+	[Cd_ClassificacaoDeliberacao]  int // PK
+	[Ds_ClassificacaoDeliberacao]  string  //  Texto visivel
+	[Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+REUNIAO_T3700_TipoSolicitacaoPrazo   // Planejamento de reuniao
+	[cd_TipoSolicitacaoPrazo]  int // PK
+	[nm_TipoSolicitacaoPrazo]  string //  Texto visivel
+	[Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+REUNIAO_T3600_TipoAtribuidorCredito
+	[Cd_TipoAtribuidorCredito]   int  //  PK
+	[Nm_TipoAtribuidorCredito]   string  //  Texto visivel
+	[Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+REUNIAO_T3200_TelaSistemaReuniao   //   Useless
+	[Cd_TelaSistemaReuniao]  int  //  PK
+	[Nm_TelaSistemaReuniao]  string // Nome Visivel 
+	[Ds_CaminhoTelaSistemaReuniao]  //  Arquivo do programa .aspx
+	[Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+REUNIAO_T3400_TelaSistemaNivelUsuario   // Useless
+	[Cd_TelaSistemaReuniao]   int  //  FK  -> REUNIAO_T3200_TelaSistemaReuniao
+	[Cd_NivelUsuarioSistema]  int  //  FK  -> REUNIAO_T3300_NivelUsuarioSistema
+    [Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+
+REUNIAO_T1200_ParametroAssuntoReuniao  //  1 on 1 REUNIAO_T0200_AssuntoReuniao
+	[Cd_AssuntoReuniao] [int] NOT NULL,   //  PK + FK -> REUNIAO_T0200_AssuntoReuniao
+	[Ind_Interessado] [char](1) NOT NULL,  //  S|N
+	[Ind_Orientador] [char](1) NOT NULL,//  S|N
+	[Ind_Defesa] [char](1) NOT NULL,//  S|N
+	[Ind_PlanoTrabalho] [char](1) NOT NULL,//  S|N
+	[Ind_BancaExaminadora] [char](1) NOT NULL,//  S|N
+	[Ind_Relator] [char](1) NOT NULL,//  S|N
+	[Ind_AtribuiCreditos] [char](1) NOT NULL,//  S|N
+	[Ind_CredenciamentoDisciplina] [char](1) NOT NULL,//  S|N
+	[Ind_SolicitaPrazo] [char](1) NOT NULL,//  S|N
+	[Ind_ADReferendum] [char](1) NOT NULL,//  S|N
+	[Ind_Deliberacao] [char](1) NOT NULL,//  S|N
+	[Ind_ObservacaoNaoPublicavel] [char](1) NOT NULL,//  S|N
+	[Ind_ObservacaoAssunto] [char](1) NOT NULL,//  S|N
+	[Ind_MotivoAssunto] [char](1) NOT NULL,//  S|N
+	[Ind_NovoPlano] [char](1) NOT NULL,//  S|N
+	[Ind_NovoOrientador] [char](1) NOT NULL,//  S|N
+	[Ind_NovoProfessor] [char](1) NOT NULL,//  S|N
+	[Ind_DataDeposito] [char](1) NOT NULL,//  S|N
+	[Ind_DissertacaoTese] [char](1) NOT NULL,//  S|N
+	[Ind_DataApresentacao] [char](1) NOT NULL,//  S|N
+	[Ind_Estagio] [char](1) NOT NULL,//  S|N
+	[Ind_DisciplinaEspecial] [char](1) NOT NULL,//  S|N
+	[Id_Usuario]      // Automatic
+	[Dt_Atualizacao] // Automatic
+
+	
+
+
+
+Empty
+dbo.REUNIAO_T0100_GrupoSolicitanteReuniao.Table.sql
+dbo.REUNIAO_T0300_TipoReuniaoSolicitadaGrupo.Table.sql
+
+Base:
+dbo.REUNIAO_T3300_NivelUsuarioSistema.Table.sql
+dbo.REUNIAO_T0400_DownloadDocumentos
+dbo.REUNIAO_T0700_TipoExaminadorBanca.Table.sql
+dbo.REUNIAO_T4000_Participantes
+dbo.REUNIAO_T3100_UsuarioSistemaReuniao
+dbo.REUNIAO_T1700_ModeloDespacho
+dbo.REUNIAO_T0200_AssuntoReuniao.Table.sql  invertendo linhas 
+dbo.REUNIAO_T1000_Reuniao.Table.sql
+dbo.REUNIAO_T1600_ParticipanteReuniao.Table.sql
+dbo.REUNIAO_T1500_OrdemDia.Table.sql
+dbo.REUNIAO_T1400_ClassificacaoDeliberacao.Table.sql
+dbo.REUNIAO_T3700_TipoSolicitacaoPrazo.Table.sql
+dbo.REUNIAO_T3600_TipoAtribuidorCredito.Table.sql
+dbo.REUNIAO_T3200_TelaSistemaReuniao.Table.sql
+dbo.REUNIAO_T3400_TelaSistemaNivelUsuario.Table.sql
+dbo.REUNIAO_T1010_ItemReuniao.Table.sql
+dbo.REUNIAO_T3900_AtribuidorCreditos.Table.sql
+dbo.REUNIAO_T0900_BancaExaminadoraReuniao.Table.sql
+dbo.REUNIAO_T3800_DisciplinaEspecial.Table.sql

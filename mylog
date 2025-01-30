@@ -1,0 +1,88 @@
+
+> sinfonia@0.1.0 dev /home/loos/Work/MLoos/IPEN/sinfonia
+> next dev
+
+   ▲ Next.js 15.1.2
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.68.135:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1990ms
+ ○ Compiling /sinfonia/reuniao/[id]/edit ...
+ ✓ Compiled /sinfonia/reuniao/[id]/edit in 6s (2747 modules)
+ ✓ Compiled in 471ms (1042 modules)
+DBG [ Wed Jan 29 2025 19:45:13 GMT-0300 (Brasilia Standard Time) ] app/sinfonia/reuniao/[id]/edit/page Page params= { id: '639' }
+DBG [ Wed Jan 29 2025 19:45:13 GMT-0300 (Brasilia Standard Time) ] /app/ui/topnav TopNav pathname= /sinfonia/reuniao/639/edit
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/lib/data fetchParticipantesByReuniaoPages count [ { n: 17 } ]
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/sinfonia/reuniao/[id]/edit/page Page reuniao= {
+  id: 639,
+  d_ini: 2025-01-30T09:00:00.000Z,
+  d_end: null,
+  sala: '227',
+  predio: 'Ensino',
+  d_lim: 2025-01-24T00:00:00.000Z,
+  active: 'N'
+}
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/sinfonia/reuniao/[id]/edit/page Page rid= 639
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/sinfonia/reuniao/[id]/edit/page Page reuniao= {
+  id: 639,
+  d_ini: 2025-01-30T09:00:00.000Z,
+  d_end: null,
+  sala: '227',
+  predio: 'Ensino',
+  d_lim: 2025-01-24T00:00:00.000Z,
+  active: 'N'
+}
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/ui/reuniao/participantes/table ParticiPantesByReuniao {rid, editable, currentPage}= { rid: 639, editable: 1, currentPage: 1 }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/ui/reuniao/edit-form EditReuniaoForm reuniao= {
+  id: 639,
+  d_ini: 2025-01-30T09:00:00.000Z,
+  d_end: null,
+  sala: '227',
+  predio: 'Ensino',
+  d_lim: 2025-01-24T00:00:00.000Z,
+  active: 'N'
+}
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/ui/reuniao/edit-form EditReuniaoForm ifactive= hidden
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/ui/reuniao/edit-form EditReuniaoForm ifsave= 
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/ui/reuniao/edit-form EditReuniaoForm ifback= 
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] app/ui/reuniao/participantes/table ParticipantesByReuniao participantes = [
+  {
+    id: 2801,
+    name: 'Prof. Dr. Eduardo Landulfo - TNM',
+    title: 'Presidente'
+  },
+  {
+    id: 2803,
+    name: 'Prof. Dr. Julian Marco Barbosa Shorto - TNR',
+    title: 'Vice Presidente'
+  },
+  { id: 2802, name: 'Sara Cristina Campos', title: 'Assistente' },
+  {
+    id: 2804,
+    name: 'Prof. Dr. Almir de Oliveira Neto - TNM - Suplente',
+    title: 'Docente'
+  },
+  {
+    id: 2805,
+    name: 'Prof. Dr. Edson Gonçalves Moreira - TNA - Suplente',
+    title: 'Docente'
+  }
+]
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/buttons AddParticipanteToReuniao rid= 639
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/buttons DeleteParticipantFromReuniao id= { id: 2801, rid: 639 }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/buttons DeleteParticipantFromReuniao id= { id: 2803, rid: 639 }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/buttons DeleteParticipantFromReuniao id= { id: 2802, rid: 639 }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/buttons DeleteParticipantFromReuniao id= { id: 2804, rid: 639 }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/buttons DeleteParticipantFromReuniao id= { id: 2805, rid: 639 }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/funcao Funcoes {id, funcao}= { id: 2801, funcao: 'Presidente' }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/funcao Funcoes {id, funcao}= { id: 2803, funcao: 'Vice Presidente' }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/funcao Funcoes {id, funcao}= { id: 2802, funcao: 'Assistente' }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/funcao Funcoes {id, funcao}= { id: 2804, funcao: 'Docente' }
+DBG [ Wed Jan 29 2025 19:45:14 GMT-0300 (Brasilia Standard Time) ] /app/ui/reuniao/funcao Funcoes {id, funcao}= { id: 2805, funcao: 'Docente' }
+ GET /sinfonia/reuniao/639/edit 200 in 8250ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 759ms (1719 modules)
+ GET /favicon.ico 200 in 857ms
+[?25h

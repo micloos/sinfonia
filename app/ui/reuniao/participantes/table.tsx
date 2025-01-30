@@ -8,9 +8,9 @@ import { Funcoes } from '../funcao';
 
 const filename = "app/ui/reuniao/participantes/table";
 
-export default async function ParticipantesByReuniao({rid, editable}: { rid: number, editable: number}) {
-    mylog ("DBG",filename,"ParticiPantesByReuniao","{rid, editable}=",{rid, editable});
-    const participantes = await fetchParticipantesByReuniao (rid) as Participantes[];
+export default async function ParticipantesByReuniao({rid, editable, currentPage}: { rid: number, editable: number, currentPage:number}) {
+    mylog ("DBG",filename,"ParticiPantesByReuniao","{rid, editable, currentPage}=",{rid, editable,currentPage});
+    const participantes = await fetchParticipantesByReuniao (rid, currentPage) as Participantes[];
     mylog ("DBG",filename,"ParticipantesByReuniao","participantes =",participantes);
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
