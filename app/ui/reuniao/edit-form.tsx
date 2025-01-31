@@ -92,7 +92,8 @@ export default function EditReuniaoForm({
           <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
-          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt-BR" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => date && setReuniaoDate(date)} />
+          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt-BR" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => {if (date) { const newdate = date; newdate.setHours(newdate.getHours()-3); setReuniaoDate(newdate)}}} />
+          <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
         <div className="mb-2 inline-block w-1/2">
@@ -100,6 +101,7 @@ export default function EditReuniaoForm({
             Data Final para Apresentação de Documentos:
         </label>
             <DatePicker disabled={withsavebutton == 0} locale="pt-BR" dateFormat="dd/MM/yy" selected={docDate}  onChange={(date) => date && setDocDate(date)} />
+            <input type="hidden" id="d_lim" name="d_lim" value={docDate.toISOString()} />
         </div>
 {/*     <div className="mb-4 inline-block w-2/3">
           <label htmlFor="cpf" className="mb-2 block text-sm font-medium">

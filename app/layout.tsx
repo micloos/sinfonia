@@ -19,7 +19,7 @@ export default function RootLayout({
         <header className="w-full flex-none height">
 	        <TopNav />
 	      </header>
-	      <div className="flex-grow h-4/6 p-6 md:overflow-y-auto md:p-12i">
+	      <div className="flex-grow p-6 md:overflow-y-auto md:p-12i">
           {children}
         </div>  
         < MLoosFooter />

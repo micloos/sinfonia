@@ -2,7 +2,7 @@ import SideNav from '@/app/ui/sidenav';
 
 export default function Layout( { children }:{ children: React.ReactNode }) {
 	return (
-		<div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+		<div className="flex flex-col md:flex-row md:overflow-hidden">
       <div className="w-1/2 md:w-48">
         <SideNav basepage={'reuniao'} />
       </div>

@@ -156,8 +156,23 @@ export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 	redirect('/sinfonia/reuniao');
 }
 
-export async function updateReuniao (id: string)
+export async function updateReuniao (id: string, formData:FormData)
 {
-	mylog ("DBG", "app/lib/actions", "updateReuniao", "id=",id);
-	redirect ('/proto')
+	mylog ("DBG", "app/lib/reuniao/actions", "updateReuniao", "id=",id);
+	mylog ("DBG", "app/lib/reuniao/actions", "updateReuniao", "formData=",formData);
+	{/* Fast */}
+	const myreq = `update reuniao_t1000_reuniao set
+			Dt_inicialReuniao='${formData.get('d_ini')}',
+			Dt_LimiteInclusaoItemReuniao=${formData.get('d_lim')}',
+			Ds_SalaReuniao='${formData.get('sala')}',
+			Ds_PredioSalaReuniao='${formData.get('predio')}'
+			Where Cd_Reuniao = ${id}`;
+	mylog ("DBG", "app/lib/reuniao/actions", "updateReuniao", "myreq=",myreq);
+	try {
+		const answer = await mssql(myreq);
+		mylog("DBG", "app/lib/reuniao/actions","updateReuniao","answer=",answer)
+	} catch (error) {
+		mylog("ERROR","app/lib/reuniao/actions","updateReuniao","error=",error)
+	}
+	redirect ('/sinfonia/reuniao')
 }
