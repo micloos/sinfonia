@@ -17,8 +17,8 @@ export default function Ipen() {
       <div>
           <Image
             src='/logo_ipen_ensino.png' 
-            height={96}
             width={829}
+            height={96}
             alt="Ipen"
                        />
       </div>

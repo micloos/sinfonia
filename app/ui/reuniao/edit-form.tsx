@@ -12,13 +12,16 @@ import { useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
-import { pt } from 'date-fns/locale/pt';
+import { ptBR } from 'date-fns/locale/pt-BR';
 import { mylog } from '@/app/lib/mylogger';
 import moment from 'moment-timezone';
 moment.tz.setDefault('UTC');
-registerLocale('pt',pt);
+registerLocale('pt-BR',ptBR);
+const localTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const filename = 'app/ui/reuniao/edit-form';
+
+mylog('DBG',filename,"none","localTZ=",localTZ);
 
 export default function EditReuniaoForm({
   reuniao,
@@ -32,8 +35,8 @@ export default function EditReuniaoForm({
   const functionname = 'EditReuniaoForm';
   mylog('DBG', filename, functionname, 'reuniao=',reuniao);
   {/* Gambearra mestre */}
-  const initdate = new Date(reuniao.d_ini);
-  initdate.setHours(initdate.getHours()+3);
+  const initdate = new Date(moment(reuniao.d_ini).tz(localTZ).format());
+  mylog("DBG",filename,functionname,"ISO=",initdate.toISOString());
   {/* Gambearra mestre fim*/}
   const [reuniaoDate, setReuniaoDate] = useState(initdate);
   const [docDate, setDocDate] = useState(new Date(reuniao.d_lim));
@@ -52,7 +55,7 @@ export default function EditReuniaoForm({
         </div>
         <div className="mb-4 inline-block w-1/2">
          
-          <label htmlFor="nome" className="mb-2 block text-sm font-medium">
+          <label htmlFor="predio" className="mb-2 block text-sm font-medium">
             Prédio
           </label>
           <div className="relative mt-2 rounded-md w-70">
@@ -71,7 +74,7 @@ export default function EditReuniaoForm({
           </div>
         </div>
         <div className="mb-2 inline-block w-1/2">
-          <label htmlFor="username" className="mb-2 block text-sm font-medium">
+          <label htmlFor="sala" className="mb-2 block text-sm font-medium">
             Sala
           </label>
           <div className="relative mt-2 rounded-md">
@@ -89,71 +92,24 @@ export default function EditReuniaoForm({
           </div>
         </div>
         <div className="mb-2 inline-block w-1/2">
-          <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
+          <label htmlFor="dataReuniao" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
-          <DatePicker disabled={withsavebutton == 0} showTimeSelect locale="pt-BR" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => {if (date) { const newdate = date; newdate.setHours(newdate.getHours()-3); setReuniaoDate(newdate)}}} />
+          <DatePicker id="dataReuniao" disabled={withsavebutton == 0} showTimeSelect locale="pt-BR" dateFormat="dd/MM/yy HH:mm" 
+                       selected={reuniaoDate} 
+                       onChange={(date) => {if (date) { const newdate = new Date(moment(date).tz(localTZ).tz('UTC').format()); setReuniaoDate(newdate)}}} 
+                       />
           <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
         <div className="mb-2 inline-block w-1/2">
-        <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
+        <label htmlFor="dataDocumentos" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
-            <DatePicker disabled={withsavebutton == 0} locale="pt-BR" dateFormat="dd/MM/yy" selected={docDate}  onChange={(date) => date && setDocDate(date)} />
+            <DatePicker id="dataDocumentos" disabled={withsavebutton == 0} dateFormat="dd/MM/yy" selected={docDate}  
+            onChange={(date) => {if(date) {const newdate = new Date(moment(date).tz(localTZ).tz('UTC').format()); setDocDate(newdate)}}} />
             <input type="hidden" id="d_lim" name="d_lim" value={docDate.toISOString()} />
         </div>
-{/*     <div className="mb-4 inline-block w-2/3">
-          <label htmlFor="cpf" className="mb-2 block text-sm font-medium">
-            CPF (Somente Números)
-          </label>
-          <div className="relative mt-2 rounded-md w-70">
-            <div className="relative">
-              <input
-                id="cpf"
-                name="nome"
-                type="number"
-                defaultValue={user.cpf}
-                placeholder="CPF"
-                className="peer inline w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
-              <ExclamationCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-        </div>
-        
-        <div className="mb-2 inline-block w-1/3">
-          <label htmlFor="password" className="mb-2 block text-sm font-medium">
-            Senha
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="password"
-                name="password"
-                type="string"
-                defaultValue="******"
-                placeholder="login"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
-              <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-          </div>
-         </div>
-         
-         <div className="mb-2 inline-block w-1/3">
-          <select id="nivel" name="nivelId" className='peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500' defaultValue={user.nivel} >
-            <option value="" disabled> Escolher nivel</option>
-            
-            {niveis.map((nivel) => (
-              <option key={nivel.idniv} value={nivel.idniv}>
-                {nivel.niv}
-              </option>
-            ))}
-             
-          </select>
-         </div>
-         */}
       <div>
         <div className="w-1/2">
            <p>Reuniao: </p>

@@ -85,7 +85,7 @@ export default async function ReunioesTable({
                     {reuniao.sala} 
                   </td>
                   <td className="py-3">
-                    {moment.tz(reuniao.d_lim,tz).format('DD/MM/YY HH:mm')} 
+                    {moment.tz(reuniao.d_lim,tz).format('DD/MM/YY')} 
                   </td>
                   
                 </tr>
