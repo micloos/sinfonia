@@ -163,7 +163,7 @@ export async function updateReuniao (id: string, formData:FormData)
 	{/* Fast */}
 	const myreq = `update reuniao_t1000_reuniao set
 			Dt_inicialReuniao='${formData.get('d_ini')}',
-			Dt_LimiteInclusaoItemReuniao=${formData.get('d_lim')}',
+			Dt_LimiteInclusaoItemReuniao='${formData.get('d_lim')}',
 			Ds_SalaReuniao='${formData.get('sala')}',
 			Ds_PredioSalaReuniao='${formData.get('predio')}'
 			Where Cd_Reuniao = ${id}`;
