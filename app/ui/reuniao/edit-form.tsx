@@ -9,12 +9,19 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/oldbutton';
 import { updateReuniao } from '@/app/lib/reuniao/actions';
 import { useState } from 'react';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { mylog } from '@/app/lib/mylogger';
 import moment from 'moment-timezone';
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import 'dayjs/locale/pt-br';
+import { DateTimePicker, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+dayjs.extend(utc);
+
 moment.tz.setDefault('UTC');
 registerLocale('pt-BR',ptBR);
 const localTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -35,11 +42,12 @@ export default function EditReuniaoForm({
   const functionname = 'EditReuniaoForm';
   mylog('DBG', filename, functionname, 'reuniao=',reuniao);
   {/* Gambearra mestre */}
-  const initdate = new Date(moment(reuniao.d_ini).tz(localTZ).format());
-  mylog("DBG",filename,functionname,"ISO=",initdate.toISOString());
+  const initdate = dayjs.utc(reuniao.d_ini);
+  const docudate = dayjs.utc(reuniao.d_lim);
+  mylog("DBG",filename,functionname,"ISO=",initdate);
   {/* Gambearra mestre fim*/}
   const [reuniaoDate, setReuniaoDate] = useState(initdate);
-  const [docDate, setDocDate] = useState(new Date(reuniao.d_lim));
+  const [docDate, setDocDate] = useState(docudate);
   const updateReuniaoWithId = updateReuniao.bind(null, reuniao.id.toString());
   const ifactive = (reuniao.active == 'N')? "hidden": "";
   mylog('DBG', filename, functionname, 'ifactive=',ifactive);
@@ -48,6 +56,7 @@ export default function EditReuniaoForm({
   const ifback = (withbackbutton == 0) ? "hidden" : "";
   mylog('DBG', filename, functionname, 'ifback=',ifback);
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
     <form action={updateReuniaoWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <div className={`w-full mb-8 inline-block ${ifactive}`}>
@@ -95,10 +104,14 @@ export default function EditReuniaoForm({
           <label htmlFor="dataReuniao" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
+          {/*
           <DatePicker id="dataReuniao" disabled={withsavebutton == 0} showTimeSelect locale="pt-BR" dateFormat="dd/MM/yy HH:mm" 
                        selected={reuniaoDate} 
                        onChange={(date) => {if (date) { const newdate = new Date(moment(date).tz(localTZ).tz('UTC').format()); setReuniaoDate(newdate)}}} 
                        />
+                       */}
+          
+          <DateTimePicker disabled={withsavebutton == 0} defaultValue={reuniaoDate} onChange={(date) => {if(date) {setReuniaoDate(date)}}} />
           <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
@@ -106,8 +119,8 @@ export default function EditReuniaoForm({
         <label htmlFor="dataDocumentos" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
-            <DatePicker id="dataDocumentos" disabled={withsavebutton == 0} dateFormat="dd/MM/yy" selected={docDate}  
-            onChange={(date) => {if(date) {const newdate = new Date(moment(date).tz(localTZ).tz('UTC').format()); setDocDate(newdate)}}} />
+            <DatePicker disabled={withsavebutton == 0} defaultValue={docDate}  
+            onChange={(date) => {if(date) {setDocDate(date)}}} />
             <input type="hidden" id="d_lim" name="d_lim" value={docDate.toISOString()} />
         </div>
       <div>
@@ -127,6 +140,6 @@ export default function EditReuniaoForm({
        </div>
        </div>
     </form>
-    
+    </LocalizationProvider>
   );
 }
