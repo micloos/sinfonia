@@ -9,22 +9,28 @@ import { Button } from '@/app/ui/oldbutton';
 import { createReuniao, ReuniaoState } from '@/app/lib/reuniao/actions';
 import { Reunioes } from '@/app/lib/definitions'; 
 import { useActionState, useState } from 'react';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale } from  "react-datepicker";
 import { mylog } from '@/app/lib/mylogger';
-import { pt } from 'date-fns/locale/pt';
-registerLocale('pt',pt);
+
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import 'dayjs/locale/pt-br';
+import { DateTimePicker, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
+dayjs.extend(utc);
 
 export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;reuniaoNumber: number}) {
   const initialState: ReuniaoState = { message:null, errors: {}}
   
   
-  const [reuniaoDate, setReuniaoDate] = useState(new Date());
+  const [reuniaoDate, setReuniaoDate] = useState(dayjs.utc());
   const [state, formAction] = useActionState(createReuniao, initialState);
   mylog("DBG",'/app/ui/reuniao/create-form', 'ReuniaoForm' , "state=", state);
-  const [docDate, setDocDate] = useState(new Date());
+  const [docDate, setDocDate] = useState(dayjs.utc());
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <div className="mb-4 inline-block w-1/2">
@@ -67,7 +73,7 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
           <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
-          <DatePicker showTimeSelect locale="pt" dateFormat="dd/MM/yy HH:mm" selected={reuniaoDate} onChange={(date) => date && setReuniaoDate(date)} />
+          <DateTimePicker defaultValue={reuniaoDate} onChange={(date) => {if(date) {setReuniaoDate(date)}}} />
           <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
@@ -75,7 +81,8 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
         <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
-            <DatePicker locale="pt" dateFormat="dd/MM/yy" selected={docDate} onChange={(date) => date && setDocDate(date)} />
+            <DatePicker defaultValue={docDate}  
+            onChange={(date) => {if(date) {setDocDate(date)}}} />
             <input type="hidden" id="d_lim" name="d_lim" value={docDate.toISOString()} />
         </div>
       <div>
@@ -86,7 +93,7 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
         </div>
         <div className="mt-6 flex justify-end gap-4">
           <Link
-            href="/reuniao"
+            href="/sinfonia/reuniao"
             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
           >
           Voltar
@@ -96,6 +103,6 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
        </div>
        </div>
     </form>
-    
+    </LocalizationProvider>
   );
 }

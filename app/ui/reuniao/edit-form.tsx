@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/oldbutton';
 import { updateReuniao } from '@/app/lib/reuniao/actions';
 import { useState } from 'react';
-import { registerLocale } from  "react-datepicker";
-import { ptBR } from 'date-fns/locale/pt-BR';
+
+
 import { mylog } from '@/app/lib/mylogger';
 import moment from 'moment-timezone';
 
@@ -23,13 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 dayjs.extend(utc);
 
 moment.tz.setDefault('UTC');
-registerLocale('pt-BR',ptBR);
-const localTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 const filename = 'app/ui/reuniao/edit-form';
-
-mylog('DBG',filename,"none","localTZ=",localTZ);
-
 export default function EditReuniaoForm({
   reuniao,
   withsavebutton,
