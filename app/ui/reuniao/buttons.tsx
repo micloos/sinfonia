@@ -1,6 +1,6 @@
 import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteReuniao, editReuniao, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/reuniao/actions';
+import { deleteReuniao, editReuniao, escOrdemDoDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia } from '@/app/lib/reuniao/actions';
 import { escParticipant, deleteParticipantFromReuniao  } from '@/app/lib/participantes/actions';
 import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
@@ -63,16 +63,16 @@ export function Participantes({ id, active}: { id: string, active: string }) {
 }
 
 export function EscParticipant({ id, active}: { id: string, active: string }) {
-  const escParticipantWithId = escParticipant.bind(null, Number(id));
-  mylog("DBG",'/app/ui/reuniao/buttons', 'EscParticipantes' , "active=", active);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'UpdateReuniao' , "active=", active);
+  const editReuniaoWithId = escParticipante.bind(null, id);
   return (
-    <form action={escParticipantWithId}>
-      <Tooltip title="Participantes">
+    <form action={editReuniaoWithId} >
+    <Tooltip title="Participantes">
       <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Participantes</span>
-        <UserGroupIcon className="w-5" />
-      </button>
-      </Tooltip>
+        <span className="sr-only">Editar</span>  
+      <UserGroupIcon className="w-5" />
+      </button>             
+    </Tooltip>
     </form>
   );
 }
@@ -133,6 +133,25 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
   );
 }
 
+export function AddOrdemDiaToReuniao({ rid, editable }: { rid: number, editable: number }) {
+  const escParticipantWithId = escParticipant.bind(null, rid);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'AddOrdemDiaToReuniao' , "rid=", rid);
+  if (editable==1){
+  return (
+    <form action={escParticipantWithId}>
+      <Tooltip title="OrdemDia">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Ordem do Dia</span>
+        <PlusIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+} else {
+  return (<p></p>);
+}
+}
+
 export function AddParticipantToReuniao({ rid, editable }: { rid: number, editable: number }) {
   const escParticipantWithId = escParticipant.bind(null, rid);
   mylog("DBG",'/app/ui/reuniao/buttons', 'AddParticipanteToReuniao' , "rid=", rid);
@@ -163,6 +182,47 @@ export function DeleteParticipantFromReuniao({id, editable, rid}: {id: number, e
       <button className="rounded-md border p-2 hover:bg-gray-100" >
         <span className="sr-only">OrdemDoDia</span>
         <TrashIcon className="w-5" />
+      </button>
+      </Tooltip>
+      </form>
+    )
+  } else {
+    return (<p/>)
+  }
+}
+
+export function DeleteOrdemDiaFromReuniao({id, editable, rid}: {id: number, editable: number, rid:number}) {
+  mylog("DBG",'/app/ui/reuniao/buttons', 'DeleteOrdemDiaFromReuniao' , "{id,editable,rid}=", {id,editable,rid});
+  const deleteOrdemDiaFromReuniaoWithId = deleteOrdemDia.bind(null,id,rid);
+
+  if (editable==1) {
+    return(
+      <form action={deleteOrdemDiaFromReuniaoWithId}>
+      <Tooltip title="Excluir">
+
+      <button className="rounded-md border p-2 hover:bg-gray-100" >
+        <span className="sr-only">OrdemDoDia</span>
+        <TrashIcon className="w-5" />
+      </button>
+      </Tooltip>
+      </form>
+    )
+  } else {
+    return (<p/>)
+  }
+}
+
+export function EditOrdemDia({id, editable, rid}: {id: number, editable: number, rid:number}) {
+  const deleteParticipantFromReuniaoWithId = deleteParticipantFromReuniao.bind(null,id,rid);
+  mylog("DBG",'/app/ui/reuniao/buttons', 'EditOrdemDia' , "{id,editable,rid}=", {id,editable,rid});
+  if (editable==1) {
+    return(
+      <form action={deleteParticipantFromReuniaoWithId}>
+      <Tooltip title="Editar">
+
+      <button className="rounded-md border p-2 hover:bg-gray-100" >
+        <span className="sr-only">OrdemDoDia</span>
+        <PencilIcon className="w-5" />
       </button>
       </Tooltip>
       </form>

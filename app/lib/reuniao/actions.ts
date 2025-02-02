@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
+import { Mynerve } from 'next/font/google';
 
 const filename="/app/lib/reuniao/actions"
 
@@ -55,6 +56,12 @@ export async function editReuniao (id: string)
 	redirect (goto);
 }
 
+export async function escParticipante (id: string)
+{
+	mylog ("DBG", "app/lib/actions", "editReuniao", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/participantes";
+	redirect (goto);
+}
 type numericanswer = { n : number};
 type charanswer = { s : string};
 
@@ -91,7 +98,22 @@ export async function setReuniaoFuncao(pid: number, funcao: string) {
 export async function escOrdemDoDia (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "escOrdemDoDia", "id=",id);
-	redirect ('/proto');
+	const goto =  "/sinfonia/reuniao/"+id+"/ordemDia";
+	redirect (goto);
+}
+
+export async function deleteOrdemDia (id:number,rid: number)
+{
+   mylog("DBG",filename,"deleteOrdemDia","id=",id);
+   const myreq = `DELETE FROM REUNIAO_T1500_OrdemDia where Cd_OrdemDia = ${id}`;
+   try {
+	const answer = await mssql(myreq);
+	mylog ("DBG",filename,"deleteOrdemDia","answer=",answer)
+
+   } catch(error) {
+	mylog("ERROR",filename,"deleteOrdemDia","Unable to delete Ordem Dia error=",error);
+
+   }
 }
 
 export async function reativarReuniao (id: string)
@@ -103,7 +125,8 @@ export async function reativarReuniao (id: string)
 export async function comporPauta (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "comporPauta", "id=",id);
-	redirect ('/proto');
+	const goto = "/sinfonia/reuniao/"+id+"/pauta";
+	redirect (goto);
 }
 
 const CreateReuniao = ReuniaoFormSchema.omit({active: true, d_end: true});

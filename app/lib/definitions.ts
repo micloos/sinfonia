@@ -9,6 +9,14 @@ export type Reunioes = {
 	sequencia: number|null;
 } 
 
+export type OrdemDia = {
+	id: number;
+	seq: number;
+	assunto: string;
+	publicavel: string;
+}
+
+
 export type LinksType = {
 	name: string;
 	href: string;

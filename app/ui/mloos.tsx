@@ -1,4 +1,5 @@
 import { PowerIcon } from '@heroicons/react/24/outline';
+import { sriracha } from '@/app/ui/fonts';
 {/* import { signOut } from '@/auth'; */}
 
 export default function MLoosFooter() {
@@ -21,7 +22,7 @@ export default function MLoosFooter() {
             </button>
         </form>
         
-            <p> MLoos Consulting LTDA</p>
+            <p className={`${sriracha.className}`} > MLoos Consulting LTDA</p>
         </div>
         </footer>
 );

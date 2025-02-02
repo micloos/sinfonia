@@ -1,5 +1,5 @@
 import { mssql } from '@/app/lib/db';
-import { UserType, Niveis, Numres, Reunioes, ParticipanteType } from '@/app/lib/definitions';
+import { UserType, Niveis, Numres, Reunioes, ParticipanteType, OrdemDia } from '@/app/lib/definitions';
 import { mylog } from './mylogger';
 
 
@@ -298,3 +298,44 @@ export async function fetchParticipanteById (id: string) {
 		throw new Error('Failed to fetch ParticipanteById');
 	}
 }
+
+export async function fetchOrdemDiaPages (id: string) {
+	mylog("DBG",filename,'fetchOrdemDiaPages','id=',id);
+	const myreq = `SELECT COUNT(*) as n FROM REUNIAO_T1500_OrdemDia where cd_reuniao='${id}'`;
+	try {
+		const count = await mssql(myreq) as Numres[] ;
+		mylog("DBG",filename,'fetchReunioesPages','number of records=',count[0].n);
+		const totalPages = Math.ceil(count[0].n / ITEMS_PER_PAGE);
+		return (totalPages);
+	} catch (error) {
+		mylog ("ERROR", "app/lib/dat", "fetchReunioesPages","error=",error);
+		throw new Error('Failed to fetch Number of Ordem do Dia');
+	} 
+}
+
+export async function fetchOrdemDia (id: number, currentPage: number) 
+{
+	mylog("DBG",filename,"fetchOrdemDia","{id, currentPage}=",{id,currentPage});
+	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+	const myreq = `select 
+		Cd_OrdemDia as id, 
+		Cd_SequenciaOrdemDia as seq, 
+		Ds_OrdemDia as assunto, 
+		Ind_OrdemDiaPublicavel as publicavel 
+		from REUNIAO_T1500_OrdemDia 
+		where cd_reuniao =${id}
+		order by seq
+		offset ${offset} rows
+		fetch next ${ITEMS_PER_PAGE} rows only`;
+	mylog("DBG",filename,"fetchOrdemDia","myreq=",myreq.replace(/\s/g," "));
+	try {
+		const ordemdia = await mssql(myreq) as OrdemDia[];
+		mylog("DBG",filename,"fetchOrdemDia","ordemdia=",ordemdia);
+		return(ordemdia)
+	} catch(error) {
+		mylog("ERROR",filename,"fetchOrdemDia","Error",error);
+		throw new Error ("Failed to fetch Ordem do Dia");
+	}
+
+}
+
