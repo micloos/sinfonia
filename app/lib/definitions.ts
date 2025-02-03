@@ -14,6 +14,7 @@ export type OrdemDia = {
 	seq: number;
 	assunto: string;
 	publicavel: string;
+	deliberacao: string;
 }
 
 

@@ -1,0 +1,21 @@
+{
+    "sqltools.connections": [
+        {
+            "dbDriver": "mssqlnodev8",
+            "connectionMethod": "Integrated",
+            "connectionTimeout": 15,
+            "sidePanelOptions": {
+                "inaccessibleDatabase": true,
+                "inaccessibleSchema": true
+            },
+            "previewLimit": 50,
+            "odbcDriver": "SQL Server",
+            "port": 1433,
+            "msnodesqlv8Options": {},
+            "driver": "SQL Server/Azure+",
+            "name": "Azure-Uirapuru",
+            "server": "uirapuru.database.windows.net",
+            "database": "ensinocpgreuniao"
+        }
+    ]
+}

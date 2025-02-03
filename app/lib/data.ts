@@ -320,7 +320,8 @@ export async function fetchOrdemDia (id: number, currentPage: number)
 	const myreq = `select 
 		Cd_OrdemDia as id, 
 		Cd_SequenciaOrdemDia as seq, 
-		Ds_OrdemDia as assunto, 
+		Ds_OrdemDia as assunto,
+		Ds_DeliberacaoOrdemDia as deliberacao, 
 		Ind_OrdemDiaPublicavel as publicavel 
 		from REUNIAO_T1500_OrdemDia 
 		where cd_reuniao =${id}

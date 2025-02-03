@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
-import { Mynerve } from 'next/font/google';
+
 
 const filename="/app/lib/reuniao/actions"
 
@@ -104,7 +104,7 @@ export async function escOrdemDoDia (id: string)
 
 export async function deleteOrdemDia (id:number,rid: number)
 {
-   mylog("DBG",filename,"deleteOrdemDia","id=",id);
+   mylog("DBG",filename,"deleteOrdemDia","{rid,id}=",{rid,id});
    const myreq = `DELETE FROM REUNIAO_T1500_OrdemDia where Cd_OrdemDia = ${id}`;
    try {
 	const answer = await mssql(myreq);

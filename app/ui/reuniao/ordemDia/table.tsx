@@ -31,8 +31,11 @@ export default async function OrdemDia({rid, editable, currentPage}: { rid: numb
                         <th scope="col" className="px-1 py-5 w-1/10 font-medium sm:pl-6">
                             Sequência
                         </th>
-                        <th scope="col" className="px-1 py-5 w-2/3 font-medium sm:pl-6">
+                        <th scope="col" className="px-1 py-5 w-1/3 font-medium sm:pl-6">
                             Assunto
+                        </th>
+                        <th scope="col" className="px-1 py-5 w-1/3 font-medium sm:pl-6">
+                            Deliberacao
                         </th>
                         <th scope="col" className="px-1 py-5 w-1/10 font-medium sm:pl-6">
                             Publicável
@@ -59,6 +62,11 @@ export default async function OrdemDia({rid, editable, currentPage}: { rid: numb
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">
                             <div className="flex text-wrap items-center gap-3">
                                 {ordemdia.assunto}
+                            </div>
+                        </td>
+                        <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                            <div className="flex text-wrap items-center gap-3">
+                                {ordemdia.deliberacao}
                             </div>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">
