@@ -105,15 +105,31 @@ export async function escOrdemDoDia (id: string)
 export async function deleteOrdemDia (id:number,rid: number)
 {
    mylog("DBG",filename,"deleteOrdemDia","{rid,id}=",{rid,id});
-   const myreq = `DELETE FROM REUNIAO_T1500_OrdemDia where Cd_OrdemDia = ${id}`;
+   
    try {
+	const myreq = `DELETE FROM REUNIAO_T1500_OrdemDia where Cd_OrdemDia = ${id}`;
 	const answer = await mssql(myreq);
 	mylog ("DBG",filename,"deleteOrdemDia","answer=",answer)
 
    } catch(error) {
 	mylog("ERROR",filename,"deleteOrdemDia","Unable to delete Ordem Dia error=",error);
-
    }
+
+ try {
+	
+	const myreq = `with newseq as 
+	   (select cd_sequenciaordemdia, row_number() over (order by cd_sequenciaordemdia) 
+	   as id_new from reuniao_t1500_OrdemDia
+	   where cd_reuniao=${rid}) 
+	   update newseq set cd_sequenciaordemdia = id_new
+	   `
+	const answer = await mssql(myreq);
+	mylog ("DBG",filename,"deleteOrdemDia","answer=",answer);
+	
+   } catch(error) {
+	mylog("ERROR",filename,"deleteOrdemDia","Unable to renumber Ordem Dia error=",error);
+   }
+   
 }
 
 export async function reativarReuniao (id: string)
