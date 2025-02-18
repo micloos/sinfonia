@@ -79,10 +79,11 @@ export async function createParticipante (prevState: ParticipanteState, formData
 
 export async function escParticipant (id: number)
 {
-	mylog ("DBG", filename, "participantes", "id=",id);
+	mylog ("DBG", filename, "escParticipant", "id=",id);
 	const goto =  "/sinfonia/reuniao/"+id+"/participantes?rid="+id;
 	redirect (goto);
 }
+
 
 export async function updateParticipante (id: string, formData:FormData) {
 	mylog("DBG","app/lib/participantes/actions","updateParticipantes","formdata=",formData);

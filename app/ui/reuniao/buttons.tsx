@@ -1,10 +1,12 @@
 import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteReuniao, editReuniao, escOrdemDoDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia } from '@/app/lib/reuniao/actions';
+import { deleteReuniao, editReuniao, escOrdemDoDia, ordemDoDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia } from '@/app/lib/reuniao/actions';
 import { escParticipant, deleteParticipantFromReuniao  } from '@/app/lib/participantes/actions';
 import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
+
+const filename = "/app/ui/reuniao/buttons";
 
 export function CreateReuniao() {
   return (
@@ -33,7 +35,7 @@ export function DeleteReuniao({ id }: { id: string }) {
 }
 
 export function UpdateReuniao({ id, active }: { id: string, active: string }) {
-  mylog("DBG",'/app/ui/reuniao/buttons', 'UpdateReuniao' , "active=", active);
+  mylog("DBG",filename, 'UpdateReuniao' , "active=", active);
   const editReuniaoWithId = editReuniao.bind(null, id);
   return (
     <form action={editReuniaoWithId} >
@@ -49,7 +51,7 @@ export function UpdateReuniao({ id, active }: { id: string, active: string }) {
 
 export function Participantes({ id, active}: { id: string, active: string }) {
 	const participantesWithId = participantes.bind(null, id);
-  mylog("DBG",'/app/ui/reuniao/buttons', 'Participantes' , "active=", active);
+  mylog("DBG",filename, 'Participantes' , "active=", active);
   return (
     <form action={participantesWithId}>
       <Tooltip title="Participantes">
@@ -63,7 +65,7 @@ export function Participantes({ id, active}: { id: string, active: string }) {
 }
 
 export function EscParticipant({ id, active}: { id: string, active: string }) {
-  mylog("DBG",'/app/ui/reuniao/buttons', 'UpdateReuniao' , "active=", active);
+  mylog("DBG",filename, 'UpdateReuniao' , "active=", active);
   const editReuniaoWithId = escParticipante.bind(null, id);
   return (
     <form action={editReuniaoWithId} >
@@ -79,7 +81,7 @@ export function EscParticipant({ id, active}: { id: string, active: string }) {
 
 export function EscOrdemDoDia({ id, active }: { id: string, active: string }) {
 	const escOrdemDoDiaWithId = escOrdemDoDia.bind(null, id);
-  mylog("DBG",'/app/ui/reuniao/buttons', 'EscOrdemDoDia' , "active=", active);
+  mylog("DBG",filename, 'EscOrdemDoDia' , "active=", active);
   return (
     <form action={escOrdemDoDiaWithId}>
       <Tooltip title="Ordem do Dia">
@@ -119,7 +121,7 @@ export function ReativarReuniao({ id, active }: { id: string, active: string }) 
 }
 
 export function ComporPauta({id,active}: {id: string, active: string }) {
-  mylog("DBG",'/app/ui/reuniao/buttons', 'ComporPauta' , "active=", active);
+  mylog("DBG",filename, 'ComporPauta' , "active=", active);
   const comporPautaWithId = comporPauta.bind(null, id);
   return (
     <form action={comporPautaWithId}>
@@ -134,11 +136,11 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
 }
 
 export function AddOrdemDiaToReuniao({ rid, editable }: { rid: number, editable: number }) {
-  const escParticipantWithId = escParticipant.bind(null, rid);
-  mylog("DBG",'/app/ui/reuniao/buttons', 'AddOrdemDiaToReuniao' , "rid=", rid);
+  const OrdemDoDiaWithId = ordemDoDia.bind(null, rid);
+  mylog("DBG",filename, 'AddOrdemDiaToReuniao' , "rid=", rid);
   if (editable==1){
   return (
-    <form action={escParticipantWithId}>
+    <form action={OrdemDoDiaWithId}>
       <Tooltip title="OrdemDia">
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Ordem do Dia</span>
@@ -154,7 +156,7 @@ export function AddOrdemDiaToReuniao({ rid, editable }: { rid: number, editable:
 
 export function AddParticipantToReuniao({ rid, editable }: { rid: number, editable: number }) {
   const escParticipantWithId = escParticipant.bind(null, rid);
-  mylog("DBG",'/app/ui/reuniao/buttons', 'AddParticipanteToReuniao' , "rid=", rid);
+  mylog("DBG",filename, 'AddParticipanteToReuniao' , "rid=", rid);
   if (editable==1){
   return (
     <form action={escParticipantWithId}>
@@ -173,7 +175,7 @@ export function AddParticipantToReuniao({ rid, editable }: { rid: number, editab
 
 export function DeleteParticipantFromReuniao({id, editable, rid}: {id: number, editable: number, rid:number}) {
   const deleteParticipantFromReuniaoWithId = deleteParticipantFromReuniao.bind(null,id,rid);
-  mylog("DBG",'/app/ui/reuniao/buttons', 'DeleteParticipantFromReuniao' , "id=", {id,rid});
+  mylog("DBG",filename, 'DeleteParticipantFromReuniao' , "id=", {id,rid});
   if (editable==1) {
     return(
       <form action={deleteParticipantFromReuniaoWithId}>
@@ -192,7 +194,7 @@ export function DeleteParticipantFromReuniao({id, editable, rid}: {id: number, e
 }
 
 export function DeleteOrdemDiaFromReuniao({id, editable, rid}: {id: number, editable: number, rid:number}) {
-  mylog("DBG",'/app/ui/reuniao/buttons', 'DeleteOrdemDiaFromReuniao' , "{id,editable,rid}=", {id,editable,rid});
+  mylog("DBG",filename, 'DeleteOrdemDiaFromReuniao' , "{id,editable,rid}=", {id,editable,rid});
   const deleteOrdemDiaFromReuniaoWithId = deleteOrdemDia.bind(null,id,rid);
 
   if (editable==1) {
@@ -214,7 +216,7 @@ export function DeleteOrdemDiaFromReuniao({id, editable, rid}: {id: number, edit
 
 export function EditOrdemDia({id, editable, rid}: {id: number, editable: number, rid:number}) {
   const deleteParticipantFromReuniaoWithId = deleteParticipantFromReuniao.bind(null,id,rid);
-  mylog("DBG",'/app/ui/reuniao/buttons', 'EditOrdemDia' , "{id,editable,rid}=", {id,editable,rid});
+  mylog("DBG",filename, 'EditOrdemDia' , "{id,editable,rid}=", {id,editable,rid});
   if (editable==1) {
     return(
       <form action={deleteParticipantFromReuniaoWithId}>
@@ -235,7 +237,7 @@ export function EditOrdemDia({id, editable, rid}: {id: number, editable: number,
 
 export function DeleteParticipante ({id,active}: {id:number, active:string})
 {
-  mylog("DBG",'/app/ui/reuniao/buttons', 'DeleteParticipante' , "{id, active}=", {id, active});
+  mylog("DBG",filename, 'DeleteParticipante' , "{id, active}=", {id, active});
   return (
       <Tooltip title="Excluir">
       <button className="rounded-md border p-2 hover:bg-gray-100" >

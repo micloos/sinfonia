@@ -39,6 +39,16 @@ export type ReuniaoState = {
 	message?: string | null;
 } 
 
+export type OrdemState = {
+	errors?: {
+		sequencia?: string[];
+		assunto?: string[];
+		
+		publicavel?: string[];
+	};
+	message?: string | null;
+}
+
 const ReuniaoFormSchema = z.object ({
 	id: z.string(),
 	d_ini: z.string().datetime(),
@@ -47,6 +57,14 @@ const ReuniaoFormSchema = z.object ({
 	sala: z.string().max(40),
 	active: z.enum(['S','N']),
 	d_end: z.string().datetime(),
+})
+
+const OrdemFormSchema = z.object ({
+	rid: z.number(),
+	sequencia: z.number().min(1),
+	assunto: z.string().min(5),
+	deliberacao: z.string().min(3),
+	publicavel: z.enum(['S','N']),
 })
 
 export async function editReuniao (id: string)
@@ -145,6 +163,61 @@ export async function comporPauta (id: string)
 	redirect (goto);
 }
 
+export async function ordemDoDia (id: number)
+{
+	mylog ("DBG", filename, "ordemDoDia", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/ordemDia";
+	mylog ("DBG", filename, "ordemDoDia", "goto=",goto);
+	redirect (goto);
+}
+
+const CreateOrdem = OrdemFormSchema.omit({deliberacao: true});
+
+export async function createOrdem (prevState: OrdemState, formData:FormData)
+{
+	mylog ("DBG",filename,"createOrdem","formData=",formData);
+
+	const validatedFields = CreateOrdem.safeParse({
+		rid: formData.get('id'),
+		sequencia: formData.get('seequencia'),
+		assunto: formData.get('assunto'),
+		publicavel: formData.get('publicavel')
+	});
+
+	if(!validatedFields.success) {
+		mylog("WARN",filename,"createOrdem","validation error=",validatedFields.error.flatten().fieldErrors);
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: 'Missing Fields, failed to create',
+		}	
+	}
+
+	const rid = validatedFields.data.rid;
+	const sequencia = validatedFields.data.sequencia;
+	const assunto = validatedFields.data.assunto;
+	const publicavel = validatedFields.data.publicavel;
+
+	mylog("DBG",filename,"createOrdem","{toinsert}",{rid,sequencia,assunto,publicavel});
+
+	try {
+		const myreq = `
+		INSERT INTO REUNIAO_T1500_OrdemDia
+			(Cd_Reuniao,Cd_SequenciaOrdemDia,Ds_OrdemDia,Ind_OrdemDiaPublicavel)
+			VALUES (${rid},${sequencia},'${assunto}','${publicavel}')
+		`;
+		mylog("DBG",filename,"createOrdem","myreq=",myreq.replace(/\s/g," "));
+		const answer = await mssql(myreq);
+		mylog("DBG",filename,"createOrdem","answer=",answer)
+	} catch(error) {
+		mylog("INFO",filename,"createOrdem","error=",error);
+		return {
+			message: 'Database Error: Nao crou Ordem do Dia'
+		}
+	}
+
+	redirect('/sinfonia/reunia/'+rid.toString()+'/ordemDia');
+}
+
 const CreateReuniao = ReuniaoFormSchema.omit({active: true, d_end: true});
 
 export async function createReuniao (prevState: ReuniaoState, formData:FormData)
@@ -184,7 +257,7 @@ export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N')
 		`;
 		const answer = await mssql(myreq);
-		mylog ("DBG", "app/lib/actions", "createReuniao", "answer=",answer);
+		mylog ("DBG", filename, "createReuniao", "answer=",answer);
 	} catch (error) {
 		mylog ("ERROR", "app/lib/actions", "createReuniao", "error=",error);
 		return {
