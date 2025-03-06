@@ -1,5 +1,5 @@
 import { mssql } from '@/app/lib/db';
-import { UserType, Niveis, Numres, ParticipanteType } from '@/app/lib/definitions';
+import { UserType, Niveis, Numres, Reunioes, ParticipanteType, OrdemDia, SystemUser } from '@/app/lib/definitions';
 import { mylog } from './mylogger';
 
 
@@ -220,4 +220,24 @@ export async function fetchFilteredAssuntos (
 	}
 }	
 
+export async function getUser(username:string)  {
+	mylog("DBG",filename,"getUser","username = ",username);
+    try {
+       const myreq = `SELECT u.Ds_LoginAcessoUsuarioSistemaReuniao as username, 
+                                        u.Nr_SenhaAcessoUsuarioSistemaReuniao as password, 
+                                        r.Nm_NivelUsuarioSistema as role,
+										1 as id  
+                                        FROM REUNIAO_T3100_UsuarioSistemaReuniao as u 
+										join REUNIAO_T3300_NivelUsuarioSistema as r 
+										ON r.Cd_NivelUsuarioSistema = u.Cd_NivelUsuarioSistema
+										where u.Ds_LoginAcessoUsuarioSistemaReuniao='${username}'`;
+		mylog("DBG",filename,"getUser","myreq = ",myreq);
+		const user = await mssql(myreq) as SystemUser[];
+		mylog("DBG",filename,"getUser","user = ",user);
+       return user[0];
+    } catch (error) {
+        mylog("ERROR","auth","getUser","error",error);
+        throw new Error('Failed to fetch user.');
+    }
+}
 

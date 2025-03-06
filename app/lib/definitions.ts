@@ -1,6 +1,12 @@
 import type { ItemReuniao,AtribuidorName, DisciplinaEspeciais } from "./reuniao/definitions";
 
 export type numericanswer = { n : number};
+export type SystemUser = {
+	id: number;
+	username: string;
+	password: string;
+	role: string;
+}
 
 export type Reunioes = {
 	id: number;
