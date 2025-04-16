@@ -34,7 +34,6 @@ export default async function Page(props: {
 const withbackbutton = 1;
 const withsavebutton = reuniao.active==='N'?1:0;
 const rid=Number(id);
-const editable=0;
 
 mylog('DBG',filename,"Page","rid=",rid);
 
@@ -47,7 +46,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <ParticipantesByReuniao rid={rid} editable={editable} currentPage={currentPage} />
+      <ParticipantesByReuniao rid={rid} editable={withsavebutton} currentPage={currentPage} />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />
       </div>

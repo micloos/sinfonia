@@ -13,7 +13,7 @@ const BackgroundDiv = styled.div`
 
 export default function Ipen() {
 	return (
-		<div className="flex bg-blue-400 w-full justify-between" >
+		<div className="flex bg-blue-400 w-full justify-between" data-testid="Ipen">
       <div>
           <Image
             src='/logo_ipen_ensino.png' 

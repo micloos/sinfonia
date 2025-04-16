@@ -84,6 +84,20 @@ export async function escParticipant (id: number)
 	redirect (goto);
 }
 
+export async function escParticipantReuniao (id: number)
+{
+	mylog ("DBG", filename, "participantes", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/editparticipante?rid="+id;
+	redirect (goto);
+}
+
+export async function escParticipantForReuniao (id: number)
+{
+	mylog ("DBG", filename, "participantes", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/reuniaoparticipantes?rid="+id;
+	redirect (goto);
+}
+
 export async function updateParticipante (id: string, formData:FormData) {
 	mylog("DBG","app/lib/participantes/actions","updateParticipantes","formdata=",formData);
 	mylog("DBG","app/lib/participantes/actions","updateParticipantes","id=",id);
@@ -136,6 +150,6 @@ export async function deleteParticipantFromReuniao (id: number, rid: number) {
 	const answer = mssql(myreq);
 	mylog("DBG",filename,'deleteParticipantFromReuniao','answer=',answer);
 
-	revalidatePath('/sinfonia/reuniao/'+rid.toString()+'/edit');
-	redirect('/sinfonia/reuniao/'+rid.toString()+'/edit');
+	revalidatePath('/sinfonia/reuniao/'+rid.toString()+'/editparticipante');
+	redirect('/sinfonia/reuniao/'+rid.toString()+'/editparticipante');
 }

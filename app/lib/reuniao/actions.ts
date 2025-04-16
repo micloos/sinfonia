@@ -77,7 +77,7 @@ export async function addParticipanteToReuniao (id: number, rid: number ){
 	} else {
 		mylog("DBG",filename,'addParticipanteToReuniao',"Participante ja existente",vazio.length);
 	}
-redirect ("/sinfonia/reuniao/"+rid.toString()+"/edit")
+redirect ("/sinfonia/reuniao/"+rid.toString()+"/editparticipante")
 
 }
 

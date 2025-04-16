@@ -1,7 +1,7 @@
 import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, reativarReuniao, comporPauta } from '@/app/lib/reuniao/actions';
-import { escParticipant, deleteParticipantFromReuniao  } from '@/app/lib/participantes/actions';
+import { escParticipant, escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
 import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
@@ -12,7 +12,7 @@ export function CreateReuniao() {
       href="/sinfonia/reuniao/criar"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
-      <span className="hidden md:block">Criar Reuniao</span>{' '}
+      <span className="hidden md:block">Criar Reunião</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
     </Link>
   );
@@ -67,6 +67,21 @@ export function EscParticipant({ id, active}: { id: string, active: string }) {
   mylog("DBG",'/app/ui/reuniao/buttons', 'EscParticipantes' , "active=", active);
   return (
     <form action={escParticipantWithId}>
+      <Tooltip title="Participantes">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Participantes</span>
+        <UserGroupIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+}
+
+export function EscParticipantReuniao({ id, active}: { id: string, active: string }) {
+  const escParticipantReuniaoWithId = escParticipantReuniao.bind(null, Number(id));
+  mylog("DBG",'/app/ui/reuniao/buttons', 'EscParticipantes' , "active=", active);
+  return (
+    <form action={escParticipantReuniaoWithId}>
       <Tooltip title="Participantes">
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Participantes</span>
@@ -134,11 +149,11 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
 }
 
 export function AddParticipantToReuniao({ rid, editable }: { rid: number, editable: number }) {
-  const escParticipantWithId = escParticipant.bind(null, rid);
+  const escParticipantForReuniaoWithId = escParticipantForReuniao.bind(null, rid);
   mylog("DBG",'/app/ui/reuniao/buttons', 'AddParticipanteToReuniao' , "rid=", rid);
   if (editable==1){
   return (
-    <form action={escParticipantWithId}>
+    <form action={escParticipantForReuniaoWithId}>
       <Tooltip title="Participantes">
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Participantes</span>

@@ -22,7 +22,7 @@ export default async function Page(props: {
 	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "totalPages=", totalPages);
 	return (
 <div className="w-full">
-	<div className="mt-4 flex w-4/5 items-center justify-between gap-2 md:mt-8">
+	<div className="mt-4 flex  items-center justify-between gap-2 md:mt-8">
 	   <Search placeholder="Procurar..." />
 	   <CreateReuniao />	   
 	</div>
