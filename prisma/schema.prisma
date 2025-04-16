@@ -1,0 +1,351 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model REUNIAO_T0100_GrupoSolicitanteReuniao {
+  Cd_GrupoSolicitanteReuniao               Int                                        @id(map: "PK_REUNIAO_T0100_Grupo_Solicitante_Reuniao")
+  Nm_GrupoSolicitanteReuniao               String                                     @db.VarChar(100)
+  Id_Usuario                               String                                     @default("user_name()", map: "DF_Usuario") @db.VarChar(200)
+  Dt_Atualizacao                           DateTime                                   @default(now(), map: "DF_DataAtualizacao") @db.DateTime
+  REUNIAO_T0300_TipoReuniaoSolicitadaGrupo REUNIAO_T0300_TipoReuniaoSolicitadaGrupo[]
+}
+
+model REUNIAO_T0200_AssuntoReuniao {
+  Cd_AssuntoReuniao                          Int                                          @id(map: "PK_REUNIAO_T0200_Assunto_Reuniao")
+  Ds_AssuntoAtaReuniao                       String                                       @db.VarChar(200)
+  Ds_AssuntoDeliberacao                      String                                       @db.VarChar(200)
+  Cd_AssuntoReuniaoRetornavel                Int?
+  Cd_ModeloDespacho                          Int?
+  Id_Usuario                                 String                                       @default("user_name()", map: "DF_Usuario2") @db.VarChar(200)
+  Dt_Atualizacao                             DateTime                                     @default(now(), map: "DF_DataAtualizacao2") @db.DateTime
+  REUNIAO_T0200_AssuntoReuniao               REUNIAO_T0200_AssuntoReuniao?                @relation("REUNIAO_T0200_AssuntoReuniaoToREUNIAO_T0200_AssuntoReuniao", fields: [Cd_AssuntoReuniaoRetornavel], references: [Cd_AssuntoReuniao], onDelete: NoAction, onUpdate: NoAction, map: "FK1_REUNIAO_T0200_REUNIAO_T0200")
+  other_REUNIAO_T0200_AssuntoReuniao         REUNIAO_T0200_AssuntoReuniao[]               @relation("REUNIAO_T0200_AssuntoReuniaoToREUNIAO_T0200_AssuntoReuniao")
+  REUNIAO_T1700_ModeloDespacho               REUNIAO_T1700_ModeloDespacho?                @relation(fields: [Cd_ModeloDespacho], references: [Cd_ModeloDespacho], onDelete: NoAction, onUpdate: NoAction, map: "FK2_REUNIAO_T1700_REUNIAO_T0200")
+  REUNIAO_T0300_TipoReuniaoSolicitadaGrupo   REUNIAO_T0300_TipoReuniaoSolicitadaGrupo[]
+  REUNIAO_T1010_ItemReuniao                  REUNIAO_T1010_ItemReuniao[]
+  REUNIAO_T1101_DocumentoRequeridoAssuntoAta REUNIAO_T1101_DocumentoRequeridoAssuntoAta[]
+  REUNIAO_T1200_ParametroAssuntoReuniao      REUNIAO_T1200_ParametroAssuntoReuniao?
+}
+
+model REUNIAO_T0300_TipoReuniaoSolicitadaGrupo {
+  Cd_GrupoSolicitanteReuniao            Int
+  Cd_AssuntoReuniao                     Int
+  Id_Usuario                            String                                @default("user_name()", map: "DF_Usuario3") @db.VarChar(200)
+  Dt_Atualizacao                        DateTime                              @default(now(), map: "DF_DataAtualizacao3") @db.DateTime
+  REUNIAO_T0100_GrupoSolicitanteReuniao REUNIAO_T0100_GrupoSolicitanteReuniao @relation(fields: [Cd_GrupoSolicitanteReuniao], references: [Cd_GrupoSolicitanteReuniao], onUpdate: NoAction, map: "FK1_REUNIAO_T0100_REUNIAO_T0300")
+  REUNIAO_T0200_AssuntoReuniao          REUNIAO_T0200_AssuntoReuniao          @relation(fields: [Cd_AssuntoReuniao], references: [Cd_AssuntoReuniao], onUpdate: NoAction, map: "FK2_REUNIAO_T0200_REUNIAO_T0300")
+
+  @@id([Cd_GrupoSolicitanteReuniao, Cd_AssuntoReuniao], map: "PK_REUNIAO_T0300_Tipo_Reuniao_Solicitada_Grupo")
+}
+
+model REUNIAO_T0400_DownloadDocumentos {
+  idDownloadDocumentos Int      @id(map: "PK__REUNIAO___DC81A4F8E856FA71")
+  nmDocumento          String   @db.VarChar(255)
+  dsDocumento          String?  @db.VarChar(1000)
+  dsCaminho            String   @db.VarChar(255)
+  Id_Usuario           String   @default("user_name()", map: "DF_Usuario04") @db.VarChar(200)
+  Dt_Atualizacao       DateTime @default(now(), map: "DF_DataAtualizacao04") @db.DateTime
+}
+
+model REUNIAO_T0700_TipoExaminadorBanca {
+  Cd_TipoExaminador                     Int                                     @id(map: "PK_REUNIAO_T0700_TipoBancaExaminadora")
+  Nm_TipoExaminador                     String                                  @db.VarChar(100)
+  Id_Usuario                            String                                  @default("user_name()", map: "DF_Usuario5") @db.VarChar(200)
+  Dt_Atualizacao                        DateTime                                @default(now(), map: "DF_DataAtualizacao5") @db.DateTime
+  REUNIAO_T0900_BancaExaminadoraReuniao REUNIAO_T0900_BancaExaminadoraReuniao[]
+}
+
+model REUNIAO_T0900_BancaExaminadoraReuniao {
+  Cd_ItemReuniao                    Int
+  Cd_TipoExaminador                 Int
+  nm_ExaminadorBanca                String?                           @db.VarChar(255)
+  Cd_BancaExaminadoraReuniao        Int                               @id(map: "PK_REUNIAO_T0900_BancaExaminadoraReuniao")
+  ds_LotExaminadorBanca             String?                           @db.VarChar(50)
+  Id_Usuario                        String                            @default("user_name()", map: "DF_Usuario6") @db.VarChar(200)
+  Dt_Atualizacao                    DateTime                          @default(now(), map: "DF_DataAtualizacao6") @db.DateTime
+  REUNIAO_T1010_ItemReuniao         REUNIAO_T1010_ItemReuniao         @relation(fields: [Cd_ItemReuniao], references: [Cd_ItemReuniao], onUpdate: NoAction, map: "FK_REUNIAO_T0900_BancaExaminadoraReuniao_REUNIAO_T1010_ItemReuniao")
+  REUNIAO_T0700_TipoExaminadorBanca REUNIAO_T0700_TipoExaminadorBanca @relation(fields: [Cd_TipoExaminador], references: [Cd_TipoExaminador], onUpdate: NoAction, map: "FK2_REUNIAO_T0700_REUNIAO_0900")
+}
+
+model Reuniao {
+  Cd_Reuniao                        Int                                 @id(map: "PK_REUNIAO_T1000_Reuniao")
+  Dt_InicialReuniao                 DateTime                            @db.DateTime
+  Dt_FinalReuniao                   DateTime?                           @db.DateTime
+  Ds_SalaReuniao                    String?                             @db.VarChar(100)
+  Ds_PredioSalaReuniao              String?                             @db.VarChar(100)
+  Dt_LimiteInclusaoItemReuniao      DateTime                            @db.DateTime
+  Ind_ReaberturaReuniao             String                              @default("N", map: "DF__REUNIAO_T__Ind_R__160F4887") @db.Char(1)
+  Nr_SequenciaReaberturaReuniao     Int?
+  Id_Usuario                        String                              @default("user_name()", map: "DF_Usuario7") @db.VarChar(200)
+  Dt_Atualizacao                    DateTime                            @default(now(), map: "DF_DataAtualizacao7") @db.DateTime
+  REUNIAO_T1010_ItemReuniao         REUNIAO_T1010_ItemReuniao[]
+  REUNIAO_T1500_OrdemDia            REUNIAO_T1500_OrdemDia[]
+  REUNIAO_T1600_ParticipanteReuniao REUNIAO_T1600_ParticipanteReuniao[]
+
+  @@map ("REUNIAO_T1000_Reuniao")
+}
+
+model ItemReuniao {
+  Cd_ItemReuniao                         Int                                     @id(map: "PK_REUNIAO_T1010_ItemReuniao")
+  Ind_AdReferendum                       String                                  @default("N", map: "DF_REUNIAO_T1010_ItemReuniao_Ind_AdReferendum") @db.Char(1)
+  ds_AdReferendum                        String?                                 @db.VarChar(1000)
+  dt_AdReferendum                        DateTime?                               @db.DateTime
+  ds_CredenciamentoDisciplina            String?                                 @db.VarChar(1000)
+  Nm_CredProfessorResponsavel            String?                                 @db.VarChar(255)
+  Nm_CredNovoProfessor                   String?                                 @db.VarChar(255)
+  Dt_Defesa                              DateTime?                               @db.DateTime
+  Cd_ClassificacaoDeliberacao            Int?
+  Ds_ObservacaoDeliberacao               String?                                 @db.VarChar(1000)
+  nm_Interessado                         String?                                 @db.VarChar(255)
+  nm_Orientador                          String?                                 @db.VarChar(255)
+  ds_MotivoItem                          String?                                 @db.VarChar(1000)
+  ds_ObservacaoItem                      String?                                 @db.VarChar(1000)
+  ds_ObservacaoNaoPublicavelItem         String?                                 @db.VarChar(1000)
+  nm_Relator                             String?                                 @db.VarChar(255)
+  ds_ObservacaoRelator                   String?                                 @db.VarChar(1000)
+  nm_NovoOrientador                      String?                                 @db.VarChar(255)
+  Cd_TipoSolicitacaoPrazo                Int?
+  qt_SolicitacaoPrazoDiasSolicitados     Int?
+  qt_SolicitacaoPrazoDiasConcedidos      Int?
+  Cd_AssuntoReuniao                      Int?
+  ds_AreaInteressado                     String?                                 @db.VarChar(20)
+  ds_NivelInteressado                    String?                                 @db.VarChar(20)
+  ds_LotOrientador                       String?                                 @db.VarChar(50)
+  ds_LotRelator                          String?                                 @db.VarChar(50)
+  cd_Reuniao                             Int?
+  dt_Deposito                            DateTime?                               @db.DateTime
+  ds_TituloDissertacaoTese               String?                                 @db.VarChar(1000)
+  ds_TituloPlanoTrabalho                 String?                                 @db.VarChar(1000)
+  ds_TituloPlanoTrabalho_NovoPlano       String?                                 @db.VarChar(1000)
+  dt_Apresentacao                        DateTime?                               @db.DateTime
+  ds_EstagioDisciplina                   String?                                 @db.VarChar(255)
+  dt_EstagioPeriodoInicio                DateTime?                               @db.DateTime
+  dt_EstagioPeriodoFim                   DateTime?                               @db.DateTime
+  qt_EstagioCreditos                     Int?
+  cd_ReuniaoOrigem                       Int?
+  Id_Usuario                             String                                  @default("user_name()", map: "DF_Usuario8") @db.VarChar(200)
+  Dt_Atualizacao                         DateTime                                @default(now(), map: "DF_DataAtualizacao8") @db.DateTime
+  REUNIAO_T0900_BancaExaminadoraReuniao  REUNIAO_T0900_BancaExaminadoraReuniao[]
+  REUNIAO_T0200_AssuntoReuniao           REUNIAO_T0200_AssuntoReuniao?           @relation(fields: [Cd_AssuntoReuniao], references: [Cd_AssuntoReuniao], onDelete: NoAction, onUpdate: NoAction, map: "FK_REUNIAO_T1010_ItemReuniao_REUNIAO_T0200_AssuntoReuniao")
+  REUNIAO_T1000_Reuniao                  REUNIAO_T1000_Reuniao?                  @relation(fields: [cd_Reuniao], references: [Cd_Reuniao], onDelete: NoAction, onUpdate: NoAction, map: "FK_REUNIAO_T1010_ItemReuniao_REUNIAO_T1000_Reuniao")
+  REUNIAO_T1400_ClassificacaoDeliberacao REUNIAO_T1400_ClassificacaoDeliberacao? @relation(fields: [Cd_ClassificacaoDeliberacao], references: [Cd_ClassificacaoDeliberacao], onDelete: NoAction, onUpdate: NoAction, map: "FK_REUNIAO_T1010_ItemReuniao_REUNIAO_T1400_ClassificacaoDeliberacao")
+  REUNIAO_T3700_TipoSolicitacaoPrazo     REUNIAO_T3700_TipoSolicitacaoPrazo?     @relation(fields: [Cd_TipoSolicitacaoPrazo], references: [cd_TipoSolicitacaoPrazo], onDelete: NoAction, onUpdate: NoAction, map: "FK_REUNIAO_T1010_ItemReuniao_REUNIAO_T3700_TipoSolicitacaoPrazo")
+  REUNIAO_T3800_DisciplinaEspecial       REUNIAO_T3800_DisciplinaEspecial[]
+  REUNIAO_T3900_AtribuidorCreditos       REUNIAO_T3900_AtribuidorCreditos[]
+
+@@map("REUNIAO_T1010_ItemReuniao"
+}
+
+model REUNIAO_T1100_DocumentoAssuntoAta {
+  Cd_DocumentoAssuntoAta                     Int                                          @id(map: "PK_REUNIAO_T1100_DocumentoRequerido")
+  Nm_DocumentoAssuntoAta                     String                                       @db.VarChar(100)
+  Nm_SiglaDocumentoAssuntoAta                String?                                      @db.VarChar(10)
+  Ds_DocumentoAssuntoAta                     String?                                      @db.VarChar(200)
+  Id_Usuario                                 String                                       @default("user_name()", map: "DF_Usuario9") @db.VarChar(200)
+  Dt_Atualizacao                             DateTime                                     @default(now(), map: "DF_DataAtualizacao9") @db.DateTime
+  REUNIAO_T1101_DocumentoRequeridoAssuntoAta REUNIAO_T1101_DocumentoRequeridoAssuntoAta[]
+}
+
+model REUNIAO_T1101_DocumentoRequeridoAssuntoAta {
+  Cd_AssuntoReuniao                 Int
+  Cd_DocumentoAssuntoAta            Int
+  Id_Usuario                        String                            @default("user_name()", map: "DF_Usuario10") @db.VarChar(200)
+  Dt_Atualizacao                    DateTime                          @default(now(), map: "DF_DataAtualizacao10") @db.DateTime
+  REUNIAO_T0200_AssuntoReuniao      REUNIAO_T0200_AssuntoReuniao      @relation(fields: [Cd_AssuntoReuniao], references: [Cd_AssuntoReuniao], onUpdate: NoAction, map: "FK1_REUNIAO_T0200_REUNIAO_T1101")
+  REUNIAO_T1100_DocumentoAssuntoAta REUNIAO_T1100_DocumentoAssuntoAta @relation(fields: [Cd_DocumentoAssuntoAta], references: [Cd_DocumentoAssuntoAta], onUpdate: NoAction, map: "FK2_REUNIAO_T1100_REUNIAO_T1101")
+
+  @@id([Cd_AssuntoReuniao, Cd_DocumentoAssuntoAta], map: "PK_REUNIAO_T1101_DocumentoRequeridoAssuntoAta")
+}
+
+model REUNIAO_T1200_ParametroAssuntoReuniao {
+  Cd_AssuntoReuniao            Int                          @id(map: "PK_REUNIAO_T1200_ParametroAssuntoReuniao")
+  Ind_Interessado              String                       @default("N", map: "DF_ParametroAssuntoReuniao1") @db.Char(1)
+  Ind_Orientador               String                       @default("N", map: "DF_ParametroAssuntoReuniao2") @db.Char(1)
+  Ind_Defesa                   String                       @default("N", map: "DF_ParametroAssuntoReuniao3") @db.Char(1)
+  Ind_PlanoTrabalho            String                       @default("N", map: "DF_ParametroAssuntoReuniao4") @db.Char(1)
+  Ind_BancaExaminadora         String                       @default("N", map: "DF_ParametroAssuntoReuniao5") @db.Char(1)
+  Ind_Relator                  String                       @default("N", map: "DF_ParametroAssuntoReuniao6") @db.Char(1)
+  Ind_AtribuiCreditos          String                       @default("N", map: "DF_ParametroAssuntoReuniao7") @db.Char(1)
+  Ind_CredenciamentoDisciplina String                       @default("N", map: "DF_ParametroAssuntoReuniao11") @db.Char(1)
+  Ind_SolicitaPrazo            String                       @default("N", map: "DF_ParametroAssuntoReuniao12") @db.Char(1)
+  Ind_ADReferendum             String                       @default("N", map: "DF_ParametroAssuntoReuniao14") @db.Char(1)
+  Ind_Deliberacao              String                       @default("N", map: "DF_ParametroAssuntoReuniao15") @db.Char(1)
+  Ind_ObservacaoNaoPublicavel  String                       @default("N", map: "DF_ParametroAssuntoReuniao16") @db.Char(1)
+  Ind_ObservacaoAssunto        String                       @default("N", map: "DF_REUNIAO_T1200_ParametroAssuntoReuniao_Ind_ObservacaoAssunto") @db.Char(1)
+  Ind_MotivoAssunto            String                       @default("N", map: "DF_REUNIAO_T1200_ParametroAssuntoReuniao_Ind_MotivoAssunto") @db.Char(1)
+  Ind_NovoPlano                String                       @default("N", map: "DF__REUNIAO_T__Ind_N__2CF2ADDF") @db.Char(1)
+  Ind_NovoOrientador           String                       @default("N", map: "DF__REUNIAO_T__Ind_N__2DE6D218") @db.Char(1)
+  Ind_NovoProfessor            String                       @default("N", map: "DF__REUNIAO_T__Ind_N__2EDAF651") @db.Char(1)
+  Ind_DataDeposito             String                       @default("N", map: "DF__REUNIAO_T__Ind_D__2FCF1A8A") @db.Char(1)
+  Ind_DissertacaoTese          String                       @default("N", map: "DF_REUNIAO_T1200_ParametroAssuntoReuniao_Ind_DissertacaoTese") @db.Char(1)
+  Ind_DataApresentacao         String                       @default("N", map: "DF__REUNIAO_T__Ind_D__31B762FC") @db.Char(1)
+  Ind_Estagio                  String                       @default("N", map: "DF_REUNIAO_T1200_ParametroAssuntoReuniao_Ind_Estagio") @db.Char(1)
+  Ind_DisciplinaEspecial       String                       @default("N", map: "DF_REUNIAO_T1200_ParametroAssuntoReuniao_Ind_DisciplinaEspecial") @db.Char(1)
+  Id_Usuario                   String                       @default("user_name()", map: "DF_Usuario11") @db.VarChar(200)
+  Dt_Atualizacao               DateTime                     @default(now(), map: "DF_DataAtualizacao11") @db.DateTime
+  REUNIAO_T0200_AssuntoReuniao REUNIAO_T0200_AssuntoReuniao @relation(fields: [Cd_AssuntoReuniao], references: [Cd_AssuntoReuniao], onUpdate: NoAction, map: "FK1_REUNIAO_T0200_REUNIAO_T1200")
+}
+
+model REUNIAO_T1400_ClassificacaoDeliberacao {
+  Cd_ClassificacaoDeliberacao Int                         @id(map: "PK_REUNIAO_T1400_ClassificaçãoDeliberação")
+  Ds_ClassificacaoDeliberacao String                      @db.VarChar(50)
+  Id_Usuario                  String                      @default("user_name()", map: "DF_Usuario12") @db.VarChar(200)
+  Dt_Atualizacao              DateTime                    @default(now(), map: "DF_DataAtualizacao12") @db.DateTime
+  REUNIAO_T1010_ItemReuniao   REUNIAO_T1010_ItemReuniao[]
+}
+
+model REUNIAO_T1500_OrdemDia {
+  Cd_Reuniao              Int
+  Cd_OrdemDia             Int                   @id(map: "PK_REUNIAO_T1500_OrdemDia_1")
+  Cd_SequenciaOrdemDia    Int
+  Ds_OrdemDia             String                @db.Text
+  Ds_DeliberacaoOrdemDia  String?               @db.Text
+  Ds_ComplementarOrdemDia String?               @db.Text
+  Ind_OrdemDiaPublicavel  String                @default("S", map: "DF_OrdemDia1") @db.Char(1)
+  Id_Usuario              String                @default("user_name()", map: "DF_Usuario13") @db.VarChar(200)
+  Dt_Atualizacao          DateTime              @default(now(), map: "DF_DataAtualizacao13") @db.DateTime
+  REUNIAO_T1000_Reuniao   REUNIAO_T1000_Reuniao @relation(fields: [Cd_Reuniao], references: [Cd_Reuniao], onUpdate: NoAction, map: "FK1_REUNIAO_T0100_REUNIAO_T1500")
+}
+
+model ParticipanteReuniao {
+  Cd_Reuniao                    Int
+  Cd_ParticipanteReuniao        Int                   @id(map: "PK_REUNIAO_T1600_ParticipanteReuniao_1")
+  Nm_ParticipanteReuniao        String                @db.VarChar(100)
+  Ds_PosicaoParticipanteReuniao String                @db.VarChar(100)
+  Id_Usuario                    String                @default("user_name()", map: "DF_Usuario14") @db.VarChar(200)
+  Dt_Atualizacao                DateTime              @default(now(), map: "DF_DataAtualizacao14") @db.DateTime
+  REUNIAO_T1000_Reuniao         REUNIAO_T1000_Reuniao @relation(fields: [Cd_Reuniao], references: [Cd_Reuniao], onUpdate: NoAction, map: "FK1_REUNIAO_T1000_REUNIAO_T1600")
+
+@@map("REUNIAO_T1600_ParticipanteReuniao"
+}
+
+model REUNIAO_T1700_ModeloDespacho {
+  Cd_ModeloDespacho            Int                            @id(map: "PK_REUNIAO_T1700_ModeloDespacho")
+  Ds_ModeloDespacho            String                         @db.VarChar(500)
+  Ds_CaminhoModeloDespacho     String                         @db.VarChar(500)
+  Id_Usuario                   String                         @default("user_name()", map: "DF_Usuario15") @db.VarChar(200)
+  Dt_Atualizacao               DateTime                       @default(now(), map: "DF_DataAtualizacao15") @db.DateTime
+  REUNIAO_T0200_AssuntoReuniao REUNIAO_T0200_AssuntoReuniao[]
+}
+
+model User {
+  Cd_UsuarioSistemaReuniao            Decimal                           @id(map: "PK_REUNIAO_T3100_UsuarioSistemaReuniao") @db.Decimal(11, 0)
+  Nm_UsuarioSistemaReuniao            String                            @db.VarChar(50)
+  Nr_SenhaAcessoUsuarioSistemaReuniao String                            @db.VarChar(50)
+  Ds_LoginAcessoUsuarioSistemaReuniao String?                           @db.VarChar(20)
+  Cd_NivelUsuarioSistema              Int
+  Id_Usuario                          String                            @default("user_name()", map: "DF_Usuario16") @db.VarChar(200)
+  Dt_Atualizacao                      DateTime                          @default(now(), map: "DF_DataAtualizacao16") @db.DateTime
+  REUNIAO_T3300_NivelUsuarioSistema   REUNIAO_T3300_NivelUsuarioSistema @relation(fields: [Cd_NivelUsuarioSistema], references: [Cd_NivelUsuarioSistema], onUpdate: NoAction, map: "FK1_REUNIAO_T3300_REUNIAO_T3100")
+
+  @@map("REUNIAO_T3100_UsuarioSistemaReuniao")
+}
+
+model REUNIAO_T3200_TelaSistemaReuniao {
+  Cd_TelaSistemaReuniao                 Int                                     @id(map: "PK_REUNIAO_T3200_TelaSistemaReuniao")
+  Nm_TelaSistemaReuniao                 String                                  @db.VarChar(50)
+  Ds_CaminhoTelaSistemaReuniao          String                                  @db.VarChar(100)
+  Id_Usuario                            String                                  @default("user_name()", map: "DF_Usuario17") @db.VarChar(200)
+  Dt_Atualizacao                        DateTime                                @default(now(), map: "DF_DataAtualizacao17") @db.DateTime
+  REUNIAO_T3400_TelaSistemaNivelUsuario REUNIAO_T3400_TelaSistemaNivelUsuario[]
+}
+
+model REUNIAO_T3300_NivelUsuarioSistema {
+  Cd_NivelUsuarioSistema                Int                                     @id(map: "PK_REUNIAO_T3300_NivelUsuarioSistema")
+  Nm_NivelUsuarioSistema                String                                  @db.VarChar(50)
+  Id_Usuario                            String                                  @default("user_name()", map: "DF_Usuario18") @db.VarChar(200)
+  Dt_Atualizacao                        DateTime                                @default(now(), map: "DF_DataAtualizacao18") @db.DateTime
+  REUNIAO_T3100_UsuarioSistemaReuniao   REUNIAO_T3100_UsuarioSistemaReuniao[]
+  REUNIAO_T3400_TelaSistemaNivelUsuario REUNIAO_T3400_TelaSistemaNivelUsuario[]
+}
+
+model REUNIAO_T3400_TelaSistemaNivelUsuario {
+  Cd_TelaSistemaReuniao             Int
+  Cd_NivelUsuarioSistema            Int
+  Id_Usuario                        String                            @default("user_name()", map: "DF_Usuario19") @db.VarChar(200)
+  Dt_Atualizacao                    DateTime                          @default(now(), map: "DF_DataAtualizacao19") @db.DateTime
+  REUNIAO_T3200_TelaSistemaReuniao  REUNIAO_T3200_TelaSistemaReuniao  @relation(fields: [Cd_TelaSistemaReuniao], references: [Cd_TelaSistemaReuniao], onUpdate: NoAction, map: "FK1_REUNIAO_T3200_REUNIAO_T3400")
+  REUNIAO_T3300_NivelUsuarioSistema REUNIAO_T3300_NivelUsuarioSistema @relation(fields: [Cd_NivelUsuarioSistema], references: [Cd_NivelUsuarioSistema], onUpdate: NoAction, map: "FK2_REUNIAO_T3300_REUNIAO_T3400")
+
+  @@id([Cd_TelaSistemaReuniao, Cd_NivelUsuarioSistema], map: "PK_REUNIAO_T3400_TelaSistemaNivelUsuario")
+}
+
+model REUNIAO_T3600_TipoAtribuidorCredito {
+  Cd_TipoAtribuidorCredito         Int                                @id(map: "PK_REUNIAO_T3600_TipoAtribuidorCredito")
+  Nm_TipoAtribuidorCredito         String                             @db.VarChar(50)
+  Id_Usuario                       String                             @default("user_name()", map: "DF_Usuario20") @db.VarChar(200)
+  Dt_Atualizacao                   DateTime                           @default(now(), map: "DF_DataAtualizacao20") @db.DateTime
+  REUNIAO_T3900_AtribuidorCreditos REUNIAO_T3900_AtribuidorCreditos[]
+}
+
+model REUNIAO_T3700_TipoSolicitacaoPrazo {
+  cd_TipoSolicitacaoPrazo   Int                         @id(map: "PK_REUNIAO_T3700_TipoSolicitacaoPrazo")
+  nm_TipoSolicitacaoPrazo   String?                     @db.VarChar(50)
+  Id_Usuario                String                      @default("user_name()", map: "DF_Usuario21") @db.VarChar(200)
+  Dt_Atualizacao            DateTime                    @default(now(), map: "DF_DataAtualizacao21") @db.DateTime
+  REUNIAO_T1010_ItemReuniao REUNIAO_T1010_ItemReuniao[]
+}
+
+model REUNIAO_T3800_DisciplinaEspecial {
+  cd_DisciplinaEspecial     Int                       @id(map: "PK_REUNIAO_T3800_DisciplinaEspecial")
+  nm_DisciplinaEspecial     String                    @db.VarChar(255)
+  qt_Creditos               Int?
+  dt_PeriodoInicial         DateTime?                 @db.DateTime
+  dt_PeriodoFinal           DateTime?                 @db.DateTime
+  ds_Frequencia             String?                   @db.VarChar(50)
+  ds_Conceito               String?                   @db.VarChar(50)
+  Cd_ItemReuniao            Int
+  Id_Usuario                String                    @default("user_name()", map: "DF_Usuario22") @db.VarChar(200)
+  Dt_Atualizacao            DateTime                  @default(now(), map: "DF_DataAtualizacao22") @db.DateTime
+  REUNIAO_T1010_ItemReuniao REUNIAO_T1010_ItemReuniao @relation(fields: [Cd_ItemReuniao], references: [Cd_ItemReuniao], onUpdate: NoAction, map: "FK_REUNIAO_T3800_DisciplinaEspecial_REUNIAO_T1010_ItemReuniao")
+}
+
+model REUNIAO_T3900_AtribuidorCreditos {
+  cd_AtribuidorCredito                Int                                 @id(map: "PK_REUNIAO_T3900_AtribuidorCreditos")
+  ds_TituloTrabalho                   String                              @db.VarChar(1000)
+  ds_TituloPeriodicoLivroCongresso    String?                             @db.VarChar(500)
+  ds_Pais                             String?                             @db.VarChar(1000)
+  dt_PeriodoInicial                   DateTime?                           @db.DateTime
+  dt_PeriodoFinal                     DateTime?                           @db.DateTime
+  nu_Volume                           Int?
+  ds_Paginas                          String?                             @db.VarChar(20)
+  ds_Ano                              Int?
+  Cd_ItemReuniao                      Int
+  Cd_TipoAtribuidorCredito            Int
+  Id_Usuario                          String                              @default("user_name()", map: "DF_Usuario23") @db.VarChar(200)
+  Dt_Atualizacao                      DateTime                            @default(now(), map: "DF_DataAtualizacao23") @db.DateTime
+  REUNIAO_T1010_ItemReuniao           REUNIAO_T1010_ItemReuniao           @relation(fields: [Cd_ItemReuniao], references: [Cd_ItemReuniao], onUpdate: NoAction, map: "FK_REUNIAO_T3900_AtribuidorCreditos_REUNIAO_T1010_ItemReuniao")
+  REUNIAO_T3600_TipoAtribuidorCredito REUNIAO_T3600_TipoAtribuidorCredito @relation(fields: [Cd_TipoAtribuidorCredito], references: [Cd_TipoAtribuidorCredito], onUpdate: NoAction, map: "FK_REUNIAO_T3900_AtribuidorCreditos_REUNIAO_T3600_TipoAtribuidorCredito")
+}
+
+model REUNIAO_T4000_Participantes {
+  Nm_Participante String   @db.VarChar(100)
+  Id_Usuario      String   @default("user_name()", map: "DF_UsuarioPa") @db.VarChar(200)
+  Dt_Atualizacao  DateTime @default(now(), map: "DF_DataAtualizacaoPa") @db.DateTime
+  Cd_Participante Int      @unique(map: "ak_cd_participante") @default(autoincrement())
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model REUNIAO_T4001_Participantes {
+  Cd_Participante Int       @unique(map: "ak_cd_participante_2") @default(autoincrement())
+  Nm_Participante String    @db.VarChar(100)
+  Id_Usuario      String    @db.VarChar(3)
+  Dt_Atualizacao  DateTime? @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model REUNIAO_T4600_ParticipantePosicao {
+  Cd_Posicao                    Int      @default(autoincrement())
+  Ds_PosicaoParticipanteReuniao String   @db.VarChar(100)
+  Id_Usuario                    String   @default("user_name()", map: "DF_Usuario25") @db.VarChar(200)
+  Dt_Atualizacao                DateTime @default(now(), map: "DF_DataAtualizacao25") @db.DateTime
+
+  @@ignore
+}

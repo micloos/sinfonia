@@ -1,0 +1,12 @@
+version: '3.6'
+
+services:
+  sinfonia:
+    image: sinfonia
+    build: .
+    container_name: sinfonia
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    command: ["node", "--inspect=0.0.0.0:9229"]
+

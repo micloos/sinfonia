@@ -25,6 +25,7 @@
     "mssql": "^11.0.1",
     "next": "15.1.2",
     "next-auth": "5.0.0-beta.25",
+    "prisma": "^6.5.0",
     "react": "^19.0.0",
     "react-datepicker": "^7.6.0",
     "react-dom": "^19.0.0",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.51.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

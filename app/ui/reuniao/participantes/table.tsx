@@ -12,8 +12,10 @@ export default async function ParticipantesByReuniao({rid, editable, currentPage
     mylog ("DBG",filename,"ParticiPantesByReuniao","{rid, editable, currentPage}=",{rid, editable,currentPage});
     const participantes = await fetchParticipantesByReuniao (rid, currentPage) as Participantes[];
     mylog ("DBG",filename,"ParticipantesByReuniao","participantes =",participantes);
+    const testname = "ParticipantesByReuniao"+editable;
+    mylog ("DBG",filename,"ParticipantesByReuniao","testname =",testname);
     return (
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        <div className="rounded-md bg-gray-50 p-4 md:p-6" data-testid={testname}>
             <div className="flex justify-between">
             <div className={`w-7/8 mb-8 inline-block`}>
                 Participantes

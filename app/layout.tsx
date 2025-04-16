@@ -12,11 +12,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head> 
+        <title> Sinfonia </title>
+      </head>
       <body className="h-screen">
-        <header className="w-full flex-none">
+        <header className="w-full flex-none" id="imageHeader">
 	        <Ipen />
 	      </header>
-        <header className="w-full flex-none height">
+        <header className="w-full flex-none height" id="navigationHeader">
 	        <TopNav />
 	      </header>
 	      <div className="flex-grow p-6 md:overflow-y-auto md:p-12i">
