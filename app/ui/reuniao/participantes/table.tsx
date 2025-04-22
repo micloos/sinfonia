@@ -2,7 +2,7 @@
 import { fetchParticipantesByReuniao } from '@/app/lib/data';
 import { mylog } from '@/app/lib/mylogger';
 import { Participantes } from '@/app/lib/definitions';
-import { AddParticipantToReuniao, DeleteParticipantFromReuniao } from '../buttons';
+import { AddParticipanteToReuniao, DeleteParticipantFromReuniao } from '../buttons';
 import { Funcoes } from '../funcao';
 
 
@@ -21,7 +21,7 @@ export default async function ParticipantesByReuniao({rid, editable, currentPage
                 Participantes
             </div>
             <div className="w-1/8 mb-8 inline-block">
-                <AddParticipantToReuniao rid={rid} editable={editable}/>
+                <AddParticipanteToReuniao rid={rid} editable={editable}/>
             </div>
             </div>
             <div className="rounded-lg bg-gray-50 p-2 md:pt-0">

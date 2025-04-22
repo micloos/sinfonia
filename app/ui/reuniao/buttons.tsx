@@ -80,9 +80,9 @@ export function EscParticipant({ id, active}: { id: string, active: string }) {
   );
 }
 
-export function EscParticipantReuniao({ id, active}: { id: string, active: string }) {
+export function EscParticipantes({ id, active}: { id: string, active: string }) {
   const escParticipantReuniaoWithId = escParticipantReuniao.bind(null, Number(id));
-  mylog("DBG",filename, 'EscParticipantReuniao' , "active=", active);
+  mylog("DBG",filename, 'EscParticipantes' , "active=", active);
   return (
     <form action={escParticipantReuniaoWithId}>
       <Tooltip title="Participantes">
@@ -171,12 +171,12 @@ export function AddOrdemDiaToReuniao({ rid, editable }: { rid: number, editable:
 }
 }
 
-export function AddParticipantToReuniao({ rid, editable }: { rid: number, editable: number }) {
-  const escParticipantForReuniaoWithId = escParticipantForReuniao.bind(null, rid);
-  mylog("DBG",filename, 'AddParticipantToReuniao' , "rid=", rid);
+export function AddParticipanteToReuniao({ rid, editable }: { rid: number, editable: number }) {
+  const escParticipanteForReuniaoWithId = escParticipantForReuniao.bind(null, rid);
+  mylog("DBG",filename, 'AddParticipanteToReuniao' , "rid=", rid);
   if (editable==1){
   return (
-    <form action={escParticipantForReuniaoWithId}>
+    <form action={escParticipanteForReuniaoWithId}>
       <Tooltip title="Participantes">
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Participantes</span>

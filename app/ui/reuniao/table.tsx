@@ -1,4 +1,4 @@
-import { UpdateReuniao, DeleteReuniao, EscParticipantReuniao, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
+import { UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
 import { fetchFilteredReunioes } from '@/app/lib/data';
 import { Reunioes } from '@/app/lib/definitions';
 import * as moment from 'moment-timezone';
@@ -57,7 +57,7 @@ export default async function ReunioesTable({
                     <div className="flex justify-start ">
                       <DeleteReuniao id={reuniao.id.toString()} /> 
                       <UpdateReuniao id={reuniao.id.toString()}  active={reuniao.active} />
-                      <EscParticipantReuniao id={reuniao.id.toString()} active={reuniao.active} />
+                      <EscParticipantes id={reuniao.id.toString()} active={reuniao.active} />
                       <EscOrdemDoDia id={reuniao.id.toString()}  active={reuniao.active} />
                       <ComporPauta id={reuniao.id.toString()}  active={reuniao.active} />
                       <ReativarReuniao id={reuniao.id.toString()}  active={reuniao.active} />
