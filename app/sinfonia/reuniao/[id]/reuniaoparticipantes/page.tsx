@@ -1,57 +1,57 @@
-import ReuniaoForm from '@/app/ui/reuniao/edit-form';
-import { fetchReuniaoById,  fetchParticipantesByReuniaoPages } from '@/app/lib/data';
-import { notFound } from 'next/navigation';
-import { mylog } from '@/app/lib/mylogger';
-import ParticipantesByReuniao from '@/app/ui/reuniao/participantes/table';
 import Pagination from '@/app/ui/pagination';
+import ParticipantesTable from '@/app/ui/administracao/participantes/table';
+import Search from '@/app/ui/search';
+{/* import { Suspense } from 'react'; */}
+import { fetchParticipantesPages } from '@/app/lib/data';
+import { CreateParticipante } from '@/app/ui/administracao/buttons';
+import { mylog } from '@/app/lib/mylogger';
 
- 
-const filename = 'app/sinfonia/reuniao/[id]/edit/page';
+const filename = 'app/sinfonia/reuniao/[id]/reuniaoparticipantes/page';
 
+export default async function Page(props:  {
+                  searchParams?: Promise<{
+                  query?: string;
+                  page?: string;
+                  rid?: string;
+                  }>;
+                }) 
+                  {
+                      
+                      const searchParams = await props.searchParams;
+                      
 
-export default async function Page(props: {
-  searchParams?: Promise<{ 
-    page?: string; 
-  }>,
-  params?: Promise<{
-    id:string;
-  }>
-}) 
-{
-  const sparams = await props.searchParams;
-  const params = await props.params;
-  mylog('DBG', filename, 'Page', 'params=',params);
-  mylog('DBG', filename, 'Page', 'sparams=',sparams);
-  const id = params?.id || '1';
-  const currentPage = Number(sparams?.page) || 1;
-  const totalPages = await fetchParticipantesByReuniaoPages(Number(id));
-  const [reuniao] = await Promise.all([
-	  fetchReuniaoById(id),
-  ]);
+                      const rid = Number(searchParams?.rid) || 0;
+                      if (rid > 0)
+                      {
+                        mylog('DBG', filename, 'Page', 'rid',rid);
+                      } else {
+                        mylog('DBG', filename, 'Page', 'No Reuniao',"");
+                      }
 
-  mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
-  
-const withbackbutton = 1;
-const withsavebutton = reuniao.active==='N'?1:0;
-const rid=Number(id);
-
-mylog('DBG',filename,"Page","rid=",rid);
-
-mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
-
-
-  if (!reuniao) {
-	  notFound();
-  }
-  return (
-    <main>
-      <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <ParticipantesByReuniao rid={rid} editable={withsavebutton} currentPage={currentPage} />
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
-    </main>
-    
-    
-  );
+                      const query = searchParams?.query || ''; 
+                      {/* const searchParams = useSearchParams(); */}
+                      {/* const query = searchParams.get('query') || ''; */}
+                      const currentPage = Number(searchParams?.page) || 1;
+                      
+                      const totalPages = await fetchParticipantesPages(query);
+                      
+    return (
+        <div className="w-full">
+        <div className="flex w-full items-center justify-between">
+          <h1 className="text-2xl"> Participantes Usuais </h1>
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+           <Search placeholder="Procurar Usuario.." />
+               <CreateParticipante />	   
+        </div>
+        {/*
+        <Suspense key={query + currentPage} fallback={<UsersTableSkeleton />}>
+        */}
+        <ParticipantesTable query={query} currentPage={currentPage} rid={rid}/>
+        <div className="mt-5 flex w-full justify-center">
+          <Pagination totalPages={totalPages} />
+        </div>
+        
+</div>
+    )
 }

@@ -6,7 +6,7 @@ import ParticipantesByReuniao from '@/app/ui/reuniao/participantes/table';
 import Pagination from '@/app/ui/pagination';
 
  
-const filename = 'app/sinfonia/reuniao/[id]/edit/page';
+const filename = 'app/sinfonia/reuniao/[id]/editparticipante/page';
 
 
 export default async function Page(props: {
