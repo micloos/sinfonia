@@ -105,5 +105,25 @@ test('Navigate to Reuniao AddParticipante from Reuniao', async ({ page }) => {
     await page.goto('/sinfonia/reuniao');
     await page.getByLabel('Participantes').first().click()
     await expect(page.getByTestId('ParticipantesByReuniao1')).toBeVisible();
+    await page.getByRole('button', {name:"Participantes"}).first().click();
+    await expect (page.getByRole('heading', {name:"Participantes Usuais"})).toBeVisible();
+ }
+)
+
+ test('Add a Participante to Reuniao', async ({ page }) => {
+    await page.goto('/sinfonia/reuniao');
+    await page.getByLabel('Participantes').first().click()
+    await expect(page.getByTestId('ParticipantesByReuniao1')).toBeVisible();
+    await expect(page.getByRole('row')).toHaveCount(3);
+    await page.getByRole('button', {name:"Participantes"}).first().click();
+    await expect (page.getByRole('heading', {name:"Participantes Usuais"})).toBeVisible();
+    await page.getByRole('button', {name:"Adicionar Participante"}).nth(2).click();
+    await expect(page.getByTestId('ParticipantesByReuniao1')).toBeVisible();
+    await expect(page.getByRole('row')).toHaveCount(4);
+    await page.getByRole('row', { name: 'Excluir MSc. Felipe Maia' }).getByLabel('Excluir').click();
+    await expect(page.getByTestId('ParticipantesByReuniao1')).toBeVisible();
+    await expect(page.getByRole('row')).toHaveCount(3);
+    
+
  }
 )

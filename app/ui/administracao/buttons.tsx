@@ -80,7 +80,7 @@ export function AddParticipante({ id, rid }: { id: number, rid: number }) {
   const addParticipanteWithReuniao = addParticipanteToReuniao.bind(null,id,rid);
   return (
     <form action={addParticipanteWithReuniao}>
-    <button className="rounded-md border p-2 hover:bg-gray-100">
+    <button className="rounded-md border p-2 hover:bg-gray-100" aria-label='Adicionar Participante'>
         <span className="sr-only">Adicionar a Reuniao</span>
         <PlusIcon className="w-5" />
     </button>
