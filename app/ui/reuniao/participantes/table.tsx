@@ -1,5 +1,5 @@
 
-import { fetchParticipantesByReuniao } from '@/app/lib/data';
+import { fetchParticipantesByReuniao } from '@/app/lib/reuniao/data';
 import { mylog } from '@/app/lib/mylogger';
 import { Participantes } from '@/app/lib/definitions';
 import { AddParticipanteToReuniao, DeleteParticipantFromReuniao } from '../buttons';

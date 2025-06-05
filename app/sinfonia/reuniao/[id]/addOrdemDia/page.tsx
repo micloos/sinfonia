@@ -1,4 +1,4 @@
-import OrdemDiaForm from '@/app/ui/reuniao/addordemdia';
+import CreateOrdemDiaForm from '@/app/ui/reuniao/addordemdia';
 import { mylog } from '@/app/lib/mylogger';
 {/* import { notFound } from 'next/navigation'; */}
 
@@ -16,7 +16,7 @@ export default async function Page(props: {
   mylog("DBG",filename, 'Page' , "id=", id);
   return (
 	<main>
-	  <OrdemDiaForm reuniaoNumber={nid} />
+	  <CreateOrdemDiaForm reuniaoNumber={nid} />
 	</main>
   );
 }

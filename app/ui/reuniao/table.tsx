@@ -1,5 +1,5 @@
 import { UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
-import { fetchFilteredReunioes } from '@/app/lib/data';
+import { fetchFilteredReunioes } from '@/app/lib/reuniao/data';
 import { Reunioes } from '@/app/lib/definitions';
 import * as moment from 'moment-timezone';
 

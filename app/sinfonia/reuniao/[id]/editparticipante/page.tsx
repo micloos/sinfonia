@@ -1,5 +1,5 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
-import { fetchReuniaoById,  fetchParticipantesByReuniaoPages } from '@/app/lib/data';
+import { fetchReuniaoById,  fetchParticipantesByReuniaoPages } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
 import ParticipantesByReuniao from '@/app/ui/reuniao/participantes/table';

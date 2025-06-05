@@ -1,5 +1,5 @@
 import ReuniaoForm from '@/app/ui/reuniao/create-form';
-import { fetchNextReuniao } from '@/app/lib/data';
+import { fetchNextReuniao } from '@/app/lib/reuniao/data';
 import { mylog } from '@/app/lib/mylogger';
 {/* import { notFound } from 'next/navigation'; */}
  

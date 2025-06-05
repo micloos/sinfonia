@@ -1,8 +1,12 @@
+'use client';
 
-import { fetchOrdemDia } from '@/app/lib/reuniao/data';
+// import { fetchOrdemDia } from '@/app/lib/reuniao/data';
 import { mylog } from '@/app/lib/mylogger';
 import type { OrdemDia } from '@/app/lib/definitions';
 import { AddOrdemDiaToReuniao, DeleteOrdemDiaFromReuniao, EditOrdemDia } from '../buttons';
+import { useEffect, useState } from 'react';
+
+
 
 {/*
 import {Table} from "antd";
@@ -12,7 +16,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper"
 */}
 
-const filename = "app/ui/reuniao/participantes/table";
+const filename = "app/ui/reuniao/ordemdia/tableclient";
 
 {/*
     
@@ -51,9 +55,26 @@ const DraggableBodyRow = ({
 */}
 
 
-export default async function OrdemDia({rid, editable, currentPage}: { rid: number, editable: number, currentPage:number}) {
+export default function OrdemDia({rid, editable, currentPage}: { rid: number, editable: number, currentPage:number}) {
+    
+    const [ordemdia, setOrdemDia] = useState<OrdemDia[]>([]);
+    useEffect(() => {
+        const fetchOrdemDia = async (rid: number, currentPage: number) => {
+            mylog ("DBG", filename, "OrdemDia", "fetchOrdemDia", {rid, currentPage});
+            const response = await fetch(`/api/ordemlist?id=${rid}&page=${currentPage}`)
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const ordemDiaData = await response.json() as OrdemDia[];
+            mylog ("DBG", filename, "OrdemDia", "fetchOrdemDia", ordemDiaData);
+            setOrdemDia(ordemDiaData);
+        }
+        fetchOrdemDia(rid, currentPage);
+    }, [rid, currentPage]);
+
     mylog ("DBG",filename,"OrdemDia","{rid, editable, currentPage}=",{rid, editable,currentPage});
-    const ordemdia = await fetchOrdemDia (rid, currentPage) as OrdemDia[];
+    // const ordemdia = await fetchOrdemDia (rid, currentPage) as OrdemDia[];
+    // setOrdemDia ( [{"id":1726,"seq":1,"assunto":"petit gateau","deliberacao":"","publicavel":"S"},{"id":1729,"seq":2,"assunto":"Primeiro Teste de Ordem do Dia","deliberacao":"","publicavel":"S"},{"id":1730,"seq":3,"assunto":"Comer bananas faz bem?","deliberacao":"","publicavel":"S"}]);
     mylog ("DBG",filename,"OrdemDia","ordemdia =",ordemdia);
 
     return (

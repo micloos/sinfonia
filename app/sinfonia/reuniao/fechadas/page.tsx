@@ -1,7 +1,7 @@
 import Pagination from '@/app/ui/pagination';
 import ReunioesTable from '@/app/ui/reuniao/table';
 import Search from '@/app/ui/search';
-import { fetchReunioesPages } from '@/app/lib/data';
+import { fetchReunioesPages } from '@/app/lib/reuniao/data';
 import { CreateReuniao } from '@/app/ui/reuniao/buttons';
 import { mylog } from '@/app/lib/mylogger';
 

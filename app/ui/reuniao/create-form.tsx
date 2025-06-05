@@ -6,7 +6,8 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/oldbutton';
-import { createReuniao, ReuniaoState } from '@/app/lib/reuniao/actions';
+import { createReuniao } from '@/app/lib/reuniao/actions';
+import { ReuniaoState } from '@/app/lib/reuniao/definitions';
 import { Reunioes } from '@/app/lib/definitions'; 
 import { useActionState, useState } from 'react';
 import { mylog } from '@/app/lib/mylogger';

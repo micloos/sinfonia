@@ -1,3 +1,5 @@
+export type numericanswer = { n : number};
+
 export type Reunioes = {
 	id: number;
 	d_ini: string;

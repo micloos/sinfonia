@@ -1,15 +1,15 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
-import { fetchReuniaoById,  fetchOrdemDiaPages } from '@/app/lib/data';
+import { fetchReuniaoById,  fetchOrdemDiaPages } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
-import  OrdemDia  from '@/app/ui/reuniao/ordemDia/table'
+import  OrdemDia  from '@/app/ui/reuniao/ordemDia/tableclient';
 import Pagination from '@/app/ui/pagination';
 
  
-const filename = 'app/sinfonia/reuniao/[id]/edit/page';
+const filename = 'app/sinfonia/reuniao/[id]/ordemDia/page';
 
 
-export default async function Page(props: {
+export default async function OrdemDiaPage(props: {
   searchParams?: Promise<{ 
     page?: string; 
   }>,
@@ -46,7 +46,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-        <OrdemDia rid={Number(id)} currentPage={currentPage} editable={withsavebutton} />
+      <OrdemDia rid={Number(id)} currentPage={currentPage} editable={withsavebutton} />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />
       </div>

@@ -79,14 +79,14 @@ test('Navigate to Edit Reuniao Participante', async ({ page }) => {
   // Reuniao Edit
 
 test('Cannot Add Participante to Reuniao', async ({ page }) => {
-    await page.goto('/sinfonia/reuniao/640/edit');
+    await page.goto('/sinfonia/reuniao/1/edit');
     await expect(page.getByTestId('ParticipantesByReuniao0')).toBeVisible();
 });
 
 // Reuniao Edit Participante
 
 test('Edit Participante of Reuniao Unit', async ({ page }) => {
-    await page.goto('/sinfonia/reuniao/640/editparticipante');
+    await page.goto('/sinfonia/reuniao/1/editparticipante');
     await expect(page.getByTestId('ParticipantesByReuniao1')).toBeVisible();
 });
 
@@ -126,4 +126,30 @@ test('Navigate to Reuniao AddParticipante from Reuniao', async ({ page }) => {
     
 
  }
+)
+
+// Reuniao Add Ordem do Dia
+test('Add Ordem do Dia to Reuniao', async ({ page }) => {
+    await page.goto('/sinfonia/reuniao/1/ordemDia');
+    await expect(page.getByTestId('Ipen')).toBeVisible();
+    await expect(page.getByRole('button', {name:"Salvar"})).toHaveCount(1);
+    await expect(page.getByRole('link', {name:"Voltar"})).toHaveCount(1);
+    await expect(page.getByRole('button', {name:"Salvar"})).toBeVisible();
+    await expect(page.getByRole('link', {name:"Voltar"})).toBeVisible();
+    await expect(page.getByRole('button', {name:"Ordem do Dia"})).toBeVisible();
+    await page.getByRole('button', {name:"Ordem do Dia"}).click();
+    await expect(page.getByRole('heading', {name:"Criar Ordem do Dia para reuniao"})).toBeVisible();
+    await expect(page.getByRole('button', {name:"Salvar"})).toBeVisible();
+    await expect(page.getByRole('link', {name:"Voltar"})).toBeVisible();
+    await expect(page.getByRole('textbox')).toHaveCount(2);
+    await expect(page.getByRole('textbox', {name:"assunto"})).toBeVisible();
+    await expect(page.getByRole('textbox', {name:"deliberacao"})).toBeVisible();
+    await expect(page.getByRole('textbox', {name:"deliberacao"})).toBeDisabled();
+    await expect(page.getByRole('checkbox')).toBeVisible();
+    await expect(page.getByRole('checkbox')).toBeChecked();
+    await page.getByRole('textbox', {name:"assunto"}).fill('Primeiro Teste de Ordem do Dia');
+    await page.getByRole('button', {name:"Salvar"}).click();
+    await expect(page.getByRole('heading', {name:"Criar Ordem do Dia para reuniao"})).not.toBeVisible();
+
+}
 )
