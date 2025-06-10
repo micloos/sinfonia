@@ -24,6 +24,7 @@
     "md5": "^2.3.0",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.46",
+    "motion": "^12.16.0",
     "mssql": "^11.0.1",
     "next": "15.1.2",
     "next-auth": "5.0.0-beta.25",

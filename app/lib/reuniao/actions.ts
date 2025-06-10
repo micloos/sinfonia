@@ -320,3 +320,22 @@ export async function comporPauta (id: string)
 	const goto = "/sinfonia/reuniao/"+id+"/pauta";
 	redirect (goto);
 }
+
+export async function reorderOrdemDiaDo (newSeq: {id: number, seq: number}[])
+{
+	mylog ("DBG", filename, "reorderOrdemDia", "ordemDia}", newSeq);
+	if (newSeq.length === 0) {
+		mylog ("ERROR", filename, "reorderOrdemDia", "ordemDia", "is empty");
+		return;
+	}
+	
+	try {
+		for (const item of newSeq) {
+			const myreq = `UPDATE REUNIAO_T1500_OrdemDia SET Cd_SequenciaOrdemDia = ${item.seq} WHERE Cd_OrdemDia = ${item.id}`;
+			mylog ("DBG", filename, "reorderOrdemDia", "myreq=", myreq);
+			await mssql(myreq);
+		}
+	} catch (error) {
+		mylog ("ERROR", filename, "reorderOrdemDia", "error=", error);
+	}
+}
