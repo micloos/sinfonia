@@ -1,9 +1,9 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
-import { fetchReuniaoById,  fetchOrdemDiaPages } from '@/app/lib/reuniao/data';
+import { fetchReuniaoById } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
 import  OrdemDia  from '@/app/ui/reuniao/ordemDia/tableclient';
-import Pagination from '@/app/ui/pagination';
+// import Pagination from '@/app/ui/pagination';
 
  
 const filename = 'app/sinfonia/reuniao/[id]/ordemDia/page';
@@ -24,7 +24,7 @@ export default async function OrdemDiaPage(props: {
   mylog('DBG', filename, 'Page', 'sparams=',sparams);
   const id = params?.id || '1';
   const currentPage = Number(sparams?.page) || 1;
-  const totalPages = await fetchOrdemDiaPages(id);
+  // const totalPages = await fetchOrdemDiaPages(id);
   const [reuniao] = await Promise.all([
 	  fetchReuniaoById(id),
   ]);
@@ -48,7 +48,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
       <OrdemDia rid={Number(id)} currentPage={currentPage} editable={withsavebutton} />
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
+      {/*  <Pagination totalPages={totalPages} /> */}
       </div>
     </main>
     

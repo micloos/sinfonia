@@ -6,7 +6,7 @@ import { mylog } from '@/app/lib/mylogger';
 import {type NextRequest} from 'next/server';
 
 const filename='/api/getordemlist';
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 100;
 
 export async function GET (request: NextRequest)
 {

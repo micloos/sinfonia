@@ -7,7 +7,7 @@ import { OrdemState } from "@/app/lib/reuniao/definitions";
 import { Button } from "@/app/ui/button"; 
 import  Link  from "next/link";
 import React, { useActionState } from 'react';
-import  OrderTable  from "@/app/ui/reuniao/dynamicorder";
+
 
 const filename="app/ui/reuniao/addordemdia";
 
@@ -36,7 +36,7 @@ export default function CreateOrdemDiaForm ({reuniaoNumber}:{reuniaoNumber:numbe
               id="assunto"
               name="assunto"
               rows={5}
-              cols={60}
+              cols={120}
               className=""
               aria-label="assunto"
               placeholder="Assunto"
@@ -44,7 +44,7 @@ export default function CreateOrdemDiaForm ({reuniaoNumber}:{reuniaoNumber:numbe
             />
             </div>
           </fieldset>
-          <fieldset className="mb-4 w-full">
+          <fieldset className="mb-4 w-full hidden">
             <label htmlFor="assunto" className="mb-2 text-sm font-medium">
               Deliberação:
             </label>
@@ -78,7 +78,6 @@ export default function CreateOrdemDiaForm ({reuniaoNumber}:{reuniaoNumber:numbe
           <Button type="submit">Salvar</Button>
          </div>   
       </div>
-      < OrderTable rid={reuniaoNumber}/>
       </form>
 
     )
