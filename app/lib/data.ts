@@ -33,6 +33,7 @@ export async function fetchUsersPages (query: string) {
 					   OR Ds_LoginAcessoUsuarioSistemaReuniao like '%QQQ%' 
 					   or Cd_UsuarioSistemaReuniao like '%QQQ%'
 					`.replace(/QQQ/g,query);
+					mylog ("INFO", filename, "fetchUsersPages","myreq=",myreq.replace(/\s/g," "));
 		const count = await mssql(myreq) as Numres[] ;
 	const totalPages = Math.ceil(Number(count[0].n) / ITEMS_PER_PAGE);
 	return totalPages;
@@ -168,5 +169,51 @@ export async function fetchParticipanteById (id: string) {
 	}
 }
 
+// Assuntos
 
+export async function fetchAssuntosPages (query: string) {
+	try {
+		const myreq = `SELECT COUNT(*) as n 
+		             FROM REUNIAO_T0200_AssuntoReuniao 
+					 where 
+					   Ds_AssuntoAtaReuniao like '%QQQ%' 
+					   OR Ds_AssuntoDeliberacao like '%QQQ%' 
+					`.replace(/QQQ/g,query);
+		const count = await mssql(myreq) as Numres[] ;
+	const totalPages = Math.ceil(Number(count[0].n) / ITEMS_PER_PAGE);
+	return totalPages;
+	} catch (error) {
+		mylog ("ERROR", filename, "fetchAssuntosPages","error=",error);
+		throw new Error('Failed to fetch total number of assuntos');
+	}
+}
+
+export async function fetchFilteredAssuntos (
+	query: string, 
+	currentPage: number,
+)  {
+        const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+	try {
+	const myreq = `SELECT  Cd_AssuntoReuniao as id,
+	                     Ds_AssuntoAtaReuniao as assunto,
+	                     Ds_AssuntoDeliberacao as assuntoDeliberacao
+					FROM REUNIAO_T0200_AssuntoReuniao
+				WHERE 
+					Ds_AssuntoAtaReuniao like '%QQQ%' 
+					OR Ds_AssuntoDeliberacao like '%QQQ%' 
+					order by Cd_AssuntoReuniao
+					offset OOO rows 
+					fetch next LLL rows only
+				`.replace(/QQQ/g,query).replace (/LLL/g,ITEMS_PER_PAGE.toString()).replace (/OOO/g,offset.toString());
+				
+
+	const assuntos = await mssql(myreq);
+	return (
+		assuntos
+	)
+	} catch(error) {
+		mylog ("ERROR", filename, "fetchFilteredUsers","error=",error);
+		throw new Error('Failed to fetch total number of users');
+	}
+}	
 

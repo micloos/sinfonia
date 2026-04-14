@@ -1,6 +1,7 @@
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, SwatchIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteUser } from '@/app/lib/usuarios/actions';
+import { deleteAssunto } from '@/app/lib/assunto/actions';
 import { deleteFromParticipantesList } from '@/app/lib/participantes/actions';
 import { mylog } from '@/app/lib/mylogger';
 import { addParticipanteToReuniao } from '@/app/lib/reuniao/actions';
@@ -32,6 +33,41 @@ export function DeleteUser({ cpf }: { cpf: string }) {
 	const deleteUserWithId = deleteUser.bind(null, cpf);
   return (
     <form action={deleteUserWithId}>
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Apagar</span>
+        <TrashIcon className="w-5" />
+      </button>
+    </form>
+  );
+}
+
+export function UpdateAssunto({ id }: { id: number }) {
+  return (
+    <Link
+      href={`/sinfonia/administracao/assuntos/${id}/edit`}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <PencilIcon className="w-5" />
+    </Link>
+  );
+}
+
+export function ParemetrizeAssunto({ id }: { id: number }) {
+  return (
+    <Link
+      href={`/sinfonia/administracao/assuntos/${id}/parametrize`}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <SwatchIcon className="w-5" />
+    </Link>
+  );
+}
+
+
+export function DeleteAssunto({ id }: { id: number }) {
+	const deleteAssuntoWithId = deleteAssunto.bind(null, id);
+  return (
+    <form action={deleteAssuntoWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Apagar</span>
         <TrashIcon className="w-5" />
@@ -86,4 +122,16 @@ export function AddParticipante({ id, rid }: { id: number, rid: number }) {
     </button>
     </form>
   )
+}
+
+export function CreateAssunto() {
+  return (
+    <Link
+      href="/sinfonia/administracao/assuntos/criar"
+      className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    >
+      <span className="hidden md:block">Criar Assunto</span>{' '}
+      <PlusIcon className="h-5 md:ml-4" />
+    </Link>
+  );
 }

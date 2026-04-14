@@ -1,4 +1,5 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
+import PautaForm from '@/app/ui/reuniao/pautaform';
 import { fetchReuniaoById } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
@@ -30,7 +31,7 @@ export default async function Page(props: {
   mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   
 const withbackbutton = 1;
-const withsavebutton = reuniao.active==='N'?1:0;
+const withsavebutton = 0;
 const rid=Number(id);
 
 mylog('DBG',filename,"Page","rid=",rid);
@@ -44,6 +45,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
+      <PautaForm reuniao={rid} />
   
     </main>
     
