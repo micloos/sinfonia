@@ -1,10 +1,11 @@
 import { PencilIcon, PlusIcon, SwatchIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteUser } from '@/app/lib/usuarios/actions';
-import { deleteAssunto } from '@/app/lib/assunto/actions';
+import { deleteAssunto, parametrizeAssunto, editAssunto } from '@/app/lib/assunto/actions';
 import { deleteFromParticipantesList } from '@/app/lib/participantes/actions';
 import { mylog } from '@/app/lib/mylogger';
 import { addParticipanteToReuniao } from '@/app/lib/reuniao/actions';
+import { Tooltip } from '@mui/material';
 
 export function CreateUser() {
   return (
@@ -42,24 +43,30 @@ export function DeleteUser({ cpf }: { cpf: string }) {
 }
 
 export function UpdateAssunto({ id }: { id: number }) {
+  const editAssuntoWithId = editAssunto.bind(null, id);
   return (
-    <Link
-      href={`/sinfonia/administracao/assuntos/${id}/edit`}
-      className="rounded-md border p-2 hover:bg-gray-100"
-    >
+    <form action={editAssuntoWithId} >
+    <Tooltip title="Editar">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Editar</span>  
       <PencilIcon className="w-5" />
-    </Link>
+      </button>             
+    </Tooltip>
+    </form>
   );
 }
 
-export function ParemetrizeAssunto({ id }: { id: number }) {
+export function ParametrizeAssunto({ id }: { id: number }) {
+  const parametrizeAssuntoWithId = parametrizeAssunto.bind(null, id);
   return (
-    <Link
-      href={`/sinfonia/administracao/assuntos/${id}/parametrize`}
-      className="rounded-md border p-2 hover:bg-gray-100"
-    >
-      <SwatchIcon className="w-5" />
-    </Link>
+    <form action={parametrizeAssuntoWithId}>
+      <Tooltip title="Parametrizar">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Parametrizar</span>
+        <SwatchIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
   );
 }
 
@@ -68,10 +75,12 @@ export function DeleteAssunto({ id }: { id: number }) {
 	const deleteAssuntoWithId = deleteAssunto.bind(null, id);
   return (
     <form action={deleteAssuntoWithId}>
+      <Tooltip title="Excluir">
       <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Apagar</span>
+        <span className="sr-only">Excluir</span>
         <TrashIcon className="w-5" />
       </button>
+      </Tooltip>
     </form>
   );
 }

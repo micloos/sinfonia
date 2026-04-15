@@ -21,3 +21,13 @@ export async function deleteAssunto(id: number) {
 
   redirect('/sinfonia/administracao/assuntos');
 }
+
+export async function parametrizeAssunto(id: number) {
+  const filename = "app/lib/assunto/actions.tsx";
+  mylog("DBG", filename, "parametrizeAssunto", "id=", id);
+}
+
+export async function editAssunto(id: number) {
+  const filename = "app/lib/assunto/actions.tsx";
+  mylog("DBG", filename, "editAssunto", "id=", id);
+}
