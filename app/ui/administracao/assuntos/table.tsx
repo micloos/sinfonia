@@ -1,8 +1,8 @@
 import { fetchFilteredAssuntos } from '@/app/lib/data';
 import { AssuntosListType } from '@/app/lib/definitions';
-import { UpdateAssunto, DeleteAssunto, ParametrizeAssunto } from '@/app/ui/administracao/buttons';
+import { UpdateAssunto, DeleteAssunto } from '@/app/ui/administracao/buttons';
 
-export default async function UsersTable({
+export default async function AssuntosTable({
   query,
   currentPage,
 }: {
@@ -42,7 +42,7 @@ export default async function UsersTable({
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                   <div className="flex justify-end gap-3">
                     {/* Add your action buttons here */}
-                    <ParametrizeAssunto id={assunto.id} />
+                    
                     <UpdateAssunto id={assunto.id} />
                     <DeleteAssunto id={assunto.id} />
                       

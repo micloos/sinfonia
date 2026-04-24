@@ -50,6 +50,7 @@ export async function createParticipante (prevState: ParticipanteState, formData
 			message: 'Missing Fields, failed to create',
 		}
 	}
+	mylog ("DBG", filename, "createParticipante", "validatedFields=", validatedFields.data);
 
 	const nome = validatedFields.data.nome;
 	mylog ("DBG", filename, "createParticipante", "nome=",nome);

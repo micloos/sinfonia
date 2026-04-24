@@ -1,7 +1,7 @@
-import { PencilIcon, PlusIcon, SwatchIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteUser } from '@/app/lib/usuarios/actions';
-import { deleteAssunto, parametrizeAssunto, editAssunto } from '@/app/lib/assunto/actions';
+import { deleteAssunto, parametrizeAssunto } from '@/app/lib/administracao/actions';
 import { deleteFromParticipantesList } from '@/app/lib/participantes/actions';
 import { mylog } from '@/app/lib/mylogger';
 import { addParticipanteToReuniao } from '@/app/lib/reuniao/actions';
@@ -43,7 +43,7 @@ export function DeleteUser({ cpf }: { cpf: string }) {
 }
 
 export function UpdateAssunto({ id }: { id: number }) {
-  const editAssuntoWithId = editAssunto.bind(null, id);
+  const editAssuntoWithId = parametrizeAssunto.bind(null, id);
   return (
     <form action={editAssuntoWithId} >
     <Tooltip title="Editar">
@@ -52,20 +52,6 @@ export function UpdateAssunto({ id }: { id: number }) {
       <PencilIcon className="w-5" />
       </button>             
     </Tooltip>
-    </form>
-  );
-}
-
-export function ParametrizeAssunto({ id }: { id: number }) {
-  const parametrizeAssuntoWithId = parametrizeAssunto.bind(null, id);
-  return (
-    <form action={parametrizeAssuntoWithId}>
-      <Tooltip title="Parametrizar">
-      <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Parametrizar</span>
-        <SwatchIcon className="w-5" />
-      </button>
-      </Tooltip>
     </form>
   );
 }

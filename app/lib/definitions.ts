@@ -102,3 +102,37 @@ export type PautaParams = {
 	i_estagio: bool_br,
 	i_disc_esp: bool_br,
 }
+
+export type AdminAssuntoType = {
+	id: number,
+	nome: string,
+	descricao: string,
+	retornavel: number,
+	modeloDespacho: number,
+}
+
+export type AdminAssuntoParametersType = {
+	id: number,
+	ind_interessado: bool_br,
+	ind_orientador: bool_br,
+	ind_defesa: bool_br,
+	ind_plano: bool_br,
+	ind_banca: bool_br,
+	ind_relator: bool_br,
+	ind_a_creditos: bool_br,
+	ind_cred_disc: bool_br,
+	ind_sol_praz: bool_br,
+	ind_addref: bool_br,
+	ind_deliber: bool_br,
+	ind_nao_pub: bool_br,
+	ind_obs: bool_br,
+	ind_motivo: bool_br,
+	ind_novo_plan: bool_br,
+	ind_novo_orient: bool_br,
+	ind_novo_prof: bool_br,
+	ind_data_dep: bool_br,
+	ind_disser_tese: bool_br,
+	ind_data_apres: bool_br,
+	ind_estagio: bool_br,
+	ind_disc_esp: bool_br,
+}	
