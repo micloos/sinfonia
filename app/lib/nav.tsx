@@ -28,9 +28,9 @@ const linksd = [
 const linksa = [
   { name: 'Usuários', href: '/sinfonia/administracao/usuarios', icon: UserGroupIcon,  pname: 'Usuários', },
   { name: 'Participantes', href: '/sinfonia/administracao/participantes', icon: UserGroupIcon, pname: 'Participantes Usuais', },
-  { name: 'Upload', href: '/sinfonia/administracao/upload', icon: DocumentDuplicateIcon,  pname: 'Upload de Documentos', },
+//  { name: 'Upload', href: '/sinfonia/administracao/upload', icon: DocumentDuplicateIcon,  pname: 'Upload de Documentos', },
   { name: 'Assuntos', href: '/sinfonia/administracao/assuntos', icon: UserGroupIcon,  pname: 'Assuntos da Reunião', },
-  { name: 'Reunioes', href: '/sinfonia/administracao/reunioes', icon: UserGroupIcon,  pname: 'Reabrir Reunião', },
+  { name: 'Reunioes', href: '/sinfonia/reuniao/fechadas', icon: UserGroupIcon,  pname: 'Reabrir Reunião', },
 ];
 
 export { links, linksr, linksa, linksd };
