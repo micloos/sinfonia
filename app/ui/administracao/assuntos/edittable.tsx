@@ -21,9 +21,10 @@ export async function EditParamsAssunto({
     mylog("DBG", filename, 'AssEditTable' , "assuntoParameters=", assuntoParameters);
     const updateAssuntoWithId = updateAssunto.bind(null, assunto.id.toString());
     return (
-        <div>
-        <h1 className="text-2xl" >Parametrizar Assunto: {assunto?.id} </h1>
+        
+        
         <form action={updateAssuntoWithId}>
+            <h1 className="text-2xl" >Parametrizar Assunto: {assunto?.id} </h1>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
             <div className="mb-4 inline-block w-full">
                 <label htmlFor="nome" className="mb-2 block text-sm font-medium">
@@ -355,16 +356,16 @@ export async function EditParamsAssunto({
             </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-        <Link
-          href="/sinfonia/administracao/assuntos"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-        >
+            <Link
+                href="/sinfonia/administracao/assuntos"
+                className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+            >
           Voltar
         </Link>
         <Button type="submit">Salvar</Button>
       </div>
         </form>
 
-        </div>
+        
     )
 }

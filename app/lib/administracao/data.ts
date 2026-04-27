@@ -4,6 +4,20 @@ import { mylog } from '../mylogger';
 
 const filename = 'app/lib/administracao/data';
 
+export async function getNextAdmAssunto() {
+    const myreq = `SELECT MAX(CD_AssuntoReuniao) as maxId FROM REUNIAO_T0200_AssuntoReuniao`;
+    try {
+        mylog("DBG", filename, "getNextAdmAssunto","myreq = ", myreq);
+        const result = await mssql(myreq) as { maxId: number }[];
+        mylog("DBG", filename, "getNextAdmAssunto", "result=", result);
+        return result[0].maxId + 1;
+    } catch (error) {
+        mylog("ERROR", filename, "getNextAdmAssunto", "error=", error);
+        throw new Error('Failed to fetch next Assunto ID');
+    }
+}
+
+
 export async function fetchAssuntoById(id: number) {
     const myreq = `SELECT 
         CD_AssuntoReuniao as id, 
