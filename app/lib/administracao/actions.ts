@@ -112,8 +112,8 @@ export async function updateAssunto(id: string, formData: FormData) {
       SET 
         Ds_AssuntoAtaReuniao = '${validatedFields.data.nome}',
         Ds_AssuntoDeliberacao = '${validatedFields.data.descricao}',
-        Cd_AssuntoReuniaoRetornavel = '${validatedFields.data.retornavel}' ,
-        Cd_ModeloDespacho = '${validatedFields.data.modeloDespacho}' 
+        Cd_AssuntoReuniaoRetornavel = ${validatedFields.data.retornavel} ,
+        Cd_ModeloDespacho = ${validatedFields.data.modeloDespacho} 
       Where Cd_AssuntoReuniao = ${id}
     `;
     mylog("DBG", filename, "updateAssunto", "myreq=", myreq.replace(/\s/g, " "));
