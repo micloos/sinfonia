@@ -311,7 +311,15 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 export async function reativarReuniao (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "reativarReuniao", "id=",id);
-	redirect ('/proto');
+	const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'N' where Cd_Reuniao = ${id}`;
+	mylog ("DBG", "app/lib/actions", "reativarReuniao", "myreq=",myreq);
+	try {
+		const answer = await mssql(myreq);
+		mylog("DBG", "app/lib/actions","reativarReuniao","answer=",answer)
+	} catch (error) {
+		mylog("ERROR","app/lib/actions","reativarReuniao","error=",error)
+	}
+	redirect ('/sinfonia/reuniao/fechadas');
 }
 
 export async function comporPauta (id: string)
