@@ -62,7 +62,7 @@ export function DeleteAssunto({ id }: { id: number }) {
   return (
     <form action={deleteAssuntoWithId}>
       <Tooltip title="Excluir">
-      <button className="rounded-md border p-2 hover:bg-gray-100">
+      <button className="rounded-md border p-2 hover:bg-gray-100" test-id={`delete-assunto-${id}`}>
         <span className="sr-only">Excluir</span>
         <TrashIcon className="w-5" />
       </button>

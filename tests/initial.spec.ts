@@ -141,15 +141,46 @@ test('Add Ordem do Dia to Reuniao', async ({ page }) => {
     await expect(page.getByRole('heading', {name:"Criar Ordem do Dia para reuniao"})).toBeVisible();
     await expect(page.getByRole('button', {name:"Salvar"})).toBeVisible();
     await expect(page.getByRole('link', {name:"Voltar"})).toBeVisible();
-    await expect(page.getByRole('textbox')).toHaveCount(2);
+    await expect(page.getByRole('textbox')).toHaveCount(1);
     await expect(page.getByRole('textbox', {name:"assunto"})).toBeVisible();
-    await expect(page.getByRole('textbox', {name:"deliberacao"})).toBeVisible();
-    await expect(page.getByRole('textbox', {name:"deliberacao"})).toBeDisabled();
     await expect(page.getByRole('checkbox')).toBeVisible();
     await expect(page.getByRole('checkbox')).toBeChecked();
     await page.getByRole('textbox', {name:"assunto"}).fill('Primeiro Teste de Ordem do Dia');
     await page.getByRole('button', {name:"Salvar"}).click();
     await expect(page.getByRole('heading', {name:"Criar Ordem do Dia para reuniao"})).not.toBeVisible();
+    await expect(page.getByText('Ordem do Dia').first()).toBeVisible();
+    await expect(page.getByText('Primeiro Teste de Ordem do Dia').first()).toBeVisible();
+    await page.getByRole('button', {name:"Excluir"}).last().click();
+    await expect(page.getByText('Primeiro Teste de Ordem do Dia').first()).not.toBeVisible();
+}
+)
 
+// Administracao Create Assunto
+test('Create Assunto in Administracao', async ({ page }) => {
+    await page.goto('/sinfonia/administracao');
+    await expect(page.getByTestId('Ipen')).toBeVisible();
+    await expect(page.getByTestId('Assuntos')).toBeVisible();
+    await page.getByTestId('Assuntos').click();
+    await expect(page.getByRole('heading', {name:"Assuntos Reunião"})).toBeVisible();
+    await expect(page.getByRole('link', {name:"Criar Assunto"})).toBeVisible();
+    
+    await page.getByRole('link').filter({hasText: /^\d+$/}).last().click();
+    await expect(page.getByRole('link', {name:"Criar Assunto"})).toBeVisible();
+    await page.getByRole('link', {name:"Criar Assunto"}).click();
+    const assuntoWId = await page.getByRole('heading', {name:"Criar Assunto"}).getByText(/\d+/).innerText();
+    console.log("Creating Assunto with id=", assuntoWId);
+    const assuntoId = assuntoWId.replace(/\D+/g,'')
+    console.log("Creating Assunto with id=", assuntoId);    
+    await page.getByRole('textbox', {name:"Nome"}).fill('Primeiro Teste de Assunto');
+    await page.getByRole('textbox', {name:"Descrição"}).fill('Descrição do Primeiro Teste de Assunto');
+    await page.getByRole('checkbox', {name:"Interessado"}).check();
+    await page.getByRole('button', {name:"Criar Assunto"}).click();
+    await expect(page.getByRole('heading', {name:"Criar Assunto"})).not.toBeVisible();
+    await page.getByRole('link').filter({hasText: /^\d+$/}).last().click();
+    await expect(page.getByText('Primeiro Teste de Assunto').first()).toBeVisible();
+    await page.getByRole('row', { name: `Editar Excluir ${assuntoId} Primeiro` }).getByLabel('Excluir').click();
+    await expect(page.getByRole('heading', {name:"Assuntos Reunião"})).toBeVisible();
+    await page.getByRole('link').filter({hasText: /^\d+$/}).last().click();
+    await expect(page.getByText('Primeiro Teste de Assunto').first()).not.toBeVisible();
 }
 )

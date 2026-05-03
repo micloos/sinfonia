@@ -11,11 +11,14 @@ export async function deleteAssunto(id: number) {
   mylog("DBG", filename, "deleteAssunto", "id=", id);
 
   try {
-    const myreq = `DELETE FROM REUNIAO_T0200_AssuntoReuniao WHERE Cd_AssuntoReuniao = ${id}`;
+    const myreq = `DELETE FROM REUNIAO_T1200_ParametroAssuntoReuniao WHERE Cd_AssuntoReuniao = ${id}`;
     mylog("DBG", filename, "deleteAssunto", "myreq=", myreq.replace(/\s/g, " "));
     const answer = await mssql(myreq);
-    // const answer = "await mssql(myreq)";
     mylog("DBG", filename, "deleteAssunto", "answer=", answer);
+    const myreq2 = `DELETE FROM REUNIAO_T0200_AssuntoReuniao WHERE Cd_AssuntoReuniao = ${id}`;
+    mylog("DBG", filename, "deleteAssunto", "myreq2=", myreq2.replace(/\s/g, " "));
+    const answer2 = await mssql(myreq2);
+    mylog("DBG", filename, "deleteAssunto", "answer2=", answer2);
   } catch (error) {
     mylog("ERROR", filename, "deleteAssunto", "error=", error);
     
