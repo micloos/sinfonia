@@ -3,8 +3,8 @@ import { PautaRed } from '@/app/lib/definitions';
 // import AddPauta  from './addpauta';
 import { AddAssuntoToReuniao } from './buttons';
 
-export default async function PautaList({ reuniao }: { reuniao: number }) {
-    const pautaItems = await fetchFilteredPauta(reuniao,'',1) as PautaRed[];
+export default async function PautaList({ query, currentPage, reuniao }: { query: string; currentPage: string; reuniao: number }) {
+    const pautaItems = await fetchFilteredPauta(reuniao,query,Number(currentPage)) as PautaRed[];
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-6" >
             <div className="flex justify-between">

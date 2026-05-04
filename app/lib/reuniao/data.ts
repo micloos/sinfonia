@@ -270,3 +270,19 @@ export async function getNextSequence (rid: number)
     mylog ("DBG", filename, "getNextSequence", "nextCd=",nextCd);
     return nextCd;
 }
+
+export async function fetchAssuntosPages (query:string, reuniao: string, currentPage: number) {
+    mylog("DBG",filename,'fetchAssuntosPages','query=',query);
+    mylog("DBG",filename,'fetchAssuntosPages','reuniao=',reuniao);
+    mylog("DBG",filename,'fetchAssuntosPages','currentPage=',currentPage);
+    const myreq = `SELECT COUNT(*) as n FROM REUNIAO_T1010_ItemReuniao where Cd_Reuniao=${reuniao} and (nm_Interessado like '%${query}%' or Cd_AssuntoReuniao like '%${query}%')`;
+    try {
+        const count = await mssql(myreq) as Numres[] ;
+        mylog("DBG",filename,'fetchReunioesPages','number of records=',count[0].n);
+        const totalPages = Math.ceil(count[0].n / ITEMS_PER_PAGE);
+        return (totalPages);
+    } catch (error) {
+        mylog ("ERROR", filename, "fetchReunioesPages","error=",error);
+        throw new Error('Failed to fetch Reunioes pages');
+    } 
+}

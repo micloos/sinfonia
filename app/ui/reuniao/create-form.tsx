@@ -89,8 +89,15 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
       <div>
         <div className="w-1/2">
            <p>Reunião: </p>
-           <p>{reuniaoNumber}</p>
-           <input type="hidden" id="id" name="id" value={reuniaoNumber} />
+           <input
+                id="id"
+                name="id"
+                type="string"
+                defaultValue={reuniaoNumber}
+                placeholder="{reuniaoNumber}"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      />
+           
+           
         </div>
         <div className="mt-6 flex justify-end gap-4">
           <Link
