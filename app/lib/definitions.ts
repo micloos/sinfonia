@@ -16,6 +16,7 @@ export type PautaRed = {
 	assuntoId: string
 	assunto: string;
 	interessado: string;
+	area: string;
 }
 
 export type OrdemDia = {

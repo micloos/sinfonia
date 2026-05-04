@@ -48,12 +48,22 @@ export default async function PautaList({ reuniao }: { reuniao: number }) {
                                             </td>
                                             <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                                 <div className="flex items-center gap-3">
+                                                    {pauta.assuntoId}
+                                                </div>
+                                            </td>
+                                            <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                                                <div className="flex items-center gap-3">
                                                     {pauta.assunto}
                                                 </div>
                                             </td>
                                             <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                                 <div className="flex items-center gap-3">
                                                     {pauta.interessado}
+                                                </div>
+                                            </td>
+                                            <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                                                <div className="flex items-center gap-3">
+                                                    {pauta.area}
                                                 </div>
                                             </td>
                                         </tr>

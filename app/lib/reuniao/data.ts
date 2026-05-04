@@ -116,7 +116,8 @@ export async function fetchFilteredPauta     (id: number, query: string, current
             ip.Cd_ItemReuniao as iid,
             ip.nm_Interessado as interessado, 
             ip.Cd_AssuntoReuniao as assuntoId,
-            a.Ds_AssuntoAtaReuniao as assunto
+            a.Ds_AssuntoAtaReuniao as assunto,
+            ip.Ds_AreaInteressado as area
         from 
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a
