@@ -2,6 +2,8 @@ import ReuniaoForm from '@/app/ui/reuniao/create-form';
 import { fetchNextReuniao } from '@/app/lib/reuniao/data';
 import { mylog } from '@/app/lib/mylogger';
 {/* import { notFound } from 'next/navigation'; */}
+export const dynamic = 'force-dynamic';
+
  
 export default async function Page() {
   const reuniao={id:0,sala:"222",predio:"ensino",d_ini:"",d_end:"",d_lim:"",active:"S",sequencia:null};
@@ -14,3 +16,10 @@ export default async function Page() {
 	</main>
   );
 }
+
+
+
+
+
+
+
