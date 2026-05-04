@@ -44,7 +44,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   }
   return (
     <main>
-      {/* <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} /> */}
+      <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
       <PautaList reuniao={rid} />
   
     </main>

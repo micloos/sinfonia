@@ -152,6 +152,15 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
   );
 }
 
+export function AddAssuntoToReuniao({ reuniao }: { reuniao: number }) {
+  const addAssuntoToReuniaoWithId = addOrdemDia.bind(null, reuniao);
+  mylog("DBG",filename, 'AddAssuntoToReuniao' , "reuniao=", reuniao);
+  return (
+    <form action={addAssuntoToReuniaoWithId}>
+    </form>
+  );
+}
+
 
 
 // Participantes da Reuniao
