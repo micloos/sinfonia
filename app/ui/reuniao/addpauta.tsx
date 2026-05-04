@@ -1,15 +1,15 @@
 
 
 
-export default async function CreatePautaForm(props: {
-  reuniaoNumber: number;
+export default async function AddPauta(props: {
+  reuniao: number;
 }) {
-  const { reuniaoNumber } = props;
+  const { reuniao } = props;
   // mylog("DBG",filename, 'CreatePautaForm' , "reuniaoNumber=", reuniaoNumber);
   return (
     <main>
       <h1>Adicionar Pauta</h1>
-      <p>Reunião Número: {reuniaoNumber}</p>
+      <p>Reunião Número: {reuniao}</p>
       {/* Add your form implementation here */}
       <form>
         {/* Form fields go here */}

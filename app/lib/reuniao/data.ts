@@ -107,6 +107,32 @@ export async function fetchParticipantesByReuniao (id: number, currentPage: numb
     }
 }
 
+export async function fetchFilteredPauta     (id: number, query: string, currentPage: number)
+{
+    mylog("DBG",filename,"fetchFilteredPauta","{id, query, currentPage}=",{id, query, currentPage})
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+    try {
+        const myreq = `Select 
+            ip.Cd_ItemReuniao as iid,
+            ip.nm_Interessado as interessado, 
+            ip.Cd_AssuntoReuniao as assuntoId,
+            a.Ds_AssuntoAtaReuniao as assunto
+        from 
+            Reuniao_T1010_ItemReuniao as ip 
+        inner join Reuniao_T0200_AssuntoReuniao as a
+        on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
+        where ip.cd_reuniao = ${id}  
+        order by ip.cd_assuntoReuniao, ip.Cd_ItemReuniao, ip.nm_Interessado 
+        offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
+        mylog("DBG",filename,"fetchFilteredPauta","myreq=",myreq.replace(/\s/g," "));
+        const pauta = await mssql(myreq);
+        mylog("DBG",filename,"fetchFilteredPauta","pauta=",pauta);
+        return (pauta)
+    } catch (error) {
+        mylog ("ERROR", filename, "fetchFilteredPauta","error=",error);
+        throw new Error('Failed to fetch Pauta');
+    }
+}
 export async function fetchFilteredReunioes (
     query: string, 
     currentPage: number,

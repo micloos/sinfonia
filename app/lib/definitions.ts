@@ -11,6 +11,13 @@ export type Reunioes = {
 	sequencia: number|null;
 } 
 
+export type PautaRed = {
+	iid: string;
+	assuntoId: string
+	assunto: string;
+	interessado: string;
+}
+
 export type OrdemDia = {
 	id: number;
 	seq: number;

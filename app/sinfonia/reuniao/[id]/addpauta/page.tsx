@@ -1,4 +1,4 @@
-import CreatePautaForm from '@/app/ui/reuniao/addpauta';
+import AddPauta from '@/app/ui/reuniao/addpauta';
 import { mylog } from '@/app/lib/mylogger';
 {/* import { notFound } from 'next/navigation'; */}
 
@@ -16,7 +16,7 @@ export default async function Page(props: {
   mylog("DBG",filename, 'Page' , "id=", id);
   return (
 	<main>
-	  <CreatePautaForm reuniaoNumber={nid} />
+	  <AddPauta reuniao={nid} />
 	</main>
   );
 }

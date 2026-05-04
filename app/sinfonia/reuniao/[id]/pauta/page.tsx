@@ -1,5 +1,5 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
-import PautaForm from '@/app/ui/reuniao/pautaform';
+import PautaList from '@/app/ui/reuniao/pautalist';
 import { fetchReuniaoById } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
 import { mylog } from '@/app/lib/mylogger';
@@ -44,8 +44,8 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   }
   return (
     <main>
-      <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <PautaForm reuniao={rid} />
+      {/* <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} /> */}
+      <PautaList reuniao={rid} />
   
     </main>
     
