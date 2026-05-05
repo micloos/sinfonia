@@ -105,14 +105,14 @@ export async function editReuniao (id: string)
 	redirect (goto);
 }
 
-export async function editAssuntoFromReuniao (id: number)
+export async function editAssuntoFromReuniao (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "editAssuntoFromReuniao", "id=",id);
 	const goto =  "/sinfonia/reuniao/"+id+"/editassunto";
 	redirect (goto);
 }
 
-export async function deleteAssuntoFromReuniao ({ id }: { id: number }) {
+export async function deleteAssuntoFromReuniao (id: string) {
 	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "id=",id);
 	const myreq = `
 		DELETE FROM REUNIAO_T1010_ItemReuniao

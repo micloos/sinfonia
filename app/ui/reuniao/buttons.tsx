@@ -23,7 +23,7 @@ export function CreateReuniao() {
   );
 }
 
-export function DeleteAssuntoFromReuniao({ id }: { id: number }) {
+export function DeleteAssuntoFromReuniao({ id }: { id: string }) {
   const deleteAssuntoFromReuniaoWithId = deleteAssuntoFromReuniao.bind(null, id);
   return (
     <form action={deleteAssuntoFromReuniaoWithId}>
@@ -50,7 +50,7 @@ export function AddAssunto() {
   );
 }
 
-export function EditAssuntoFromReuniao({ id }: { id: number }) {
+export function EditAssuntoFromReuniao({ id }: { id: string }) {
   const editAssuntoFromReuniaoWithId = editAssuntoFromReuniao.bind(null, id);
   return (
     <form action={editAssuntoFromReuniaoWithId}>
