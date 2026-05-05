@@ -56,7 +56,7 @@ export default function EditReuniaoForm({
         <div className={`w-full mb-8 inline-block ${ifactive}`}>
           Reuniao fechada
         </div>
-        <div className="mb-4 inline-block w-1/2">
+        <div className="mb-4 inline-block w-1/4">
          
           <label htmlFor="predio" className="mb-2 block text-sm font-medium">
             Prédio
@@ -76,7 +76,7 @@ export default function EditReuniaoForm({
             </div>
           </div>
         </div>
-        <div className="mb-2 inline-block w-1/2">
+        <div className="mb-2 inline-block w-1/4">
           <label htmlFor="sala" className="mb-2 block text-sm font-medium">
             Sala
           </label>
@@ -94,7 +94,7 @@ export default function EditReuniaoForm({
             </div>
           </div>
         </div>
-        <div className="mb-2 inline-block w-1/2">
+        <div className="mb-2 inline-block w-1/4">
           <label htmlFor="dataReuniao" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
@@ -109,7 +109,7 @@ export default function EditReuniaoForm({
           <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
-        <div className="mb-2 inline-block w-1/2">
+        <div className="mb-2 inline-block w-1/4">
         <label htmlFor="dataDocumentos" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
