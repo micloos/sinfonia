@@ -105,6 +105,29 @@ export async function editReuniao (id: string)
 	redirect (goto);
 }
 
+export async function editAssuntoFromReuniao (id: number)
+{
+	mylog ("DBG", "app/lib/actions", "editAssuntoFromReuniao", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/editassunto";
+	redirect (goto);
+}
+
+export async function deleteAssuntoFromReuniao ({ id }: { id: number }) {
+	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "id=",id);
+	const myreq = `
+		DELETE FROM REUNIAO_T1010_ItemReuniao
+		WHERE Cd_ItemReuniao = ${id}
+	`;
+	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "myreq=",myreq.replace(/\s/g," "));
+	try {
+		const answer = await mssql (myreq);
+		mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "answer=",answer);
+	} catch (error) {
+		mylog ("INFO", "app/lib/actions", "deleteAssuntoFromReuniao", "error=",error);
+	}
+}
+
+
 export async function deleteReuniao (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "deleteReuniao", "id=",id);

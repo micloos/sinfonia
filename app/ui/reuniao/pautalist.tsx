@@ -1,10 +1,16 @@
 import { fetchFilteredPauta } from '@/app/lib/reuniao/data';
 import { PautaRed } from '@/app/lib/definitions';
 // import AddPauta  from './addpauta';
-import { AddAssuntoToReuniao } from './buttons';
+import { AddAssuntoToReuniao, EditAssuntoFromReuniao, DeleteAssuntoFromReuniao } from './buttons';
+import { mylog } from '@/app/lib/mylogger';
 
-export default async function PautaList({ query, currentPage, reuniao }: { query: string; currentPage: string; reuniao: number }) {
+const fileName = 'pautalist.tsx';
+
+export default async function PautaList(
+    {query, currentPage, reuniao }: { query: string; currentPage: string; reuniao: number }) 
+    {
     const pautaItems = await fetchFilteredPauta(reuniao,query,Number(currentPage)) as PautaRed[];
+    mylog("DBG",fileName,'PautaList','pautaItems=',pautaItems);
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-6" >
             <div className="flex justify-between">
@@ -42,9 +48,9 @@ export default async function PautaList({ query, currentPage, reuniao }: { query
                                             key={pauta.iid}
                                             className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                                           >
-                                            <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                                                {/* <EditAssuntoFromReuniao id={pauta.iid} /> */}
-                                                {/* <DeleteAssuntoFromReuniao id={pauta.iid} /> */}
+                                            <td className="flex justify-start py-3 pl-6 pr-3">
+                                                <EditAssuntoFromReuniao id={pauta.iid} />
+                                                <DeleteAssuntoFromReuniao id={pauta.iid} />
                                             </td>
                                             <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                                 <div className="flex items-center gap-3">

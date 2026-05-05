@@ -2,7 +2,7 @@ import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlas
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia  } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
-
+import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
 import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
@@ -23,6 +23,21 @@ export function CreateReuniao() {
   );
 }
 
+export function DeleteAssuntoFromReuniao({ id }: { id: number }) {
+  const deleteAssuntoFromReuniaoWithId = deleteAssuntoFromReuniao.bind(null, id);
+  return (
+    <form action={deleteAssuntoFromReuniaoWithId}>
+      <Tooltip title="Excluir">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Apagar</span>       
+            <TrashIcon className="w-5"  />      
+      </button>
+      </Tooltip>
+    </form>
+
+  );
+}
+
 export function AddAssunto() {
   return (
     <Link
@@ -34,6 +49,21 @@ export function AddAssunto() {
     </Link>
   );
 }
+
+export function EditAssuntoFromReuniao({ id }: { id: number }) {
+  const editAssuntoFromReuniaoWithId = editAssuntoFromReuniao.bind(null, id);
+  return (
+    <form action={editAssuntoFromReuniaoWithId}>
+      <Tooltip title="Editar">
+      <button className="rounded-md border p-2 hover:bg-gray-100" >
+        <span className="sr-only">Editar</span>
+        <PencilIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+}
+
 export function DeleteReuniao({ id }: { id: string }) {
 	const deleteReuniaoWithId = deleteReuniao.bind(null, id);
   return (

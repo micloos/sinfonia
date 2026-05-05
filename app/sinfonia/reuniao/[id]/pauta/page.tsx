@@ -58,7 +58,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
     <main>
       
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <div className="mt-4 flex w-4/5 items-center justify-between gap-2 md:mt-8">
+      <div className="mt-4 flex w-full items-center justify-between gap-2 md:mt-8">
            <SearchAssunto placeholder="Procurar..." />
            <AddAssunto />	   
       </div>

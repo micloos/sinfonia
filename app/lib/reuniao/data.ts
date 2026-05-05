@@ -122,7 +122,7 @@ export async function fetchFilteredPauta     (id: number, query: string, current
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a
         on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
-        where ip.cd_reuniao = ${id}  
+        where ip.cd_reuniao = ${id} and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao like '%${query}%')
         order by ip.cd_assuntoReuniao, ip.Cd_ItemReuniao, ip.nm_Interessado 
         offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
         mylog("DBG",filename,"fetchFilteredPauta","myreq=",myreq.replace(/\s/g," "));
