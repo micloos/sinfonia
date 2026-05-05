@@ -31,7 +31,7 @@ export async function fetchReunioesPages (query: string, active:number) {
 
 export async function fetchNextReuniao () 
 {
-
+    mylog("DBG",filename,'fetchNextReuniao',' fetching next Reuniao number','...')   ;
     type correctanswer = { n: number};
     {/* type badanswer = {error: string};
     
