@@ -290,7 +290,7 @@ export async function EditParamsAssunto({
                     id="ind_disser_tese"
                     name="ind_disser_tese"
                     value='S'
-                    defaultChecked={assuntoParameters?.ind_disser_tese === 'S'}
+                    defaultChecked={assuntoParameters?.ind_dissertacao_tese === 'S'}
                     className="mb-2 mr-4"
                 />
                 <label htmlFor="ind_nao_pub" className="mb-2 block text-sm font-medium">

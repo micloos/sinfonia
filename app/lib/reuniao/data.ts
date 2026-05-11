@@ -1,7 +1,7 @@
 'use server'
 
 import { mssql } from '@/app/lib/db';
-import { Numres, Reunioes, OrdemDia } from '@/app/lib/definitions';
+import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
 import { mylog } from '../mylogger';
 
 
@@ -134,6 +134,87 @@ export async function fetchFilteredPauta     (id: number, query: string, current
         throw new Error('Failed to fetch Pauta');
     }
 }
+
+export async function fetchAssuntoParameters ()
+{    const myreq = `select
+    Cd_ParametroAssuntoReuniao as id, 
+    Ind_Interessado,
+    Ind_Orientador,
+    Ind_Defesa,
+    Ind_PlanoTrabalho,
+    Ind_BancaExaminadora,
+    Ind_Relator,
+    Ind_AtribuiCreditos,
+    Ind_CredenciamentoDisciplina,
+    Ind_SolicitaPrazo,
+    Ind_AdReferendum,
+    Ind_Deliberacao,
+    Ind_ObservacaoNaoPublicavel,
+    Ind_ObservacaoAssunto,
+    Ind_MotivoAssunto,
+    Ind_NovoPlano,
+    Ind_NovoOrientador,
+    Ind_NovoProfessor,
+    Ind_DataDeposito,
+    Ind_DisertacaoTese,
+    Ind_DataApresentacao,
+    Ind_Estagio,
+    Ind_DisciplinaEspecial
+    from REUNIAO_T1200_ParametroAssuntoReuniao`
+    try {        const parameters = await mssql(myreq) as AssuntoParameters[];  
+        return (parameters)
+    } catch (error) {
+        mylog ("ERROR", filename, "fetchAssuntoParameters","error=",error);
+        throw new Error('Failed to fetch Assunto Parameters');
+    }
+}
+
+export async function fetchAssuntos() {
+    const myreq = `select Cd_AssuntoReuniao as id, concat(Cd_AssuntoReuniao,' - ',Ds_AssuntoAtaReuniao) as assunto from REUNIAO_T0200_AssuntoReuniao`;
+    try {
+        const assuntos = await mssql(myreq) as Assuntos[];   
+        return (assuntos)
+    } catch (error) {
+        mylog ("ERROR", filename, "fetchAssuntos","error=",error);  
+        throw new Error('Failed to fetch Assuntos');
+    }  
+}
+
+export async function fetchIndices() {
+    const myreq = `select 
+    Ind_Interessado,
+    Ind_Orientador,
+    Ind_Defesa,
+    Ind_PlanoTrabalho,
+    Ind_BancaExaminadora,
+    Ind_Relator,
+    Ind_AtribuiCreditos,
+    Ind_CredenciamentoDisciplina,
+    Ind_SolicitaPrazo,
+    Ind_AdReferendum,
+    Ind_Deliberacao,
+    Ind_ObservacaoNaoPublicavel,
+    Ind_ObservacaoAssunto,
+    Ind_MotivoAssunto,
+    Ind_NovoPlano,
+    Ind_NovoOrientador,
+    Ind_NovoProfessor,
+    Ind_DataDeposito,
+    Ind_DissertacaoTese,
+    Ind_DataApresentacao,
+    Ind_Estagio,
+    Ind_DisciplinaEspecial
+     from REUNIAO_T1200_ParametroAssuntoReuniao`
+       ;
+    try {
+        const indices = await mssql(myreq) as AssuntoParameters[];  
+        return (indices)
+    } catch (error) {
+        mylog ("ERROR", filename, "fetchIndices","error=",error);
+        throw new Error('Failed to fetch Indices');
+    }
+}
+
 export async function fetchFilteredReunioes (
     query: string, 
     currentPage: number,

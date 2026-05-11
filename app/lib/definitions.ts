@@ -19,6 +19,36 @@ export type PautaRed = {
 	area: string;
 }
 
+export type Assuntos = {
+	id: number;
+	assunto: string;
+}
+
+export type AssuntoParameters	 = {
+	Ind_Interessado : bool_br
+    Ind_Orientador : bool_br
+    Ind_Defesa : bool_br
+    Ind_PlanoTrabalho : bool_br
+    Ind_BancaExaminadora : bool_br
+    Ind_Relator : bool_br
+    Ind_AtribuiCreditos : bool_br
+    Ind_CredenciamentoDisciplina : bool_br
+    Ind_SolicitaPrazo : bool_br
+    Ind_AdReferendum : bool_br
+    Ind_Deliberacao : bool_br
+    Ind_ObservacaoNaoPublicavel : bool_br
+    Ind_ObservacaoAssunto : bool_br
+    Ind_MotivoAssunto : bool_br
+    Ind_NovoPlano : bool_br
+    Ind_NovoOrientador : bool_br
+    Ind_NovoProfessor : bool_br
+    Ind_DataDeposito : bool_br
+    Ind_DissertacaoTese : bool_br
+    Ind_DataApresentacao : bool_br
+    Ind_Estagio : bool_br
+    Ind_DisciplinaEspecial : bool_br
+}
+
 export type OrdemDia = {
 	id: number;
 	seq: number;
@@ -105,7 +135,7 @@ export type PautaParams = {
 	i_novo_orient: bool_br,
 	i_novo_prof: bool_br,
 	i_data_dep: bool_br,
-	i_disser_tese: bool_br,
+	i_dissertacao_tese: bool_br,
 	i_data_apres: bool_br,
 	i_estagio: bool_br,
 	i_disc_esp: bool_br,
@@ -139,7 +169,7 @@ export type AdminAssuntoParametersType = {
 	ind_novo_orient: bool_br,
 	ind_novo_prof: bool_br,
 	ind_data_dep: bool_br,
-	ind_disser_tese: bool_br,
+	ind_dissertacao_tese: bool_br,
 	ind_data_apres: bool_br,
 	ind_estagio: bool_br,
 	ind_disc_esp: bool_br,

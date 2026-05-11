@@ -1,0 +1,57 @@
+
+import Myhr from "./myhr"
+import { DatePicker } from "@mui/x-date-pickers"
+import dayjs from "dayjs"
+import utc from 'dayjs/plugin/utc'
+import "dayjs/locale/pt-br"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { useState } from "react"
+
+dayjs.extend(utc);
+
+export default  function AdReferendum() {
+    const [docDate, setDocDate] = useState(dayjs.utc());
+    return (
+        <div className="rounded-md bg-gray-50 p-4 md:p-2">
+            <div className="mb-4 inline-block pr-4 w-1/6">
+                <label htmlFor="ind_adreferendum" className="mb2 block text-sm font-medium">
+                    Ad Referendum
+                </label>
+                <input 
+                    type="checkbox"
+                    id="ind_adreferendum"
+                    name="ind_adreferendum"
+                    value="S"
+                    className="mb-2 mr-4"
+                />
+            </div>
+            <div className="mb-4 inline-block pr-4 w-2/3">
+                <label htmlFor="ds_AdReferendum" className="mb2 block text-sm font-medium">
+                    Observação Ad Referendum
+                </label>
+                <input
+                    type="string"
+                    id="ds_AdReferendum"
+                    name="ds_AdReferendum"
+                    placeholder="Observacao"
+                    className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                />
+            </div>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+            <div className="mb-4 inline-block pr-4 w-1/6">
+                <label htmlFor="dt_AdReferendum" className="mb2 block text-sm font-medium" >
+                    Data
+                </label>
+                <div className="w-full" >
+                <DatePicker defaultValue={docDate}
+                   onChange={(date) => {if(date) {setDocDate(date)}}} />
+                   <input type="hidden" id="dt_adreferendum" name="dt_adreferendum" value={docDate.toISOString()}
+                />
+                </div>
+            </div>
+            </LocalizationProvider>
+            <Myhr />
+        </div>
+    )
+}

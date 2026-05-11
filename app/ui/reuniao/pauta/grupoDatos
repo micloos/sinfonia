@@ -1,0 +1,197 @@
+REUNIAO_T1010_ItemReuniao
+    Cd_ItemReuniao                                                                                                                   int                                                                                                                              no                                            4 10    0     no                                  (n/a)                               (n/a)                               NULL                                                                                                                            
+    Ind_AdReferendum                                                                                                                 char                                                                                                                             no                                            1             no                                  no                                  no                                  SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_AdReferendum                                                                                                                  varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    dt_AdReferendum                                                                                                                  datetime                                                                                                                         no                                            8             yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    ds_CredenciamentoDisciplina                                                                                                      varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    Nm_CredProfessorResponsavel                                                                                                      varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    Nm_CredNovoProfessor                                                                                                             varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    Dt_Defesa                                                                                                                        datetime                                                                                                                         no                                            8             yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    Cd_ClassificacaoDeliberacao                                                                                                      int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    Ds_ObservacaoDeliberacao                                                                                                         varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    nm_Interessado                                                                                                                   varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    nm_Orientador                                                                                                                    varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_MotivoItem                                                                                                                    varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_ObservacaoItem                                                                                                                varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_ObservacaoNaoPublicavelItem                                                                                                   varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    nm_Relator                                                                                                                       varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_ObservacaoRelator                                                                                                             varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    nm_NovoOrientador                                                                                                                varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    Cd_TipoSolicitacaoPrazo                                                                                                          int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    qt_SolicitacaoPrazoDiasSolicitados                                                                                               int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    qt_SolicitacaoPrazoDiasConcedidos                                                                                                int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    Cd_AssuntoReuniao                                                                                                                int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    ds_AreaInteressado                                                                                                               varchar                                                                                                                          no                                           20             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_NivelInteressado                                                                                                              varchar                                                                                                                          no                                           20             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_LotOrientador                                                                                                                 varchar                                                                                                                          no                                           50             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_LotRelator                                                                                                                    varchar                                                                                                                          no                                           50             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    cd_Reuniao                                                                                                                       int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    dt_Deposito                                                                                                                      datetime                                                                                                                         no                                            8             yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    ds_TituloDissertacaoTese                                                                                                         varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_TituloPlanoTrabalho                                                                                                           varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    ds_TituloPlanoTrabalho_NovoPlano                                                                                                 varchar                                                                                                                          no                                         1000             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    dt_Apresentacao                                                                                                                  datetime                                                                                                                         no                                            8             yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    ds_EstagioDisciplina                                                                                                             varchar                                                                                                                          no                                          255             yes                                 no                                  yes                                 SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    dt_EstagioPeriodoInicio                                                                                                          datetime                                                                                                                         no                                            8             yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    dt_EstagioPeriodoFim                                                                                                             datetime                                                                                                                         no                                            8             yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    qt_EstagioCreditos                                                                                                               int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    cd_ReuniaoOrigem                                                                                                                 int                                                                                                                              no                                            4 10    0     yes                                 (n/a)                               (n/a)                               NULL                                                                                                                            
+    Id_Usuario                                                                                                                       varchar                                                                                                                          no                                          200             no                                  no                                  no                                  SQL_Latin1_General_CP1_CI_AS                                                                                                    
+    Dt_Atualizacao                                                                                                                   datetime                                                                                                                         no                                            8             no                                  (n/a)                               (n/a)                               NULL                                                                                                                            
+ 
+
+
+
+
+
+
+
+
+
+
+ind_interessado='S'
+    nm_interessado : string
+    ds_areainteressado : string
+    ds_nivelinteressado : string
+
+ind_orientador='S'
+    nm_orientador : string
+    ds_LotOrientador : string 
+    
+ind_adreferendum='S'
+    ind_adreferendum: 'S' | 'N'
+    ds_adreferendum : string
+    dt_adreferendum : Date
+
+ind_defesa='S'
+    dt_defesa : Date
+
+ind_planotrabalho='S'  
+    ds_TituloPlanoTrabalho : string
+
+ind_bancaexaminadora='S'
+    REUNIAO_T0900_BancaExaminadoraReuniao[]
+        Cd_TipoExaminador : int
+        Nm_ExaminadorBanca : string
+        ds_LotExaminadorBanca : string
+
+ind_relator='S'
+    nm_relator : string
+    ds_ObservacaoRelator : string
+    ds_lotRelator : string
+
+ind_atribuicreditos='S'
+    REUNIAO_T3900_AtribuidorCreditos
+        cd_AtribuidorCredito : int
+        cd_ItemReuniao : int
+        cd_TipoAtribuidorCredito : int
+        ds_TituloTrabalho : string
+        ds_TituloPeriodicoLivroCongresso : string
+        ds_Pais : string
+        dt_periodoinicial : Date
+        dt_periodofinal : Date
+        ds_Paginas : string
+        ds_Ano : int
+    REUNIAO_T3600_TipoAtribuidorCredito[5] fix
+        Cd_TipoAtribuidorCredito : int
+        Nm_TipoAtribuidorCredito : string
+
+ind_credenciamentodisciplina='S'
+    ds_CredenciamentoDisciplina : string 
+    Nm_CredProfessorResponsavel : string
+
+ind_solicitaprazo='S'
+    Cd_TipoSolicitacaoPrazo : int
+    qt_SolicitacaoPrazoDiasSolicitados : int
+    REUNIAO_T3700_TipoSolicitacaoPrazo[2] fix
+        Cd_TipoSolicitacaoPrazo : int
+        nm_TipoSolicitacaoPrazo : string
+
+ind_adreferendum='S'
+    ind_adreferendum: 'S' | 'N'
+    ds_adreferendum : string
+    dt_adreferendum : Date
+    
+ind_deliberacao='S'
+    Not used
+
+ind_observacaonaopublicavel='S'
+    ds_ObservacaoNaoPublicavelItem : string
+    
+ind_observacaoassunto='S'
+    ds_ObservacaoItem : string
+
+ind_motivoassunto='S'
+    ds_MotivoItem : string
+    
+ind_novoplano='S'
+    ds_TituloPlanoTrabalho_NovoPlano : string
+
+ind_novoorientador='S'
+    nm_NovoOrientador : string
+    
+ind_novoprofessor='S'
+    Nm_CredNovoProfessor : string
+    
+ind_datadeposito='S'
+    dt_Deposito : Date
+    
+ind_dissertacaotese='S'
+    ds_TituloDissertacaoTese : string
+
+ind_dataapresentacao='S'
+    dt_Apresentacao : Date
+
+ind_estagio='S'
+    ds_EstagioDisciplina : string
+    dt_EstagioPeriodoInicio : Date
+    dt_EstagioPeriodoFim : Date
+    qt_EstagioCreditos : int
+    
+ind_disciplinaespecial='S'
+    REUNIAO_T3800_DisciplinaEspecial
+        cd_DisciplinaEspecial : int
+        cd_itemreuniao : int
+        nm_DisciplinaEspecial : string
+        qt_creditos : int
+        dt_periodoinicial : Date
+        dt_periodofinal : Date
+        ds_frequencia : string
+        ds_conceito : string
+
+
+
+REuniao_T1200_ParametroAssuntoReuniao
+    Cd_AssuntoReuniao : int
+    Ind_Interessado : 'S' | 'N'
+    Ind_Orientador : 'S' | 'N'
+    Ind_Defesa : 'S' | 'N'
+    Ind_PlanoTrabalho : 'S' | 'N'
+    Ind_BancaExaminadora : 'S' | 'N'
+    Ind_Relator : 'S' | 'N'
+    Ind_AtribuiCreditos : 'S' | 'N'
+    Ind_CredenciamentoDisciplina : 'S' | 'N'
+    Ind_SolicitaPrazo : 'S' | 'N'
+    Ind_AdReferendum : 'S' | 'N'
+    Ind_Deliberacao : 'S' | 'N'
+    Ind_ObservacaoNaoPublicavel : 'S' | 'N'
+    Ind_ObservacaoAssunto : 'S' | 'N'
+    Ind_MotivoAssunto : 'S' | 'N'
+    Ind_NovoPlano : 'S' | 'N'
+    Ind_NovoOrientador : 'S' | 'N'
+    Ind_NovoProfessor : 'S' | 'N'
+    Ind_DataDeposito : 'S' | 'N'
+    Ind_DissertacaoTese : 'S' | 'N'
+    Ind_DataApresentacao : 'S' | 'N'
+    Ind_Estagio : 'S' | 'N'
+    Ind_DisciplinaEspecial : 'S' | 'N'
+   
+REUNIAO_T0700_TipoExaminadorBanca
+    Cd_TipoExaminador : int
+    Nm_TipoExaminador : string
+
+REUNIAO_T0900_BancaExaminadoraReuniao
+    Cd_ItemReuniao : int
+    Cd_TipoExaminador : int
+    Nm_ExaminadorBanca : string
+    ds_LotExaminadorBanca : string
