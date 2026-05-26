@@ -6,6 +6,8 @@ import { mylog } from '@/app/lib/mylogger';
 
 const fileName = 'pautalist.tsx';
 
+
+
 export default async function PautaList(
     {query, currentPage, reuniao }: { query: string; currentPage: string; reuniao: number }) 
     {
@@ -49,7 +51,7 @@ export default async function PautaList(
                                             className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                                           >
                                             <td className="flex justify-start py-3 pl-6 pr-3">
-                                                <EditAssuntoFromReuniao id={pauta.iid} />
+                                                <EditAssuntoFromReuniao id={pauta.iid} reuniao={reuniao} />
                                                 <DeleteAssuntoFromReuniao id={pauta.iid} />
                                             </td>
                                             <td className="whitespace-nowrap py-3 pl-6 pr-3">

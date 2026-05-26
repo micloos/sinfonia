@@ -15,18 +15,19 @@ export default  function SelectAssunto({assuntos, assunto}: {assuntos: Assuntos[
     const selectedValue = event.target.value;
     const params = new URLSearchParams(searchParams);
     if (selectedValue) {
-      params.set('assunto', selectedValue);
+      params.set('cd_assunto', selectedValue);
     } else {
-      params.delete('assunto');
+      params.delete('cd_assunto');
     }
     replace(`?${params.toString()}`);
   };
-  mylog('DBG', filename, functionname, 'assunto=', assunto);
+  mylog('DBG', filename, functionname, 'assunto=',assunto);
   return (
     <div className="mb-4">
         <select
-        id="selectassunto" 
-        name="selectassunto"
+        id="cd_assunto" 
+        name="cd_assunto"
+        defaultValue={assunto}
         onChange={handleSelect}
         className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500">
           <option value="" disabled> Escolher nivel</option>           

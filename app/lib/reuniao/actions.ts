@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
-
 import { getNextSequence } from '@/app/lib/reuniao/data';
 import { ReuniaoState, OrdemState } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
@@ -13,6 +12,8 @@ import { revalidatePath } from 'next/cache';
 const filename="/app/lib/reuniao/actions";
 type numericanswer = { n : number};
 type charanswer = { s : string};
+
+
 
 {/* Reunioes */}
 
@@ -64,7 +65,7 @@ export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 		    (Cd_Reuniao, Dt_inicialReuniao, Dt_LimiteInclusaoItemReuniao, Ds_SalaReuniao, Ds_PredioSalaReuniao, Ind_ReaberturaReuniao)
 			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N')
 		`;
-		const answer = await mssql(myreq);
+		const answer =  mssql(myreq);
 		mylog ("DBG", filename, "createReuniao", "answer=",answer);
 	} catch (error) {
 		mylog ("ERROR", "app/lib/actions", "createReuniao", "error=",error);
@@ -105,15 +106,26 @@ export async function editReuniao (id: string)
 	redirect (goto);
 }
 
-export async function editAssuntoFromReuniao (id: string)
+export async function editAssuntoFromReuniao (id: string, reuniao:number)
 {
-	mylog ("DBG", "app/lib/actions", "editAssuntoFromReuniao", "id=",id);
+	mylog ("DBG", "app/lib/actions", "editAssuntoFromReuniao", "{id,reuniao}=", {id,reuniao});
 	const goto =  "/sinfonia/reuniao/"+id+"/editassunto";
 	redirect (goto);
 }
 
 export async function deleteAssuntoFromReuniao (id: string) {
 	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "id=",id);
+	const myreq0 = `
+		DELETE FROM REUNIAO_T0900_BancaExaminadoraReuniao
+		WHERE Cd_ItemReuniao = ${id}
+	`;
+	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "myreq0=",myreq0.replace(/\s/g," "));
+	try {
+		const answer = await mssql (myreq0);
+		mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "answer=",answer);
+	} catch (error) {
+		mylog ("INFO", "app/lib/actions", "deleteAssuntoFromReuniao", "error=",error);
+	}
 	const myreq = `
 		DELETE FROM REUNIAO_T1010_ItemReuniao
 		WHERE Cd_ItemReuniao = ${id}
@@ -125,6 +137,7 @@ export async function deleteAssuntoFromReuniao (id: string) {
 	} catch (error) {
 		mylog ("INFO", "app/lib/actions", "deleteAssuntoFromReuniao", "error=",error);
 	}
+	revalidatePath('/sinfonia/reuniao/pauta');
 }
 
 

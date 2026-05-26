@@ -2,7 +2,8 @@ import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlas
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia  } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
-import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
+// import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
+import { deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
 import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
@@ -41,7 +42,7 @@ export function DeleteAssuntoFromReuniao({ id }: { id: string }) {
 export function AddAssunto({ reuniao }: { reuniao: number }) {
   return (
     <Link
-      href={`/sinfonia/reuniao/${reuniao}/addpauta`}
+      href={`/sinfonia/reuniao/${reuniao}/0/addpauta`}
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">Criar Assunto</span>{' '}
@@ -50,17 +51,18 @@ export function AddAssunto({ reuniao }: { reuniao: number }) {
   );
 }
 
-export function EditAssuntoFromReuniao({ id }: { id: string }) {
-  const editAssuntoFromReuniaoWithId = editAssuntoFromReuniao.bind(null, id);
+export function EditAssuntoFromReuniao({ id, reuniao }: { id: string, reuniao: number }) {
+  
+  mylog("DBG",filename, 'EditAssuntoFromReuniao' , "id=", id);
   return (
-    <form action={editAssuntoFromReuniaoWithId}>
+    
       <Tooltip title="Editar">
-      <button className="rounded-md border p-2 hover:bg-gray-100" >
+      <Link href={`/sinfonia/reuniao/${reuniao}/${id}/addpauta`} className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Editar</span>
         <PencilIcon className="w-5" />
-      </button>
+      </Link>
       </Tooltip>
-    </form>
+    
   );
 }
 

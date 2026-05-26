@@ -18,11 +18,11 @@ export async function mssql( query:string ) {
 		mylog ("INFO", "db.ts", "mssql","query=",query);
 		{/* connect */}
 	    const pool = await sql.connect(config);
-		mylog ("INFO", "db.ts", "mssql", "status", pool.connected?"Connected to MSSQL":"Failed to connect to MSSQL");
+		// mylog ("INFO", "db.ts", "mssql", "status", pool.connected?"Connected to MSSQL":"Failed to connect to MSSQL");
 
 		{/* Connect to pool and query*/}
 		const results = await pool.request().query(query);
-		mylog ("INFO", "db.ts", "mssql","results=",results);
+		// mylog ("INFO", "db.ts", "mssql","results=",results);
 	
 	
 		const realresult : IRecordSet<any> = results.recordset;

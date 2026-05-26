@@ -22,7 +22,7 @@ export default async function ReunioesTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr><th scope="col" className="px-1 py-5 font-medium sm:pl-6">
-                 Acoes
+                 Ações
                 </th>
                 <th scope="col" className="px-1 py-5 font-medium sm:pl-6">
                  N

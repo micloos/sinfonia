@@ -49,39 +49,42 @@ REUNIAO_T1010_ItemReuniao
 
 
 
-ind_interessado='S'
+ind_interessado='S'  // 21607
     nm_interessado : string
     ds_areainteressado : string
     ds_nivelinteressado : string
+[DONE Interessado]
 
-ind_orientador='S'
+    ind_orientador='S'  // 14673
     nm_orientador : string
     ds_LotOrientador : string 
-    
-ind_adreferendum='S'
+[TODO Orientador]
+
+
+ind_adreferendum='S'   // 30049
     ind_adreferendum: 'S' | 'N'
     ds_adreferendum : string
     dt_adreferendum : Date
 
-ind_defesa='S'
+ind_defesa='S'   //  3454
     dt_defesa : Date
 
-ind_planotrabalho='S'  
+ind_planotrabalho='S'  // 7886
     ds_TituloPlanoTrabalho : string
 
-ind_bancaexaminadora='S'
+ind_bancaexaminadora='S'  // 6233
     REUNIAO_T0900_BancaExaminadoraReuniao[]
         Cd_TipoExaminador : int
         Nm_ExaminadorBanca : string
         ds_LotExaminadorBanca : string
 
-ind_relator='S'
+ind_relator='S'  // 5671
     nm_relator : string
     ds_ObservacaoRelator : string
     ds_lotRelator : string
 
-ind_atribuicreditos='S'
-    REUNIAO_T3900_AtribuidorCreditos
+ind_atribuicreditos='S'           // 211
+    REUNIAO_T3900_AtribuidorCreditos 
         cd_AtribuidorCredito : int
         cd_ItemReuniao : int
         cd_TipoAtribuidorCredito : int
@@ -96,18 +99,18 @@ ind_atribuicreditos='S'
         Cd_TipoAtribuidorCredito : int
         Nm_TipoAtribuidorCredito : string
 
-ind_credenciamentodisciplina='S'
+ind_credenciamentodisciplina='S'     // 600
     ds_CredenciamentoDisciplina : string 
     Nm_CredProfessorResponsavel : string
 
-ind_solicitaprazo='S'
+ind_solicitaprazo='S'  //  967
     Cd_TipoSolicitacaoPrazo : int
     qt_SolicitacaoPrazoDiasSolicitados : int
     REUNIAO_T3700_TipoSolicitacaoPrazo[2] fix
         Cd_TipoSolicitacaoPrazo : int
         nm_TipoSolicitacaoPrazo : string
 
-ind_adreferendum='S'
+ind_adreferendum='S' //  30049
     ind_adreferendum: 'S' | 'N'
     ds_adreferendum : string
     dt_adreferendum : Date
@@ -115,40 +118,40 @@ ind_adreferendum='S'
 ind_deliberacao='S'
     Not used
 
-ind_observacaonaopublicavel='S'
+ind_observacaonaopublicavel='S'   // 4783
     ds_ObservacaoNaoPublicavelItem : string
     
-ind_observacaoassunto='S'
+ind_observacaoassunto='S'  // 3206
     ds_ObservacaoItem : string
 
-ind_motivoassunto='S'
+ind_motivoassunto='S'  // 1797
     ds_MotivoItem : string
     
-ind_novoplano='S'
+ind_novoplano='S'  //  138
     ds_TituloPlanoTrabalho_NovoPlano : string
 
-ind_novoorientador='S'
+ind_novoorientador='S' // 344
     nm_NovoOrientador : string
     
-ind_novoprofessor='S'
+ind_novoprofessor='S' // 90
     Nm_CredNovoProfessor : string
     
-ind_datadeposito='S'
+ind_datadeposito='S' //  2397
     dt_Deposito : Date
     
-ind_dissertacaotese='S'
+ind_dissertacaotese='S'  // 5113
     ds_TituloDissertacaoTese : string
 
-ind_dataapresentacao='S'
+ind_dataapresentacao='S' // 4371
     dt_Apresentacao : Date
 
-ind_estagio='S'
+ind_estagio='S' // 57
     ds_EstagioDisciplina : string
     dt_EstagioPeriodoInicio : Date
     dt_EstagioPeriodoFim : Date
     qt_EstagioCreditos : int
     
-ind_disciplinaespecial='S'
+ind_disciplinaespecial='S' // 778
     REUNIAO_T3800_DisciplinaEspecial
         cd_DisciplinaEspecial : int
         cd_itemreuniao : int
@@ -195,3 +198,76 @@ REUNIAO_T0900_BancaExaminadoraReuniao
     Cd_TipoExaminador : int
     Nm_ExaminadorBanca : string
     ds_LotExaminadorBanca : string
+
+
+
+
+
+
+
+    export async function createItemObject2 ( toSubmit :string) {
+    const formData = JSON.parse(toSubmit) as Record<string, any>;
+    mylog("ERROR",filename,"createItemReuniao","formData = ",formData)
+    
+
+    const myform = flattenObject(formData);
+    mylog("ERROR",filename,"createItemReuniao","myform = ",myform)
+    const essentialFields = ItemAssunto.safeParse(myform)
+
+    mylog("ERROR",filename,"createItemReuniao","essentials = ",essentialFields)
+    if(!essentialFields.success) {
+		mylog ("ERROR", "app/lib/actions", "createReuniao", "essentialFields=", essentialFields.error.flatten().fieldErrors);
+		return {
+			errors: essentialFields.error.flatten().fieldErrors,
+			message: 'Missing Fields, failed to create',
+		}
+	}
+
+
+
+    try {
+            const myreq = `
+            UPDATE REUNIAO_T1010_ItemReuniao set 
+            cd_reuniao = ${essentialFields.data.cd_reuniao},
+            cd_assuntoreuniao = ${essentialFields.data.cd_assuntoreuniao},
+            nm_interessado = '${essentialFields.data.nm_interessado}',
+            ds_areainteressado = '${essentialFields.data.ds_areainteressado}',
+            ds_nivelinteressado = '${essentialFields.data.ds_nivelinteressado}',
+            nm_orientador = '${essentialFields.data.nm_orientador}',
+            ds_LotOrientador = '${essentialFields.data.ds_LotOrientador}',
+            dt_Apresentacao = '${essentialFields.data.dt_Apresentacao}',
+            ind_adreferendum = '${essentialFields.data.ind_adreferendum}',
+            ds_adreferendum = '${essentialFields.data.ds_AdReferendum}',
+            dt_adreferendum = '${essentialFields.data.dt_adreferendum}',
+            ds_TituloPlanoTrabalho = '${essentialFields.data.ds_TituloPlanoTrabalho}',
+            ds_ObservacaoItem = '${essentialFields.data.ds_ObservacaoItem}',
+            ds_ObservacaoNaoPublicavelItem = '${essentialFields.data.ds_ObservacaoNaoPublicavelItem}'
+
+            where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
+            `;
+            mylog ("DBG",filename,"createItemReuniao","myreq =",myreq.replace(/\s/g," "));
+            const answer = mssql(myreq)
+            mylog ("DBG",filename,"createItemObject","answer = ", answer);
+        } catch(error) {
+            mylog ("DBG",filename,"createItemObject","error = ", error);
+            return {
+                message: "Database Error" + error
+            }
+        }
+    
+    revalidatePath("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
+    redirect("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
+}
+
+
+function flattenObject(obj: Record<string, any>): Record<string, any> {
+  return Object.keys(obj).reduce((acc, k) => {
+    const pre = '';
+    if (typeof obj[k] === 'object' && obj[k] !== null && !Array.isArray(obj[k])) {
+      Object.assign(acc, flattenObject(obj[k],  k));
+    } else {
+      acc[pre + k] = obj[k];
+    }
+    return acc;
+  }, {} as Record<string, any>);
+}

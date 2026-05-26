@@ -212,8 +212,8 @@ export async function fetchFilteredAssuntos (
 		assuntos
 	)
 	} catch(error) {
-		mylog ("ERROR", filename, "fetchFilteredUsers","error=",error);
-		throw new Error('Failed to fetch total number of users');
+		mylog ("ERROR", filename, "fetchFilteredAssuntos","error=",error);
+		throw new Error('Failed to fetch total number of assuntos');
 	}
 }	
 

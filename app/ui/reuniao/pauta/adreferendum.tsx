@@ -7,11 +7,27 @@ import "dayjs/locale/pt-br"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { useState } from "react"
+import { AdReferendumType } from "@/app/lib/reuniao/definitions"
 
 dayjs.extend(utc);
 
-export default  function AdReferendum() {
-    const [docDate, setDocDate] = useState(dayjs.utc());
+interface AdReferendumSubformProps {
+  data: AdReferendumType;
+  onChange: (data: AdReferendumType) => void;
+  isRequired?: boolean;
+}
+
+export default  function AdReferendum({ data, onChange }: AdReferendumSubformProps) {
+    const [adReferendum, setAdReferendum] = useState<AdReferendumType>(data || { ind_adreferendum: 'N', ds_AdReferendum: '', dt_AdReferendum: '' });
+    const [docDate, setDocDate] = useState(data.dt_AdReferendum ? dayjs(data.dt_AdReferendum) : dayjs.utc());
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    const updatedAdReferendum = { ...adReferendum, [name]: value };
+    setAdReferendum(updatedAdReferendum);
+    onChange(updatedAdReferendum);
+  };
+
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-2">
             <div className="mb-4 inline-block pr-4 w-1/6">
@@ -24,6 +40,13 @@ export default  function AdReferendum() {
                     name="ind_adreferendum"
                     value="S"
                     className="mb-2 mr-4"
+                    checked={adReferendum.ind_adreferendum === 'S'}
+                    onChange={(e) => {
+                        const value = e.target.checked ? 'S' : 'N';
+                        const updatedAdReferendum = { ...adReferendum, ind_adreferendum: value };
+                        setAdReferendum(updatedAdReferendum);
+                        onChange(updatedAdReferendum);
+                        }    }                
                 />
             </div>
             <div className="mb-4 inline-block pr-4 w-2/3">
@@ -35,6 +58,8 @@ export default  function AdReferendum() {
                     id="ds_AdReferendum"
                     name="ds_AdReferendum"
                     placeholder="Observacao"
+                    value={adReferendum.ds_AdReferendum}
+                    onChange = {handleChange}
                     className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 />
             </div>

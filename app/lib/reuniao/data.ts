@@ -3,6 +3,7 @@
 import { mssql } from '@/app/lib/db';
 import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
 import { mylog } from '../mylogger';
+import { Banca, ItemReuniaoResponse } from './definitions';
 
 
 
@@ -266,6 +267,27 @@ export async function fetchOrdemDiaPages (id: string) {
 		throw new Error('Failed to fetch Number of Ordem do Dia');
 	} 
 }
+
+export async function fetchItemObject (irid: number) {
+    mylog("DBG",filename,"fetchItemObject","irid = ",irid)
+    if (irid) {
+    const myreq = `select * from reuniao_t1010_itemreuniao where cd_itemreuniao = ${irid}`;
+    try {
+        const item = await mssql(myreq) as ItemReuniaoResponse[];
+        const toreturn = item[0] ? item[0] : null;
+        const myreq2 = `select * from REUNIAO_T0900_BancaExaminadoraReuniao where cd_itemreuniao = ${irid}`;
+        const banca = await mssql(myreq2) as Banca[];
+        if (banca && banca.length > 0 && toreturn) {
+            toreturn.banca = banca as Banca[];
+        }
+        return (toreturn)
+    } catch (error) {
+        mylog("DBG",filename,"fetchItemObject","Error",error);
+        
+    }
+    }
+}
+
 
 export async function fetchOrdemDia (id: number, currentPage: number) 
 {
