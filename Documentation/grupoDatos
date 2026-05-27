@@ -46,42 +46,99 @@ REUNIAO_T1010_ItemReuniao
 
 
 
+ind_adreferendum='S'   // 30049 DONE
+    ind_adreferendum: 'S' | 'N'
+    ds_adreferendum : string
+    dt_adreferendum : Date
+[DONE AdReferendum]
 
-
-
-ind_interessado='S'  // 21607
+ind_interessado='S'  // 21607 DONE
     nm_interessado : string
     ds_areainteressado : string
     ds_nivelinteressado : string
 [DONE Interessado]
 
-    ind_orientador='S'  // 14673
+    ind_orientador='S'  // 14673  DONE
     nm_orientador : string
     ds_LotOrientador : string 
-[TODO Orientador]
-
-
-ind_adreferendum='S'   // 30049
-    ind_adreferendum: 'S' | 'N'
-    ds_adreferendum : string
-    dt_adreferendum : Date
-
-ind_defesa='S'   //  3454
-    dt_defesa : Date
+[DONE Orientador]
 
 ind_planotrabalho='S'  // 7886
     ds_TituloPlanoTrabalho : string
+[DONE Plano de Trabalho]
+
+ind_relator='S'  // 5671
+    nm_relator : string
+    ds_ObservacaoRelator : string
+    ds_lotRelator : string
+[DONE Relator]
 
 ind_bancaexaminadora='S'  // 6233
     REUNIAO_T0900_BancaExaminadoraReuniao[]
         Cd_TipoExaminador : int
         Nm_ExaminadorBanca : string
         ds_LotExaminadorBanca : string
+[DONE Banca Examinadora]
 
-ind_relator='S'  // 5671
-    nm_relator : string
-    ds_ObservacaoRelator : string
-    ds_lotRelator : string
+ind_observacaoassunto='S'  // 3206
+    ds_ObservacaoItem : string
+[DONE Observacao Assunto]
+
+ind_observacaonaopublicavel='S'   // 4783
+    ds_ObservacaoNaoPublicavelItem : string
+[DONE Observacao Nao Publicavel]
+
+ind_dataapresentacao='S' // 4371
+    dt_Apresentacao : Date
+[DONE Data Apresentacao]
+
+
+ind_dissertacaotese='S'  // 5113
+    ds_TituloDissertacaoTese : string
+
+
+ind_defesa='S'   //  3454
+    dt_defesa : Date
+
+
+ind_datadeposito='S' //  2397
+    dt_Deposito : Date
+ 
+
+ind_motivoassunto='S'  // 1797
+    ds_MotivoItem : string
+
+ind_solicitaprazo='S'  //  967
+    Cd_TipoSolicitacaoPrazo : int
+    qt_SolicitacaoPrazoDiasSolicitados : int
+    REUNIAO_T3700_TipoSolicitacaoPrazo[2] fix
+        Cd_TipoSolicitacaoPrazo : int
+        nm_TipoSolicitacaoPrazo : string
+
+ind_credenciamentodisciplina='S'     // 600
+    ds_CredenciamentoDisciplina : string 
+    Nm_CredProfessorResponsavel : string
+
+ind_novoplano='S'  //  138
+    ds_TituloPlanoTrabalho_NovoPlano : string
+
+ind_novoorientador='S' // 344
+    nm_NovoOrientador : string
+    
+ind_novoprofessor='S' // 90
+    Nm_CredNovoProfessor : string
+
+
+ind_disciplinaespecial='S' // 778
+    REUNIAO_T3800_DisciplinaEspecial
+        cd_DisciplinaEspecial : int
+        cd_itemreuniao : int
+        nm_DisciplinaEspecial : string
+        qt_creditos : int
+        dt_periodoinicial : Date
+        dt_periodofinal : Date
+        ds_frequencia : string
+        ds_conceito : string
 
 ind_atribuicreditos='S'           // 211
     REUNIAO_T3900_AtribuidorCreditos 
@@ -99,51 +156,24 @@ ind_atribuicreditos='S'           // 211
         Cd_TipoAtribuidorCredito : int
         Nm_TipoAtribuidorCredito : string
 
-ind_credenciamentodisciplina='S'     // 600
-    ds_CredenciamentoDisciplina : string 
-    Nm_CredProfessorResponsavel : string
 
-ind_solicitaprazo='S'  //  967
-    Cd_TipoSolicitacaoPrazo : int
-    qt_SolicitacaoPrazoDiasSolicitados : int
-    REUNIAO_T3700_TipoSolicitacaoPrazo[2] fix
-        Cd_TipoSolicitacaoPrazo : int
-        nm_TipoSolicitacaoPrazo : string
 
-ind_adreferendum='S' //  30049
-    ind_adreferendum: 'S' | 'N'
-    ds_adreferendum : string
-    dt_adreferendum : Date
-    
+
+
+
 ind_deliberacao='S'
     Not used
 
-ind_observacaonaopublicavel='S'   // 4783
-    ds_ObservacaoNaoPublicavelItem : string
-    
-ind_observacaoassunto='S'  // 3206
-    ds_ObservacaoItem : string
 
-ind_motivoassunto='S'  // 1797
-    ds_MotivoItem : string
     
-ind_novoplano='S'  //  138
-    ds_TituloPlanoTrabalho_NovoPlano : string
 
-ind_novoorientador='S' // 344
-    nm_NovoOrientador : string
     
-ind_novoprofessor='S' // 90
-    Nm_CredNovoProfessor : string
-    
-ind_datadeposito='S' //  2397
-    dt_Deposito : Date
-    
-ind_dissertacaotese='S'  // 5113
-    ds_TituloDissertacaoTese : string
 
-ind_dataapresentacao='S' // 4371
-    dt_Apresentacao : Date
+    
+   
+
+
+
 
 ind_estagio='S' // 57
     ds_EstagioDisciplina : string
@@ -151,16 +181,7 @@ ind_estagio='S' // 57
     dt_EstagioPeriodoFim : Date
     qt_EstagioCreditos : int
     
-ind_disciplinaespecial='S' // 778
-    REUNIAO_T3800_DisciplinaEspecial
-        cd_DisciplinaEspecial : int
-        cd_itemreuniao : int
-        nm_DisciplinaEspecial : string
-        qt_creditos : int
-        dt_periodoinicial : Date
-        dt_periodofinal : Date
-        ds_frequencia : string
-        ds_conceito : string
+
 
 
 

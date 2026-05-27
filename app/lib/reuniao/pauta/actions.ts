@@ -48,6 +48,8 @@ const ItemAssunto = z.object ({
     nm_Relator: minstr3,
     ds_LotRelator: minstr3,
     ds_ObservacaoRelator: minstr3,
+    ds_TituloDissertacaoTese: minstr3,
+    ds_MotivoItem: minstr3,
     
 
 })
@@ -167,7 +169,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             ds_ObservacaoNaoPublicavelItem = '${essentialFields.data.ds_ObservacaoNaoPublicavelItem}',
             nm_Relator = '${essentialFields.data.nm_Relator}',
             ds_LotRelator = '${essentialFields.data.ds_LotRelator}',
-            ds_ObservacaoRelator = '${essentialFields.data.ds_ObservacaoRelator}'
+            ds_ObservacaoRelator = '${essentialFields.data.ds_ObservacaoRelator}',
+            ds_TituloDissertacaoTese = '${essentialFields.data.ds_TituloDissertacaoTese}',
+            ds_MotivoItem = '${essentialFields.data.ds_MotivoItem}'
 
             where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
             `;

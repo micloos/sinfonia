@@ -33,6 +33,17 @@ export type Relator = {
     ds_LotRelator: string;
 }
 
+export type TituloTese = {
+    ds_TituloDissertacaoTese: string;
+}
+
+export type Assunto = {
+    cd_AssuntoReuniao: string;
+}
+
+export type MotivoAssunto = {
+    ds_MotivoItem: string;
+}
 
 export interface AddPautaFormData {
   bancaMembers: Banca[];
@@ -44,7 +55,9 @@ export interface AddPautaFormData {
   observacao: Observacao;
   observacaoNP: ObservacaoNP;
   relatorData: Relator;
-  cd_AssuntoReuniao: string;
+  cd_AssuntoReuniao: Assunto;
+  ds_TituloDissertacaoTese: TituloTese;
+  ds_MotivoItem: MotivoAssunto;
 }
 
 export type ItemReuniaoResponse = {
