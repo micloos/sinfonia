@@ -62,6 +62,14 @@ export type CredenciamentoDisciplina = {
     Nm_CredProfessorResponsavel: string;
 }
 
+export type Defesa = {
+    Dt_Defesa: string;
+}
+
+export type Deposito = {
+    dt_Deposito: string;
+}
+
 
 export interface AddPautaFormData {
   bancaMembers: Banca[];
@@ -80,6 +88,8 @@ export interface AddPautaFormData {
   novoPlano: NovoPlano;
   novoProfessor: NovoProfessor; 
   credenciamentoDisciplina: CredenciamentoDisciplina;
+  defesa: Defesa;
+  deposito: Deposito;
 }
 
 export type ItemReuniaoResponse = {
@@ -190,7 +200,7 @@ export type ItemReuniao = {
         ds_AdReferendum?: string;
         dt_AdReferendum?: string;
     // Defesa
-        dt_defesa?: string;
+        Dt_Defesa?: string;
     // Plano de Trabalho
         ds_TituloPlanoTrabalho?: string;
     // Relator

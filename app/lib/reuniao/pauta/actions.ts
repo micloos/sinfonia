@@ -55,6 +55,8 @@ const ItemAssunto = z.object ({
     nm_CredNovoProfessor: minstr3,
     ds_CredenciamentoDisciplina: minstr3,
     Nm_CredProfessorResponsavel: minstr3,
+    Dt_Defesa: mydate,
+    dt_Deposito: mydate,
     
 
 })
@@ -181,7 +183,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             ds_TituloPlanoTrabalho_NovoPlano = '${essentialFields.data.ds_TituloPlanoTrabalho_NovoPlano}',
             nm_CredNovoProfessor = '${essentialFields.data.nm_CredNovoProfessor}',
             ds_CredenciamentoDisciplina = '${essentialFields.data.ds_CredenciamentoDisciplina}',
-            Nm_CredProfessorResponsavel = '${essentialFields.data.Nm_CredProfessorResponsavel}'
+            Nm_CredProfessorResponsavel = '${essentialFields.data.Nm_CredProfessorResponsavel}',
+            Dt_Defesa = '${essentialFields.data.Dt_Defesa}',
+            dt_Deposito = '${essentialFields.data.dt_Deposito}'
 
             where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
             `;
