@@ -1,6 +1,18 @@
+import { CredenciamentoDisciplina } from "@/app/lib/reuniao/definitions";
 import Myhr from "./myhr";
+import { useState } from "react";
 
-export default function AddCredenciamentoDisciplina () {
+
+export default function AddCredenciamentoDisciplina ({ data, onChange }: { data: CredenciamentoDisciplina; onChange: (credenciamentoDisciplina: CredenciamentoDisciplina) => void }) {
+const [credenciamentoDisciplina, setCredenciamentoDisciplina] = useState <CredenciamentoDisciplina>(data || { Nm_CredProfessorResponsavel   : '' , ds_CredenciamentoDisciplina: '' });
+               
+               const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+                   const { name, value } = e.target;
+                   const updatedCredenciamentoDisciplina = { ...credenciamentoDisciplina, [name]: value };
+                       setCredenciamentoDisciplina(updatedCredenciamentoDisciplina);
+                       onChange(updatedCredenciamentoDisciplina);
+                     };
+
 
     return(
         <div className="rounded-md bg-gray-50 p-4 md:p-2">
@@ -14,7 +26,9 @@ export default function AddCredenciamentoDisciplina () {
                             id="ds_CredenciamentoDisciplina" 
                             name="ds_CredenciamentoDisciplina"
                             type="string"
-                            placeholder="Disciplina"        
+                            placeholder="Disciplina"
+                            value={data.ds_CredenciamentoDisciplina}        
+                            onChange={handleChange}
                             className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      
                         />
                     </div>
@@ -31,6 +45,8 @@ export default function AddCredenciamentoDisciplina () {
                             name="Nm_CredProfessorResponsavel"
                             type="string"
                             placeholder="Nome(s) do(s) Professor(es)"        
+                            value={data.Nm_CredProfessorResponsavel}
+                            onChange={handleChange} 
                             className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      
                         />
                     </div>

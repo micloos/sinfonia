@@ -35,7 +35,10 @@ import { Button } from "../button";
 
 import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferendumType, Apresentacao, Plano, Orientador, 
    Observacao, ObservacaoNP, ItemReuniaoResponse, Relator, TituloTese, MotivoAssunto,
-   Assunto} from "@/app/lib/reuniao/definitions";
+   Assunto,
+   NovoOrientador, NovoProfessor,
+   NovoPlano,
+   CredenciamentoDisciplina} from "@/app/lib/reuniao/definitions";
 // import { set, string } from "zod";
 // import { create } from "domain";
 // import BancaTable from "./pauta/banca";
@@ -96,7 +99,10 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
       relatorData: (itemReuniaoObject && itemReuniaoObject.nm_Relator) ? { nm_Relator: itemReuniaoObject.nm_Relator, ds_ObservacaoRelator: itemReuniaoObject.ds_ObservacaoRelator, ds_LotRelator: itemReuniaoObject.ds_LotRelator } as Relator : { nm_Relator: '', ds_ObservacaoRelator: '', ds_LotRelator: '' } as Relator,
       cd_AssuntoReuniao: (itemReuniaoObject && itemReuniaoObject.Cd_AssuntoReuniao) ? {cd_AssuntoReuniao : itemReuniaoObject.Cd_AssuntoReuniao } as Assunto : {cd_AssuntoReuniao : '1'} as Assunto,
       ds_MotivoItem: (itemReuniaoObject && itemReuniaoObject.ds_MotivoItem) ? { ds_MotivoItem: itemReuniaoObject.ds_MotivoItem } as MotivoAssunto : { ds_MotivoItem: '' } as MotivoAssunto,
-     
+      novoOrientador: (itemReuniaoObject && itemReuniaoObject.nm_NovoOrientador) ? { nm_NovoOrientador: itemReuniaoObject.nm_NovoOrientador } as NovoOrientador : { nm_NovoOrientador: '' } as NovoOrientador,
+      novoPlano: (itemReuniaoObject && itemReuniaoObject.ds_TituloPlanoTrabalho_NovoPlano) ? { ds_TituloPlanoTrabalho_NovoPlano: itemReuniaoObject.ds_TituloPlanoTrabalho_NovoPlano } as NovoPlano : { ds_TituloPlanoTrabalho_NovoPlano: '' } as NovoPlano,
+      novoProfessor: (itemReuniaoObject && itemReuniaoObject.Nm_CredNovoProfessor) ? { nm_CredNovoProfessor: itemReuniaoObject.Nm_CredNovoProfessor } as NovoProfessor : { nm_CredNovoProfessor: '' } as NovoProfessor,
+      credenciamentoDisciplina: (itemReuniaoObject && itemReuniaoObject.ds_CredenciamentoDisciplina) ? { ds_CredenciamentoDisciplina: itemReuniaoObject.ds_CredenciamentoDisciplina, Nm_CredProfessorResponsavel: itemReuniaoObject.Nm_CredProfessorResponsavel } as CredenciamentoDisciplina : { ds_CredenciamentoDisciplina: '', Nm_CredProfessorResponsavel: '' } as CredenciamentoDisciplina,
   });
 
 mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
@@ -115,6 +121,14 @@ const handleObservacaoNPChange = (observacaoNPData: ObservacaoNP) => {
     setFormData(prev => ({ 
         ...prev,
         observacaoNP: observacaoNPData
+    }));
+    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+  }
+
+  const handleNovoOrientadorChange = (novoOrientadorData: NovoOrientador) => {
+    setFormData(prev => ({ 
+        ...prev,
+        novoOrientador: novoOrientadorData
     }));
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   }
@@ -139,6 +153,11 @@ const handleOrientadorChange = (orientadorData: Orientador) => {
 
 const handleBancaChange = (bancaData: Banca[]) => {
     setFormData(prev => ({ ...prev, bancaMembers: bancaData }));
+    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+  };
+
+const handleNovoProfessorChange = (novoProfessorData: NovoProfessor) => {
+    setFormData(prev => ({ ...prev, novoProfessor: novoProfessorData }));
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   };
 
@@ -174,6 +193,14 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   }
 
+  const handleCredenciamentoDisciplinaChange = (credenciamentoDisciplinaData: CredenciamentoDisciplina) => {
+    setFormData(prev => ({ 
+        ...prev,
+        credenciamentoDisciplina: credenciamentoDisciplinaData
+    }));
+    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+  }
+
   const handleAssuntoChange = (assunto: Assunto) => {
     setFormData(prev => ({ 
         ...prev,
@@ -187,6 +214,14 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
     setFormData(prev => ({ 
         ...prev,
         ds_MotivoItem: motivoData
+    }));
+    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+  }
+
+  const handleNovoPlanoChange = (novoPlanoData: NovoPlano) => {
+    setFormData(prev => ({ 
+        ...prev,
+        novoPlano: novoPlanoData
     }));
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   }
@@ -216,12 +251,12 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         {/* DONE Interessado */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_Orientador === 'S' && (<AddPautaOrientador data={formData.orientador} onChange={handleOrientadorChange}  />)}
         {/* DONE Orientador */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_NovoOrientador === 'S' && ( <AddNovoOrientador />)}  {/* 9 10 */}
-        {/* TODO Novo Orientador */}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_NovoOrientador === 'S' && ( <AddNovoOrientador data={formData.novoOrientador} onChange={handleNovoOrientadorChange} />)}  {/* 9 10 */}
+        {/* DONE Novo Orientador */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_AdReferendum === 'S' && (<AddAdReferendum data={formData.adReferendum || { ind_adreferendum: 'N', ds_AdReferendum: '', dt_AdReferendum: '' }} onChange={handleAdReferendumChange} />)}
         {/* DONE Ad Referendum */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_Defesa === 'S' && (<AddDefesa />)}
-        {/* TODO Defesa */}
+        {/* DOING Defesa */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_DataApresentacao === 'S' && ( <AddDtApresentacao data={formData.apresentacao} onChange={handleApresentacaoChange} isRequired/>)}
         {/* DONE Data Apresentacao */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_PlanoTrabalho === 'S' && ( <AddPlano data={formData.planotrabalho} onChange={handlePlanoChange}  />)}
@@ -232,8 +267,8 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_SolicitaPrazo === 'S' && ( <AddPrazo />)}
         {/* TODO Prazo */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_NovoPlano === 'S' && ( <AddNovoPlano />)}  {/* 11 12 */}
-        {/* TODO Novo Plano */}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_NovoPlano === 'S' && ( <AddNovoPlano data={formData.novoPlano} onChange={handleNovoPlanoChange}/>)}  {/* 11 12 */}
+        {/* DONE Novo Plano */}
         
         
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_DataDeposito === 'S' && ( <AddDeposito />)}  {/* 16 18 */}
@@ -260,10 +295,10 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
                                                         onChange = {handleRelatorChange}
                                                       />)}
         {/* DONE Relator */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_CredenciamentoDisciplina === 'S' && ( <AddCredenciamentoDisciplina />)}
-        {/* TODO Credenciamento Disciplina */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_NovoProfessor === 'S' && ( <AddNovoProfessor />)}  {/* 26 30 31 32 */}
-        {/* TODO Novo Professor */}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_CredenciamentoDisciplina === 'S' && ( <AddCredenciamentoDisciplina data={formData.credenciamentoDisciplina} onChange={handleCredenciamentoDisciplinaChange} />)}
+        {/* DONE Credenciamento Disciplina */}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_NovoProfessor === 'S' && ( <AddNovoProfessor data={formData.novoProfessor} onChange={handleNovoProfessorChange} />)}  {/* 26 30 31 32 */}
+        {/* DONE Novo Professor */}
 
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)].Ind_MotivoAssunto === 'S' && ( <AddMotivo data={formData.ds_MotivoItem} onChange={handleMotivoChange} />)}  {/* 9 10 11 12 */}
         {/* DONE Motivo Assunto */}

@@ -31,12 +31,17 @@
         "icon": "check",
         "type": "line"
     },
-    "FIXME": {
-        "foreground": "#000000",
+    "DOING": {
+        "foreground": "#04520e",
+        "iconColour": "#FFFF00",
+        "gutterIcon": true
+    },
+    "DONE": {
+        "foreground": "#616461",
         "iconColour": "#FFFF00",
         "gutterIcon": true
     }
 },
 "todo-tree.general.rootFolder": "/home/loos/Work/MLoos/IPEN/sinfonia",
-"todo-tree.general.tags": ["TODO","FIXME","BUG"]
+"todo-tree.general.tags": ["TODO","FIXME","BUG","DOING","DONE"],
 }

@@ -1,6 +1,17 @@
+import { useState } from "react";
 import Myhr from "./myhr";
+import { NovoPlano } from "@/app/lib/reuniao/definitions";
 
-export default function AddNovoPlano () {
+export default function AddNovoPlano ({ data, onChange }: { data: NovoPlano; onChange: (novoPlano: NovoPlano) => void }) {
+    const [novoPlano, setNovoPlano] = useState <NovoPlano>(data || { ds_TituloPlanoTrabalho_NovoPlano   : '' });
+            
+            const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+                const { name, value } = e.target;
+                const updatedNovoPlano = { ...novoPlano, [name]: value };
+                    setNovoPlano(updatedNovoPlano);
+                    onChange(updatedNovoPlano);
+                  };
+            
     return(
     <div className="rounded-md bg-gray-50 p-4 md:p-2">
         <div className="mb-4 inline-block pr-4 w-full">
@@ -13,7 +24,9 @@ export default function AddNovoPlano () {
                         id="ds_TituloPlanoTrabalho_NovoPlano" 
                         name="ds_TituloPlanoTrabalho_NovoPlano"
                         type="string"
-                        placeholder="Plano"        
+                        placeholder="Plano"   
+                        value={data.ds_TituloPlanoTrabalho_NovoPlano}
+                        onChange={handleChange}    
                         className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      
                     />
                 </div>

@@ -45,6 +45,24 @@ export type MotivoAssunto = {
     ds_MotivoItem: string;
 }
 
+export type NovoOrientador = {
+    nm_NovoOrientador: string;
+}
+
+export type NovoPlano = {
+    ds_TituloPlanoTrabalho_NovoPlano: string;
+}
+
+export type NovoProfessor = {
+    nm_CredNovoProfessor: string;
+}
+
+export type CredenciamentoDisciplina = {
+    ds_CredenciamentoDisciplina: string;
+    Nm_CredProfessorResponsavel: string;
+}
+
+
 export interface AddPautaFormData {
   bancaMembers: Banca[];
   interessado: Interessado;
@@ -58,6 +76,10 @@ export interface AddPautaFormData {
   cd_AssuntoReuniao: Assunto;
   ds_TituloDissertacaoTese: TituloTese;
   ds_MotivoItem: MotivoAssunto;
+  novoOrientador: NovoOrientador;
+  novoPlano: NovoPlano;
+  novoProfessor: NovoProfessor; 
+  credenciamentoDisciplina: CredenciamentoDisciplina;
 }
 
 export type ItemReuniaoResponse = {

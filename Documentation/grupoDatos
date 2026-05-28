@@ -95,6 +95,29 @@ ind_dataapresentacao='S' // 4371
 
 ind_dissertacaotese='S'  // 5113
     ds_TituloDissertacaoTese : string
+[DONE Dissertacao Tese]
+
+
+ind_motivoassunto='S'  // 1797
+    ds_MotivoItem : string
+[DONE Motivo Assunto]
+
+ind_novoorientador='S' // 344
+    nm_NovoOrientador : string
+[DONE Novo Orientador]
+
+ind_novoplano='S'  //  138
+    ds_TituloPlanoTrabalho_NovoPlano : string
+[DONE Novo Plano]
+
+ind_novoprofessor='S' // 90
+    Nm_CredNovoProfessor : string
+[DONE Novo Professor]
+
+ind_credenciamentodisciplina='S'     // 600
+    ds_CredenciamentoDisciplina : string 
+    Nm_CredProfessorResponsavel : string
+[DONE Credenciamento Disciplina]
 
 
 ind_defesa='S'   //  3454
@@ -105,8 +128,6 @@ ind_datadeposito='S' //  2397
     dt_Deposito : Date
  
 
-ind_motivoassunto='S'  // 1797
-    ds_MotivoItem : string
 
 ind_solicitaprazo='S'  //  967
     Cd_TipoSolicitacaoPrazo : int
@@ -115,19 +136,11 @@ ind_solicitaprazo='S'  //  967
         Cd_TipoSolicitacaoPrazo : int
         nm_TipoSolicitacaoPrazo : string
 
-ind_credenciamentodisciplina='S'     // 600
-    ds_CredenciamentoDisciplina : string 
-    Nm_CredProfessorResponsavel : string
 
-ind_novoplano='S'  //  138
-    ds_TituloPlanoTrabalho_NovoPlano : string
 
-ind_novoorientador='S' // 344
-    nm_NovoOrientador : string
+
+
     
-ind_novoprofessor='S' // 90
-    Nm_CredNovoProfessor : string
-
 
 ind_disciplinaespecial='S' // 778
     REUNIAO_T3800_DisciplinaEspecial

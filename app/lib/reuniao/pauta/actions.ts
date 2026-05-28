@@ -50,6 +50,11 @@ const ItemAssunto = z.object ({
     ds_ObservacaoRelator: minstr3,
     ds_TituloDissertacaoTese: minstr3,
     ds_MotivoItem: minstr3,
+    nm_NovoOrientador: minstr3,
+    ds_TituloPlanoTrabalho_NovoPlano: minstr3,
+    nm_CredNovoProfessor: minstr3,
+    ds_CredenciamentoDisciplina: minstr3,
+    Nm_CredProfessorResponsavel: minstr3,
     
 
 })
@@ -171,7 +176,12 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             ds_LotRelator = '${essentialFields.data.ds_LotRelator}',
             ds_ObservacaoRelator = '${essentialFields.data.ds_ObservacaoRelator}',
             ds_TituloDissertacaoTese = '${essentialFields.data.ds_TituloDissertacaoTese}',
-            ds_MotivoItem = '${essentialFields.data.ds_MotivoItem}'
+            ds_MotivoItem = '${essentialFields.data.ds_MotivoItem}',
+            nm_NovoOrientador = '${essentialFields.data.nm_NovoOrientador}',
+            ds_TituloPlanoTrabalho_NovoPlano = '${essentialFields.data.ds_TituloPlanoTrabalho_NovoPlano}',
+            nm_CredNovoProfessor = '${essentialFields.data.nm_CredNovoProfessor}',
+            ds_CredenciamentoDisciplina = '${essentialFields.data.ds_CredenciamentoDisciplina}',
+            Nm_CredProfessorResponsavel = '${essentialFields.data.Nm_CredProfessorResponsavel}'
 
             where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
             `;
