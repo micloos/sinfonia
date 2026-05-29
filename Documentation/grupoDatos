@@ -119,14 +119,23 @@ ind_credenciamentodisciplina='S'     // 600
     Nm_CredProfessorResponsavel : string
 [DONE Credenciamento Disciplina]
 
-
 ind_defesa='S'   //  3454
     dt_defesa : Date
-
+[DONE Defesa]
 
 ind_datadeposito='S' //  2397
     dt_Deposito : Date
- 
+ [TODO Data Deposito]
+
+
+
+ind_estagio='S' // 57
+    ds_EstagioDisciplina : string
+    dt_EstagioPeriodoInicio : Date
+    dt_EstagioPeriodoFim : Date
+    qt_EstagioCreditos : int
+[TODO Estagio]
+
 
 
 ind_solicitaprazo='S'  //  967
@@ -188,11 +197,7 @@ ind_deliberacao='S'
 
 
 
-ind_estagio='S' // 57
-    ds_EstagioDisciplina : string
-    dt_EstagioPeriodoInicio : Date
-    dt_EstagioPeriodoFim : Date
-    qt_EstagioCreditos : int
+
     
 
 

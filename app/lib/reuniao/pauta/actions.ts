@@ -57,8 +57,13 @@ const ItemAssunto = z.object ({
     Nm_CredProfessorResponsavel: minstr3,
     Dt_Defesa: mydate,
     dt_Deposito: mydate,
-    
-
+    ds_EstagioDisciplina: minstr3,
+    dt_EstagioPeriodoInicio: mydate,
+    dt_EstagioPeriodoFim: mydate,
+    qt_EstagioCreditos: z.string().regex(/^\d+$/).default('0'),
+    Cd_TipoSolicitacaoPrazo: z.string().regex(/^\d+$/).default('0'),
+    qt_SolicitacaoPrazoDiasSolicitados: z.string().regex(/^\d+$/).default('0'),
+    qt_SolicitacaoPrazoDiasConcedidos: z.string().regex(/^\d+$/).default('0')
 })
 
 export async function getNextItem () {
@@ -185,7 +190,14 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             ds_CredenciamentoDisciplina = '${essentialFields.data.ds_CredenciamentoDisciplina}',
             Nm_CredProfessorResponsavel = '${essentialFields.data.Nm_CredProfessorResponsavel}',
             Dt_Defesa = '${essentialFields.data.Dt_Defesa}',
-            dt_Deposito = '${essentialFields.data.dt_Deposito}'
+            dt_Deposito = '${essentialFields.data.dt_Deposito}',
+            ds_EstagioDisciplina = '${essentialFields.data.ds_EstagioDisciplina}',
+            dt_EstagioPeriodoInicio = '${essentialFields.data.dt_EstagioPeriodoInicio}',
+            dt_EstagioPeriodoFim = '${essentialFields.data.dt_EstagioPeriodoFim}',
+            qt_EstagioCreditos = ${essentialFields.data.qt_EstagioCreditos},
+            Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
+            qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},
+            qt_SolicitacaoPrazoDiasConcedidos = ${essentialFields.data.qt_SolicitacaoPrazoDiasConcedidos}
 
             where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
             `;

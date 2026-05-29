@@ -17,7 +17,7 @@ export default function AddNovoOrientador ({ data, onChange }: { data: NovoOrien
         <div className="rounded-md bg-gray-50 p-4 md:p-2">
             <div className="mb-4 inline-block pr-4 w-full">
                 <label htmlFor="nm_NovoOrientador" className="block text-sm font-medium text-gray-700">
-                    Novo Orientador:
+                    Coorientador/Novo Orientador:
                 </label>
                 <div className="relative mt-2 rounded-md  ">
                     <div className="relative">

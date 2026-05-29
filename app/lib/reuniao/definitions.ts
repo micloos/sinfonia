@@ -70,6 +70,13 @@ export type Deposito = {
     dt_Deposito: string;
 }
 
+export type Estagio = {
+    ds_EstagioDisciplina: string;
+    dt_EstagioPeriodoInicio: string;
+    dt_EstagioPeriodoFim: string;
+    qt_EstagioCreditos: number;
+}
+
 
 export interface AddPautaFormData {
   bancaMembers: Banca[];
@@ -90,6 +97,8 @@ export interface AddPautaFormData {
   credenciamentoDisciplina: CredenciamentoDisciplina;
   defesa: Defesa;
   deposito: Deposito;
+  estagio: Estagio;
+  prazo: Prazo;
 }
 
 export type ItemReuniaoResponse = {
@@ -132,6 +141,11 @@ export type ItemReuniaoResponse = {
     banca: Banca[];
 }
 
+export type PrazoName = {
+    id: number;
+    name: string;
+}
+
 export type Observacao = {
     ds_ObservacaoItem: string;
 }
@@ -164,6 +178,11 @@ export type AdReferendumType = {
 
 export type Apresentacao = {
     dt_apresentacao: string;
+}
+
+export type Prazo = {
+    Cd_TipoSolicitacaoPrazo: number;
+    qt_SolicitacaoPrazoDiasSolicitados: number;
 }
 
 {/* ds_areainteressado?: string[];

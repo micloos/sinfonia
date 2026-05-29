@@ -1,0 +1,42 @@
+app/lib/reuniao/definition.ts
+    create new type
+
+
+app/lib/reuniao/definition.ts
+    interface AddPautaFormData
+    include new type
+
+app/ui/reuniao/addpauta.tsx
+    l.87 
+
+app/ui/reuniao/addpauta.tsx
+    create handle...Change
+
+
+app/ui/reuniao/addpauta.tsx
+    indices... &&  <Add..>
+
+
+app/ui/reuniao/pauta/add....tsx
+    correct everything
+        interface ...Props
+        input vars
+        useState
+        handleChange
+        <input>
+            value 
+            onChange
+
+app/lib/reuniao/pauta/action
+    ItemAssunto
+        add elementos de ...
+
+    createItemObject
+        add in UPDATE
+
+TEST
+    criation (verify in DB)
+    update (verify in DB)
+
+
+54 -> Coorientador/Novo Orientador

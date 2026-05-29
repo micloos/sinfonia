@@ -15,7 +15,7 @@ const links = [
 const linksr = [
   { name: 'Abertas', href: '/sinfonia/reuniao', icon: UserGroupIcon,  pname: 'Aberta', },
   { name: 'Fechadas', href: '/sinfonia/reuniao/fechadas', icon: UserGroupIcon,  pname: 'Fechada', },
-  { name: 'Pauta', href: '/sinfonia/reuniao/pauta', icon: PencilSquareIcon, pname: 'Administração', },
+//  { name: 'Pauta', href: '/sinfonia/reuniao/pauta', icon: PencilSquareIcon, pname: 'Administração', },
   { name: 'Execução', href: '/sinfonia/reuniao/execucao', icon: PencilSquareIcon, pname: 'Administração', },
   { name: 'Avaliação Plano', href: '/sinfonia/reuniao/plano', icon: PencilSquareIcon, pname: 'Administração', },
   { name: 'Relatorios', href: '/sinfonia/reuniao/relatorios', icon: PencilSquareIcon, pname: 'Administração', },

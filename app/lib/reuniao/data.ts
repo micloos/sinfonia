@@ -3,7 +3,7 @@
 import { mssql } from '@/app/lib/db';
 import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
 import { mylog } from '../mylogger';
-import { Banca, ItemReuniaoResponse } from './definitions';
+import { Banca, ItemReuniaoResponse, PrazoName } from './definitions';
 
 
 
@@ -285,6 +285,17 @@ export async function fetchItemObject (irid: number) {
         mylog("DBG",filename,"fetchItemObject","Error",error);
         
     }
+    }
+}
+
+export async function fetchPrazoNames () {
+    const myreq = `select Cd_TipoSolicitacaoPrazo as id, nm_TipoSolicitacaoPrazo as name from REUNIAO_T3700_TipoSolicitacaoPrazo`;
+    try {
+        const prazos = await mssql(myreq) as {id: number, name: string}[] as PrazoName[];
+        return (prazos)
+    } catch (error) {
+        mylog("DBG",filename,"fetchPrazoNames","Error",error);
+        throw new Error('Failed to fetch Prazo Names');
     }
 }
 
