@@ -163,7 +163,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
 // Inserir datos essentials
 
     try {
-            const myreq = `
+            const myreq0 = `
             UPDATE REUNIAO_T1010_ItemReuniao set 
             cd_reuniao = ${essentialFields.data.cd_reuniao},
             cd_assuntoreuniao = ${essentialFields.data.cd_AssuntoReuniao},
@@ -194,13 +194,15 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             ds_EstagioDisciplina = '${essentialFields.data.ds_EstagioDisciplina}',
             dt_EstagioPeriodoInicio = '${essentialFields.data.dt_EstagioPeriodoInicio}',
             dt_EstagioPeriodoFim = '${essentialFields.data.dt_EstagioPeriodoFim}',
-            qt_EstagioCreditos = ${essentialFields.data.qt_EstagioCreditos},
-            Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
+            qt_EstagioCreditos = ${essentialFields.data.qt_EstagioCreditos}`;
+        const add1 = essentialFields.data.Cd_TipoSolicitacaoPrazo === '0' ? '' :`
+            , Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},
-            qt_SolicitacaoPrazoDiasConcedidos = ${essentialFields.data.qt_SolicitacaoPrazoDiasConcedidos}
-
+            qt_SolicitacaoPrazoDiasConcedidos = ${essentialFields.data.qt_SolicitacaoPrazoDiasConcedidos}`
+        const fim = `
             where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
             `;
+        const myreq = myreq0 + add1 + fim;
             mylog ("ERROR",filename,"createItemObject","myreq =",myreq.replace(/\s/g," "));
             const answer = mssql(myreq)
             mylog ("ERROR",filename,"createItemObject","answer = ", answer);

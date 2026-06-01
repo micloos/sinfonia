@@ -25,6 +25,24 @@ export interface Banca  {
     Cd_TipoExaminador: number;
 }
 
+export interface Creditos {
+    cd_atribuidorCredito : string;
+    cd_TipoAtribuidorCredito : string;
+    ds_TituloTrabalho : string;
+    ds_TituloPeriodicoLivroCongresso : string;
+    ds_Pais : string;
+    dt_PeriodoInicial : string;
+    dt_PeriodoFinal : string;
+    ds_Paginas : string;
+    ds_Ano: string;
+    nu_Volume: string;
+    qt_Creditos : number;
+}
+
+export type Credito = Omit<Creditos, 'qt_Creditos'>;
+
+export type CreditosFormData = Omit<Creditos, 'cd_atribuidorCredito' | 'qt_Creditos'>;
+
 export type BancaFormData = Omit<Banca, 'id_ExaminadorBanca'>;
 
 export type Relator = {
@@ -99,6 +117,7 @@ export interface AddPautaFormData {
   deposito: Deposito;
   estagio: Estagio;
   prazo: Prazo;
+  creditos: Credito[];
 }
 
 export type ItemReuniaoResponse = {
@@ -139,6 +158,7 @@ export type ItemReuniaoResponse = {
     qt_EstagioCreditos: string;
     cd_ReuniaoOrigem: string;
     banca: Banca[];
+    creditos: Credito[];
 }
 
 export type PrazoName = {

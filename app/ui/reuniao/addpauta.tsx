@@ -42,7 +42,8 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
    CredenciamentoDisciplina,
    Deposito,
    Estagio,
-   Prazo} from "@/app/lib/reuniao/definitions";
+   Prazo,
+   Credito} from "@/app/lib/reuniao/definitions";
 // import { set, string } from "zod";
 // import { create } from "domain";
 // import BancaTable from "./pauta/banca";
@@ -92,6 +93,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
 
   mylog("DBG",filename, 'AddPauta Teste','state = ',state);
 
+
   const [formData, setFormData] = useState<AddPautaFormData>({
       bancaMembers: itemReuniaoObject ? itemReuniaoObject.banca : [],
       interessado: itemReuniaoObject ? { nm_interessado: itemReuniaoObject.nm_Interessado, ds_areainteressado: itemReuniaoObject.ds_AreaInteressado, ds_nivelinteressado: itemReuniaoObject.ds_NivelInteressado } : { nm_interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' },
@@ -113,6 +115,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
       deposito: (itemReuniaoObject && itemReuniaoObject.dt_Deposito) ? { dt_Deposito: itemReuniaoObject.dt_Deposito } as Deposito : { dt_Deposito: '' } as Deposito,
       estagio: (itemReuniaoObject && itemReuniaoObject.ds_EstagioDisciplina) ? { ds_EstagioDisciplina: itemReuniaoObject.ds_EstagioDisciplina, dt_EstagioPeriodoInicio: itemReuniaoObject.dt_EstagioPeriodoInicio, dt_EstagioPeriodoFim: itemReuniaoObject.dt_EstagioPeriodoFim, qt_EstagioCreditos: Number(itemReuniaoObject.qt_EstagioCreditos) } as Estagio : { ds_EstagioDisciplina: '', dt_EstagioPeriodoInicio: '', dt_EstagioPeriodoFim: '', qt_EstagioCreditos: 0 } as Estagio,
       prazo: (itemReuniaoObject && itemReuniaoObject.Cd_TipoSolicitacaoPrazo) ? { Cd_TipoSolicitacaoPrazo: Number(itemReuniaoObject.Cd_TipoSolicitacaoPrazo), qt_SolicitacaoPrazoDiasSolicitados: Number(itemReuniaoObject.qt_SolicitacaoPrazoDiasSolicitados) } as Prazo : { Cd_TipoSolicitacaoPrazo: 0, qt_SolicitacaoPrazoDiasSolicitados: 0 } as Prazo,
+      creditos: (itemReuniaoObject) ? itemReuniaoObject.creditos : [] as Credito[]
   });
 mylog ("ERROR",filename, 'AddPauta', 'estagio = ', formData.estagio);
 
@@ -171,6 +174,11 @@ const handleOrientadorChange = (orientadorData: Orientador) => {
 
 const handleBancaChange = (bancaData: Banca[]) => {
     setFormData(prev => ({ ...prev, bancaMembers: bancaData }));
+    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+  };
+
+const handleCreditosChange = (creditosData: Credito[]) => {
+    setFormData(prev => ({ ...prev, creditos: creditosData }));
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   };
 
@@ -302,8 +310,8 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_PlanoTrabalho === 'S' && ( <AddPlano data={formData.planotrabalho} onChange={handlePlanoChange}  />)}
         {/* DONE Plano de Trabalho */}
         
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AtribuiCreditos === 'S' && ( <AddCreditos />)}
-        {/* TODO Creditos */}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AtribuiCreditos === 'S' && ( <AddCreditos data={formData.creditos} onChange={handleCreditosChange} />)}
+        {/* DOING Creditos */}
         
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_SolicitaPrazo === 'S' && ( <AddPrazo data={formData.prazo} onChange={handlePrazoChange}/>)}
         {/* DONE Prazo */}
