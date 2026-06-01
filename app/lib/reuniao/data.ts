@@ -3,7 +3,7 @@
 import { mssql } from '@/app/lib/db';
 import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
 import { mylog } from '../mylogger';
-import { Banca, ItemReuniaoResponse, PrazoName } from './definitions';
+import { Banca, Credito, ItemReuniaoResponse, PrazoName } from './definitions';
 
 
 
@@ -280,6 +280,13 @@ export async function fetchItemObject (irid: number) {
         if (banca && banca.length > 0 && toreturn) {
             toreturn.banca = banca as Banca[];
         }
+        const myreq3 = `select * from REUNIAO_T3900_AtribuidorCreditos where cd_itemreuniao = ${irid}`;
+        const creditos = await mssql(myreq3) as Credito[];
+        if (creditos && creditos.length > 0 && toreturn) {
+            toreturn.creditos = creditos as Credito[];
+            mylog("ERROR",filename,"fetchItemObject","creditos = ",creditos)
+        }
+
         return (toreturn)
     } catch (error) {
         mylog("DBG",filename,"fetchItemObject","Error",error);

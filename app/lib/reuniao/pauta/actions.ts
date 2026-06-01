@@ -5,7 +5,7 @@ import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../../mylogger';
 
-import { Banca, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
+import { Banca, Credito, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
 
 // import { revalidatePath } from 'next/cache';
@@ -85,22 +85,23 @@ export  async function getNextBancaItem ()
     try {
         const nextitem = await mssql(myreq1) as {n: number }[];
         mylog("ERROR",filename,"getNextBancaItem","nextitem",nextitem);
-        {/*
-        for (let i = nextitem[0].n; i < nextitem[0].n + n; i++) {
-            mylog("ERROR",filename,"getNextBancaItem","next banca item = ", i);
-            const myreq = `insert into REUNIAO_T0900_BancaExaminadoraReuniao (cd_BancaExaminadoraReuniao,cd_itemreuniao) values (${i},0)`
-            try {
-                const answer = await mssql(myreq)
-                mylog ("ERROR",filename,"getNextBancaItem","answer for banca = ", answer);
-            } catch(error) {
-                mylog ("ERROR",filename,"getNextBancaItem","error for banca = ", error);
-        // Continuar o loop mesmo se houver um erro ao inserir um membro da banca
-            }
-        }
-            */}
         return (nextitem[0].n)
     } catch (error) {
         mylog("ERROR",filename,"getNextBancaItem","Error",error);
+        return (-1)
+    }
+}
+
+export  async function getNextCreditosItem ()
+{
+    const myreq1 = `select max(cd_AtribuidorCredito)+ 1 as n from REUNIAO_T3900_AtribuidorCreditos`;
+    
+    try {
+        const nextitem = await mssql(myreq1) as {n: number }[];
+        mylog("ERROR",filename,"getNextCreditosItem","nextitem",nextitem);
+        return (nextitem[0].n)
+    } catch (error) {
+        mylog("ERROR",filename,"getNextCreditosItem","Error",error);
         return (-1)
     }
 }
@@ -241,6 +242,36 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         }
     }
 
+    const creditos= myform.creditos_json ? JSON.parse(myform.creditos_json as string) as Credito[] : [];
+
+    if (creditos.length > 0) {
+        mylog("ERROR",filename,"createItemObject","creditos = ",creditos);
+        const cd_CreditosInit =  await getNextCreditosItem();
+        mylog("ERROR",filename,"createItemObject","next cd_Creditos = ",cd_CreditosInit);
+        for (let i = cd_CreditosInit; i < cd_CreditosInit + creditos.length; i++) {
+            const element = creditos[i - cd_CreditosInit];
+            if (isNaN(+element.cd_AtribuidorCredito)) {
+            try {
+                
+                    mylog("ERROR",filename,"createItemObject","i = ",i);
+                    element.nu_Volume = element.nu_Volume ? element.nu_Volume : '0';
+                     const myreq = `
+                        INSERT INTO REUNIAO_T3900_AtribuidorCreditos 
+                        (cd_AtribuidorCredito, cd_itemreuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                        
+                        VALUES 
+                        (${i}, ${essentialFields.data.cd_itemreuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
+                    `;
+                    mylog("ERROR",filename,"createItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
+                    const answer = await mssql(myreq);
+                    mylog ("ERROR",filename,"createItemObject","answer for banca = ", answer);
+                
+            } catch (error) {
+                mylog ("ERROR",filename,"createItemObject","Error in banca insertion loop = ", error);
+            }                  
+        }
+        }
+    }
 
     revalidatePath("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
     redirect("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")

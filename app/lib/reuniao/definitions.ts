@@ -26,8 +26,8 @@ export interface Banca  {
 }
 
 export interface Creditos {
-    cd_atribuidorCredito : string;
-    cd_TipoAtribuidorCredito : string;
+    cd_AtribuidorCredito : string;
+    Cd_TipoAtribuidorCredito : string;
     ds_TituloTrabalho : string;
     ds_TituloPeriodicoLivroCongresso : string;
     ds_Pais : string;
@@ -41,7 +41,7 @@ export interface Creditos {
 
 export type Credito = Omit<Creditos, 'qt_Creditos'>;
 
-export type CreditosFormData = Omit<Creditos, 'cd_atribuidorCredito' | 'qt_Creditos'>;
+export type CreditosFormData = Omit<Creditos, 'cd_AtribuidorCredito' | 'qt_Creditos'>;
 
 export type BancaFormData = Omit<Banca, 'id_ExaminadorBanca'>;
 

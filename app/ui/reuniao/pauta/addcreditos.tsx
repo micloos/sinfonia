@@ -15,9 +15,18 @@ import utc from 'dayjs/plugin/utc'
 import "dayjs/locale/pt-br"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { set } from "zod";
 
 const filename = 'app/ui/reuniao/pauta/addcreditos';
 
+const tiposAtribuidorCredito = [
+    'Escolha o tipo de crédito',
+    'Publicação de capítulo de livro',
+    'Publicação de livro',
+    'Publicação em periódico',
+    'Publicação em congresso',
+    'Patente'
+];
 
 dayjs.extend(utc);
 
@@ -38,7 +47,7 @@ export default function AddCreditos({
     const [isAdding, setIsAdding] = useState<boolean>(false);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [formData, setFormData] = useState<CreditosFormData>({
-        cd_TipoAtribuidorCredito: '0',
+        Cd_TipoAtribuidorCredito: '0',
         ds_TituloTrabalho: '',
         ds_TituloPeriodicoLivroCongresso: '',
         ds_Pais: '',
@@ -50,18 +59,40 @@ export default function AddCreditos({
     });
     const [docDateIni, setDocDateIni] = useState(formData.dt_PeriodoInicial ? dayjs.utc(formData.dt_PeriodoInicial) : dayjs.utc());
     const [docDateFim, setDocDateFim] = useState(formData.dt_PeriodoFinal ? dayjs.utc(formData.dt_PeriodoFinal) : dayjs.utc());
+    console.log("AddCreditos - data", data);
+    console.log("AddCreditos - formData", formData);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ 
             ...prev, 
-            [name]:  value 
+            [name]:  name === 'Cd_TipoAtribuidorCredito' ? parseInt(value) || 0 : value
         }));
-console.log("handleInputChange", name, value);
-console.log("handleInputChange - formData", formData);
-      }
 
-    const addMember = () => {
+        console.log("handleInputChange - formData", formData);
+        console.log("handleInputChange - data", data);
+      }
+    const handleInitChange = (date: dayjs.Dayjs | null) => {
+        if(date) 
+          {setDocDateIni(date); console.log(docDateIni.toISOString())
+            setFormData(prev => ({
+              ...prev,
+              dt_PeriodoInicial: date.toISOString()
+            }))
+          }
+        }
+    const handleFimChange = (date: dayjs.Dayjs | null) => {
+        if(date) 
+          {setDocDateFim(date); console.log(docDateFim.toISOString())
+            setFormData(prev => ({
+              ...prev,
+              dt_PeriodoFinal: date.toISOString()
+            }))
+          }
+        }
+
+
+      const addMember = () => {
         if (data.length >= maxMembers) {
           alert(`Maximum ${maxMembers} family members allowed`);
           return;
@@ -71,7 +102,7 @@ console.log("handleInputChange - formData", formData);
 
 
         const newMember: Credito = {
-                    cd_atribuidorCredito: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+                    cd_AtribuidorCredito: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
                     ...formData
             };
         
@@ -80,7 +111,7 @@ console.log("handleInputChange - formData", formData);
     
         // Reset form
         setFormData({ 
-            cd_TipoAtribuidorCredito: '0',
+            Cd_TipoAtribuidorCredito: '0',
             ds_TituloTrabalho: '',
             ds_TituloPeriodicoLivroCongresso: '',
             ds_Pais: '',
@@ -96,13 +127,13 @@ console.log("handleInputChange - formData", formData);
     const updateMember = () => {
       if (!editingId) return;
 
-      if (!formData.cd_TipoAtribuidorCredito || !formData.ds_TituloTrabalho ) {
+      if (!formData.Cd_TipoAtribuidorCredito || !formData.ds_TituloTrabalho ) {
                 alert('Prencha os campos obrigatórios');
                 return;
             }
 
       const updated = data.map(member => 
-                member.cd_atribuidorCredito === editingId 
+                member.cd_AtribuidorCredito === editingId 
                 ? { ...member, ...formData }
                 : member
             );
@@ -112,8 +143,9 @@ console.log("handleInputChange - formData", formData);
         };
 
         const deleteMember = (id: string) => {
-            if (confirm('Are you sure you want to remove this family member?')) {
-                const updated = data.filter(member => member.cd_atribuidorCredito  !== id);
+            if (confirm('Vc tem certeza de querer remover isso?')) {
+                const updated = data.filter(member => member.cd_AtribuidorCredito  !== id);
+                
                 onChange(updated);
             }
         };
@@ -130,7 +162,7 @@ console.log("handleInputChange - formData", formData);
 */}
         const cancelEdit = () => {
             setEditingId(null);
-            setFormData({ cd_TipoAtribuidorCredito: '0',
+            setFormData({ Cd_TipoAtribuidorCredito: '0',
             ds_TituloTrabalho: '',
             ds_TituloPeriodicoLivroCongresso: '',
             ds_Pais: '',
@@ -144,7 +176,7 @@ console.log("handleInputChange - formData", formData);
 
         const cancelAdd = () => {
             setIsAdding(false);
-            setFormData({ cd_TipoAtribuidorCredito: '0',
+            setFormData({ Cd_TipoAtribuidorCredito: '0',
             ds_TituloTrabalho: '',
             ds_TituloPeriodicoLivroCongresso: '',
             ds_Pais: '',
@@ -182,8 +214,8 @@ console.log("handleInputChange - formData", formData);
                             Tipo de Crédito *
                         </label>
                         <select
-                            name="cd_TipoAtribuidorCredito"
-                            value={formData.cd_TipoAtribuidorCredito}
+                            name="Cd_TipoAtribuidorCredito"
+                            value={formData.Cd_TipoAtribuidorCredito}
                             onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                         >
@@ -298,7 +330,7 @@ console.log("handleInputChange - formData", formData);
                           </label>
                           <div className="w-full" >
                             <DatePicker defaultValue={docDateIni}
-                              onChange={(date) => {if(date) {setDocDateIni(date); console.log(docDateIni.toISOString())}}} />
+                              onChange={handleInitChange} />
                             <input type="hidden" id="dt_PeriodoInicial" name="dt_PeriodoInicial" value={docDateIni.toISOString()}
                             />
                           </div>
@@ -313,7 +345,7 @@ console.log("handleInputChange - formData", formData);
                           </label>
                           <div className="w-full" >
                             <DatePicker defaultValue={docDateFim}
-                              onChange={(date) => {if(date) {setDocDateFim(date)}}} />
+                              onChange={handleFimChange} />
                             <input type="hidden" id="dt_PeriodoFinal" name="dt_PeriodoFinal" value={docDateFim.toISOString()}
                             />
                           </div>
@@ -345,7 +377,7 @@ console.log("handleInputChange - formData", formData);
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-300">
             <thead className="bg-gray-100">
-              <tr>
+              <tr key="header">
                 {!readOnly && (
                   <th className="px-4 py-2 border-b text-left">Ações</th>
                 )}
@@ -362,9 +394,9 @@ console.log("handleInputChange - formData", formData);
                 <th className="px-4 py-2 border-b text-left">Fim: </th>
               </tr>
             </thead>
-            <tbody>
-              {data.map((member) => (
-                <tr key={member.cd_atribuidorCredito} className="hover:bg-gray-50">
+            <tbody key={"body"}>
+              {data.map((member) => ( 
+                <tr key={member.cd_AtribuidorCredito} className="hover:bg-gray-50">
                     {!readOnly && (
                     <td className="px-4 py-2 border-b">
                       <div className="flex gap-2">
@@ -372,7 +404,7 @@ console.log("handleInputChange - formData", formData);
                         <Tooltip title="Excluir" placement="top">
                         <button
                           type="button"
-                          onClick={() => deleteMember(member.cd_atribuidorCredito)}
+                          onClick={() => deleteMember(member.cd_AtribuidorCredito)}
                           className="rounded-md border p-2 hover:bg-gray-100"
                           disabled={!!editingId || isAdding}
                         >
@@ -382,9 +414,11 @@ console.log("handleInputChange - formData", formData);
                       </div>
                     </td>
                   )}
-                  <td className="px-4 py-2 border-b">{member.cd_TipoAtribuidorCredito}</td>
+                  <td className="px-4 py-2 border-b">{tiposAtribuidorCredito[Number(member.Cd_TipoAtribuidorCredito)] || member.Cd_TipoAtribuidorCredito}</td>
                   <td className="px-4 py-2 border-b">{member.ds_TituloTrabalho}</td>
-                  <td className="px-4 py-2 border-b">{member.ds_TituloPeriodicoLivroCongresso}</td>
+                  <td className="px-4 py-2 border-b">{member.ds_TituloPeriodicoLivroCongresso}
+                    {/* {JSON.stringify(member)} */}
+                  </td>
                   <td className="px-4 py-2 border-b">{member.nu_Volume}</td>
                   <td className="px-4 py-2 border-b">{member.ds_Paginas}</td>
                   <td className="px-4 py-2 border-b">{member.ds_Pais}</td>
@@ -393,12 +427,13 @@ console.log("handleInputChange - formData", formData);
                   <td className="px-4 py-2 border-b">{member.dt_PeriodoFinal? dayjs(member.dt_PeriodoFinal).locale('pt-br').format('DD/MM/YYYY') : ''}</td>
                   
                 </tr>
-              ))}
+              ))
+              }
             </tbody>
             <tfoot className="bg-gray-50">
               <tr>
                 <td colSpan={readOnly ? 5 : 6} className="px-4 py-2 text-sm text-gray-600">
-                  Total: {data.length} family member{data.length !== 1 ? 's' : ''}
+                  Total: {data.length} Atribuidores {data.length !== 1 ? 's' : ''}
                 </td>
               </tr>
             </tfoot>

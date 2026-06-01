@@ -2,11 +2,12 @@ import { mylog } from "@/app/lib/mylogger";
 import Myhr from "./myhr";
 import { fetchPrazoNames } from "@/app/lib/reuniao/data";
 import { Prazo } from "@/app/lib/reuniao/definitions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
     const filename = "addpraz.tsx";
-    const prazoNames = fetchPrazoNames();
-    mylog("ERROR", filename, 'AddPrazo', 'prazoNames = ', prazoNames);
+
+//    const prazoNames = fetchPrazoNames();
+//    mylog("ERROR", filename, 'AddPrazo', 'prazoNames = ', prazoNames);
 
 interface PrazoSubformProps {
   data: Prazo;
@@ -21,6 +22,13 @@ export default function AddPrazo ({ data, onChange }: PrazoSubformProps) {
         setPrazo(updatedPrazo);
         onChange(updatedPrazo);
       };
+          useEffect(() => {
+        const loadPrazoNames = async () => {
+            const prazoNames = await fetchPrazoNames();
+            mylog("INFO", filename, 'AddPrazo', 'Loaded prazo names: ', prazoNames);
+        };
+        loadPrazoNames();
+    }, []);
 
     return(
         <div className="rounded-md bg-gray-50 p-4 md:p-2">

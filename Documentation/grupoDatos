@@ -166,7 +166,7 @@ ind_atribuicreditos='S'           // 211
     REUNIAO_T3900_AtribuidorCreditos 
         cd_AtribuidorCredito : int
         cd_ItemReuniao : int
-        cd_TipoAtribuidorCredito : int
+        Cd_TipoAtribuidorCredito : int
         ds_TituloTrabalho : string
         ds_TituloPeriodicoLivroCongresso : string
         ds_Pais : string

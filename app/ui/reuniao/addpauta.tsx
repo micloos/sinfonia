@@ -117,7 +117,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
       prazo: (itemReuniaoObject && itemReuniaoObject.Cd_TipoSolicitacaoPrazo) ? { Cd_TipoSolicitacaoPrazo: Number(itemReuniaoObject.Cd_TipoSolicitacaoPrazo), qt_SolicitacaoPrazoDiasSolicitados: Number(itemReuniaoObject.qt_SolicitacaoPrazoDiasSolicitados) } as Prazo : { Cd_TipoSolicitacaoPrazo: 0, qt_SolicitacaoPrazoDiasSolicitados: 0 } as Prazo,
       creditos: (itemReuniaoObject) ? itemReuniaoObject.creditos : [] as Credito[]
   });
-mylog ("ERROR",filename, 'AddPauta', 'estagio = ', formData.estagio);
+mylog ("ERROR",filename, 'AddPauta', 'creditos = ', formData.creditos);
 
 
 // const [numAssunto, setNumAssunto] = useState<number>(0);
