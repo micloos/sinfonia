@@ -19,10 +19,10 @@ export type OrdemState = {
 }
 
 export interface Banca  {
-    id_ExaminadorBanca: string;
     nm_ExaminadorBanca: string;
     ds_LotExaminadorBanca: string;
     Cd_TipoExaminador: number;
+    Cd_BancaExaminadoraReuniao: string;
 }
 
 export interface Creditos {
@@ -43,7 +43,12 @@ export type Credito = Omit<Creditos, 'qt_Creditos'>;
 
 export type CreditosFormData = Omit<Creditos, 'cd_AtribuidorCredito' | 'qt_Creditos'>;
 
-export type BancaFormData = Omit<Banca, 'id_ExaminadorBanca'>;
+export type AtribuidorName = {
+    id: string;
+    name: string;
+}
+
+export type BancaFormData = Omit<Banca, 'Cd_BancaExaminadoraReuniao'>;
 
 export type Relator = {
     nm_Relator: string;

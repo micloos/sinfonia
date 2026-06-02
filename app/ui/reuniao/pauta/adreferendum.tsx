@@ -30,7 +30,7 @@ export default  function AdReferendum({ data, onChange }: AdReferendumSubformPro
 
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-2">
-            <div className="mb-4 inline-block pr-4 w-1/6">
+            <div id="ind_adreferendum" className="mb-4 inline-block pr-4 w-1/6">
                 <label htmlFor="ind_adreferendum" className="mb2 block text-sm font-medium">
                     Ad Referendum
                 </label>
@@ -49,7 +49,7 @@ export default  function AdReferendum({ data, onChange }: AdReferendumSubformPro
                         }    }                
                 />
             </div>
-            <div className="mb-4 inline-block pr-4 w-2/3">
+            <div id="ds_AdReferendum" className="mb-4 inline-block pr-4 w-2/3">
                 <label htmlFor="ds_AdReferendum" className="mb2 block text-sm font-medium">
                     Observação Ad Referendum
                 </label>
@@ -58,7 +58,7 @@ export default  function AdReferendum({ data, onChange }: AdReferendumSubformPro
                     id="ds_AdReferendum"
                     name="ds_AdReferendum"
                     placeholder="Observacao"
-                    value={adReferendum.ds_AdReferendum}
+                    value={adReferendum.ds_AdReferendum?? ''}
                     onChange = {handleChange}
                     className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 />

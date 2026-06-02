@@ -72,6 +72,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
 
   const listaItemReuniao = itemReuniaoObject ? [itemReuniaoObject] : [];
   mylog("ERROR",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
+  mylog("ERROR",filename, 'AddPauta Teste' , "listaitemReuniao=", JSON.stringify(listaItemReuniao[0].banca));
 
   useEffect (() => {
         if (itemReuniao) {
@@ -311,7 +312,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         {/* DONE Plano de Trabalho */}
         
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AtribuiCreditos === 'S' && ( <AddCreditos data={formData.creditos} onChange={handleCreditosChange} />)}
-        {/* DOING Creditos */}
+        {/* DONE Creditos */}
         
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_SolicitaPrazo === 'S' && ( <AddPrazo data={formData.prazo} onChange={handlePrazoChange}/>)}
         {/* DONE Prazo */}

@@ -279,6 +279,7 @@ export async function fetchItemObject (irid: number) {
         const banca = await mssql(myreq2) as Banca[];
         if (banca && banca.length > 0 && toreturn) {
             toreturn.banca = banca as Banca[];
+            mylog("ERROR",filename,"fetchItemObject","banca = ",banca)
         }
         const myreq3 = `select * from REUNIAO_T3900_AtribuidorCreditos where cd_itemreuniao = ${irid}`;
         const creditos = await mssql(myreq3) as Credito[];
@@ -303,6 +304,17 @@ export async function fetchPrazoNames () {
     } catch (error) {
         mylog("DBG",filename,"fetchPrazoNames","Error",error);
         throw new Error('Failed to fetch Prazo Names');
+    }
+}
+
+export async function fetchTipoAtribuidorCredito () {
+    const myreq = `select Cd_TipoAtribuidorCredito as id, nm_TipoAtribuidorCredito as name from REUNIAO_T3600_TipoAtribuidorCredito`;
+    try {
+        const tipos = await mssql(myreq) as {id: string, name: string}[];
+        return (tipos)
+    } catch (error) {
+        mylog("DBG",filename,"fetchTipoAtribuidorCredito","Error",error);
+        throw new Error('Failed to fetch Tipo Atribuidor Creditos');
     }
 }
 

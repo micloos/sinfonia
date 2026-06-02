@@ -68,7 +68,7 @@ export default function AddBanca({
             }
 
             const newMember: Banca = {
-                    id_ExaminadorBanca: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+                    Cd_BancaExaminadoraReuniao: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
                     ...formData
             };
             const updated = [...data, newMember];
@@ -87,7 +87,7 @@ export default function AddBanca({
             }
 
             const updated = data.map(member => 
-                member.id_ExaminadorBanca === editingId 
+                member.Cd_BancaExaminadoraReuniao === editingId 
                 ? { ...member, ...formData }
                 : member
             );
@@ -98,7 +98,7 @@ export default function AddBanca({
 
         const deleteMember = (id: string) => {
             if (confirm('Are you sure you want to remove this family member?')) {
-                const updated = data.filter(member => member.id_ExaminadorBanca  !== id);
+                const updated = data.filter(member => member.Cd_BancaExaminadoraReuniao  !== id);
                 onChange(updated);
             }
         };
@@ -223,9 +223,9 @@ export default function AddBanca({
                 <th className="px-4 py-2 border-b text-left">Lotação: </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody key="tableBody">
               {data.map((member) => (
-                <tr key={member.id_ExaminadorBanca} className="hover:bg-gray-50">
+                <tr key={member.Cd_BancaExaminadoraReuniao} className="hover:bg-gray-50">
                     {!readOnly && (
                     <td className="px-4 py-2 border-b">
                       <div className="flex gap-2">
@@ -233,7 +233,7 @@ export default function AddBanca({
                         <Tooltip title="Excluir" placement="top">
                         <button
                           type="button"
-                          onClick={() => deleteMember(member.id_ExaminadorBanca)}
+                          onClick={() => deleteMember(member.Cd_BancaExaminadoraReuniao)}
                           className="rounded-md border p-2 hover:bg-gray-100"
                           disabled={!!editingId || isAdding}
                         >
@@ -246,7 +246,7 @@ export default function AddBanca({
                   <td className="px-4 py-2 border-b">{tiposExaminadores[member.Cd_TipoExaminador]}</td>
                   <td className="px-4 py-2 border-b">{member.nm_ExaminadorBanca}</td>
                   <td className="px-4 py-2 border-b">{member.ds_LotExaminadorBanca}</td>
-                  
+                 {/* <td className="px-4 py-2 border-b">{JSON.stringify(member)}</td> */}
                 </tr>
               ))}
             </tbody>

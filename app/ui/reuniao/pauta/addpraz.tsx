@@ -54,7 +54,7 @@ export default function AddPrazo ({ data, onChange }: PrazoSubformProps) {
                         
                             <option value="0">Selecione um Tipo</option>
                             {prazoNames.map((name) => (
-                                <option key={name.id} value={name.name}>
+                                <option key={name.id} value={name.id}>
                                     {name.name}
                                 </option>
                             ))}

@@ -2,13 +2,13 @@
 
 import Myhr from "./myhr";
 import { mylog } from "@/app/lib/mylogger";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useDebouncedCallback } from 'use-debounce';
 // import { Button } from "../../button";
-import { CreditosFormData, Credito } from "@/app/lib/reuniao/definitions";
+import { CreditosFormData, Credito, AtribuidorName } from "@/app/lib/reuniao/definitions";
 import { Tooltip } from "@mui/material";
 import {  TrashIcon } from '@heroicons/react/24/outline';
-
+import { fetchTipoAtribuidorCredito } from "@/app/lib/reuniao/data";
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import utc from 'dayjs/plugin/utc'
@@ -19,14 +19,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 
 const filename = 'app/ui/reuniao/pauta/addcreditos';
 
-const tiposAtribuidorCredito = [
-    'Escolha o tipo de crédito',
-    'Publicação de capítulo de livro',
-    'Publicação de livro',
-    'Publicação em periódico',
-    'Publicação em congresso',
-    'Patente'
-];
 
 dayjs.extend(utc);
 
@@ -57,10 +49,26 @@ export default function AddCreditos({
         ds_Ano: '',
         nu_Volume: ''
     });
+
+    const [tipos, setTiposAtribuidorCredito] = useState<AtribuidorName[]>([]);
+
     const [docDateIni, setDocDateIni] = useState(formData.dt_PeriodoInicial ? dayjs.utc(formData.dt_PeriodoInicial) : dayjs.utc());
     const [docDateFim, setDocDateFim] = useState(formData.dt_PeriodoFinal ? dayjs.utc(formData.dt_PeriodoFinal) : dayjs.utc());
     console.log("AddCreditos - data", data);
     console.log("AddCreditos - formData", formData);
+
+    useEffect(() => {
+        // Simulate fetching tiposAtribuidorCredito
+        const fetchTiposAtribuidorCreditos = async () => {
+            // Replace this with your actual API call
+            const tipos = await fetchTipoAtribuidorCredito() as AtribuidorName[];
+            setTiposAtribuidorCredito(tipos);
+        };
+
+        fetchTiposAtribuidorCreditos();
+    }, []);
+
+    console.log("AddCreditos - tiposAtribuidorCredito", tipos);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -220,11 +228,11 @@ export default function AddCreditos({
                             className="w-full p-2 border rounded"
                         >
                             <option value="">[Selectionar Tipo]</option>
-                            <option value="1">Publicação de capítulo de livro</option>
-                            <option value="2">Publicação de livro</option>                            
-                            <option value="3">Publicação em periódico</option>
-                            <option value="4">Publicação em congresso</option>                           
-                            <option value="5">Patente</option>
+                            {tipos.map((tipo) => (
+                                <option key={tipo.id} value={tipo.id}>
+                                    {tipo.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
                   </div>
@@ -414,7 +422,8 @@ export default function AddCreditos({
                       </div>
                     </td>
                   )}
-                  <td className="px-4 py-2 border-b">{tiposAtribuidorCredito[Number(member.Cd_TipoAtribuidorCredito)] || member.Cd_TipoAtribuidorCredito}</td>
+                  <td className="px-4 py-2 border-b">{tipos[Number(member.Cd_TipoAtribuidorCredito)-1].name} </td>
+                  {/* <td className="px-4 py-2 border-b">{JSON.stringify(tipos[1])}</td> */}
                   <td className="px-4 py-2 border-b">{member.ds_TituloTrabalho}</td>
                   <td className="px-4 py-2 border-b">{member.ds_TituloPeriodicoLivroCongresso}
                     {/* {JSON.stringify(member)} */}
@@ -433,7 +442,7 @@ export default function AddCreditos({
             <tfoot className="bg-gray-50">
               <tr>
                 <td colSpan={readOnly ? 5 : 6} className="px-4 py-2 text-sm text-gray-600">
-                  Total: {data.length} Atribuidores {data.length !== 1 ? 's' : ''}
+                  Total: {data.length} Atribuidor{data.length !== 1 ? 'es' : ''}
                 </td>
               </tr>
             </tfoot>
