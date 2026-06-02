@@ -1,7 +1,7 @@
 import { mylog } from "@/app/lib/mylogger";
 import Myhr from "./myhr";
 import { fetchPrazoNames } from "@/app/lib/reuniao/data";
-import { Prazo } from "@/app/lib/reuniao/definitions";
+import { Prazo, PrazoName } from "@/app/lib/reuniao/definitions";
 import { useEffect, useState } from "react";
 
     const filename = "addpraz.tsx";
@@ -14,21 +14,29 @@ interface PrazoSubformProps {
   onChange: (data: Prazo) => void;
   isRequired?: boolean;
 }
+
 export default function AddPrazo ({ data, onChange }: PrazoSubformProps) {
+    const[prazoNames, setPrazoNames] = useState<PrazoName[]>([]);
     const [prazo, setPrazo] = useState<Prazo>(data || { Cd_TipoSolicitacaoPrazo: 0, qt_SolicitacaoPrazoDiasSolicitados: 0 });
     const handleChange= (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         const updatedPrazo = { ...prazo, [name]: value };
         setPrazo(updatedPrazo);
         onChange(updatedPrazo);
+ //       console.log("Updated prazo: ", updatedPrazo);
+ //       console.log("Current prazoNames: ", prazoNames);
       };
-          useEffect(() => {
+    useEffect(() => {
+        mylog("ERROR", filename, 'AddPrazo', 'Component mounted, fetching prazo names...','');
         const loadPrazoNames = async () => {
             const prazoNames = await fetchPrazoNames();
-            mylog("INFO", filename, 'AddPrazo', 'Loaded prazo names: ', prazoNames);
+            setPrazoNames(prazoNames);
+            mylog("ERROR", filename, 'AddPrazo', 'Loaded prazo names: ', prazoNames);
         };
         loadPrazoNames();
     }, []);
+
+//    mylog("ERROR", filename, 'AddPrazo', 'Rendering component with prazo: ', prazoNames);
 
     return(
         <div className="rounded-md bg-gray-50 p-4 md:p-2">
@@ -45,8 +53,11 @@ export default function AddPrazo ({ data, onChange }: PrazoSubformProps) {
                             value={prazo.Cd_TipoSolicitacaoPrazo} onChange={handleChange}>
                         
                             <option value="0">Selecione um Tipo</option>
-                            <option key="1" value="1">Trancamento</option>
-                            <option key="2" value="2">Prorrogação de Curso</option>
+                            {prazoNames.map((name) => (
+                                <option key={name.id} value={name.name}>
+                                    {name.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>           
