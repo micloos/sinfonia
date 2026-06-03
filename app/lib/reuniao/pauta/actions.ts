@@ -5,7 +5,7 @@ import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../../mylogger';
 
-import { Banca, Credito, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
+import { Banca, Credito, DisciplinaEspecial, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
 
 // import { revalidatePath } from 'next/cache';
@@ -105,6 +105,21 @@ export  async function getNextCreditosItem ()
         return (-1)
     }
 }
+
+export async function getNextDisciplinaEspecialItem ()
+{
+    const myreq1 = `select max(cd_DisciplinaEspecial)+ 1 as n from REUNIAO_T3800_DisciplinaEspecial`;
+    
+    try {
+        const nextitem = await mssql(myreq1) as {n: number }[];
+        mylog("ERROR",filename,"getNextDisciplinaEspecialItem","nextitem",nextitem);
+        return (nextitem[0].n)
+    } catch (error) {
+        mylog("ERROR",filename,"getNextDisciplinaEspecialItem","Error",error);
+        return (-1)
+    }
+}
+
 
 
 export async function createItem () {
@@ -272,6 +287,30 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         }
         }
     }
+
+    const disciplinaEspecial= myform.disciplinas_json ? JSON.parse(myform.disciplinas_json as string) as DisciplinaEspecial[] : [];
+    if (disciplinaEspecial.length > 0) {
+        mylog("ERROR",filename,"createItemObject","disciplinaEspecial = ",disciplinaEspecial);
+        const cd_DisciplinaEspecialInit =  await getNextDisciplinaEspecialItem();
+        for (let i = cd_DisciplinaEspecialInit; i < cd_DisciplinaEspecialInit + disciplinaEspecial.length; i++) {
+            const element = disciplinaEspecial[i - cd_DisciplinaEspecialInit];
+            if (isNaN(+element.cd_DisciplinaEspecial)) {
+                try {
+                    mylog("ERROR",filename,"createItemObject","i = ",i);
+                     const myreq = `
+                        INSERT INTO REUNIAO_T3800_DisciplinaEspecial 
+                        (cd_DisciplinaEspecial, cd_itemreuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                        VALUES 
+                        (${i}, ${essentialFields.data.cd_itemreuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}')
+                    `;
+                    
+                    const answer = await mssql(myreq);
+                    mylog ("ERROR",filename,"createItemObject","answer for disciplinaEspecial = ", answer);
+                } catch (error) {
+                    mylog ("ERROR",filename,"createItemObject","Error in disciplinaEspecial insertion loop = ", error);
+                }                     
+        }}
+        }
 
     revalidatePath("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
     redirect("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")

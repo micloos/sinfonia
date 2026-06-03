@@ -73,7 +73,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
 
   const listaItemReuniao = itemReuniaoObject ? [itemReuniaoObject] : [];
   mylog("ERROR",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
-  mylog("ERROR",filename, 'AddPauta Teste' , "listaitemReuniao=", JSON.stringify(listaItemReuniao[0].banca));
+  // mylog("ERROR",filename, 'AddPauta Teste' , "listaitemReuniao=", JSON.stringify(listaItemReuniao[0].banca));
 
   useEffect (() => {
         if (itemReuniao) {
