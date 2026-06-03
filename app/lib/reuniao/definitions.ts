@@ -25,6 +25,21 @@ export interface Banca  {
     Cd_BancaExaminadoraReuniao: string;
 }
 
+export interface DisciplinaEspeciais {
+    cd_DisciplinaEspecial : string;
+    cd_ItemReuniao : string;
+    nm_DisciplinaEspecial : string;
+    qt_Creditos : number;
+    dt_PeriodoInicial : string;
+    dt_PeriodoFinal : string;
+    ds_Frequencia : string;
+    ds_Conceito : string;
+}
+
+export type DisciplinaEspeciaisFormData = Omit<DisciplinaEspeciais, 'cd_DisciplinaEspecial' | 'cd_ItemReuniao'>;
+
+export type DisciplinaEspecial = Omit<DisciplinaEspeciais, 'cd_ItemReuniao'>;
+
 export interface Creditos {
     cd_AtribuidorCredito : string;
     Cd_TipoAtribuidorCredito : string;
@@ -85,6 +100,9 @@ export type CredenciamentoDisciplina = {
     Nm_CredProfessorResponsavel: string;
 }
 
+
+
+
 export type Defesa = {
     Dt_Defesa: string;
 }
@@ -123,6 +141,7 @@ export interface AddPautaFormData {
   estagio: Estagio;
   prazo: Prazo;
   creditos: Credito[];
+  disciplinaEspecial: DisciplinaEspecial[]; 
 }
 
 export type ItemReuniaoResponse = {
@@ -164,6 +183,7 @@ export type ItemReuniaoResponse = {
     cd_ReuniaoOrigem: string;
     banca: Banca[];
     creditos: Credito[];
+    disciplinaEspecial: DisciplinaEspecial[]; 
 }
 
 export type PrazoName = {

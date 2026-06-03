@@ -43,7 +43,8 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
    Deposito,
    Estagio,
    Prazo,
-   Credito} from "@/app/lib/reuniao/definitions";
+   Credito,
+   DisciplinaEspecial} from "@/app/lib/reuniao/definitions";
 // import { set, string } from "zod";
 // import { create } from "domain";
 // import BancaTable from "./pauta/banca";
@@ -116,7 +117,8 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
       deposito: (itemReuniaoObject && itemReuniaoObject.dt_Deposito) ? { dt_Deposito: itemReuniaoObject.dt_Deposito } as Deposito : { dt_Deposito: '' } as Deposito,
       estagio: (itemReuniaoObject && itemReuniaoObject.ds_EstagioDisciplina) ? { ds_EstagioDisciplina: itemReuniaoObject.ds_EstagioDisciplina, dt_EstagioPeriodoInicio: itemReuniaoObject.dt_EstagioPeriodoInicio, dt_EstagioPeriodoFim: itemReuniaoObject.dt_EstagioPeriodoFim, qt_EstagioCreditos: Number(itemReuniaoObject.qt_EstagioCreditos) } as Estagio : { ds_EstagioDisciplina: '', dt_EstagioPeriodoInicio: '', dt_EstagioPeriodoFim: '', qt_EstagioCreditos: 0 } as Estagio,
       prazo: (itemReuniaoObject && itemReuniaoObject.Cd_TipoSolicitacaoPrazo) ? { Cd_TipoSolicitacaoPrazo: Number(itemReuniaoObject.Cd_TipoSolicitacaoPrazo), qt_SolicitacaoPrazoDiasSolicitados: Number(itemReuniaoObject.qt_SolicitacaoPrazoDiasSolicitados) } as Prazo : { Cd_TipoSolicitacaoPrazo: 0, qt_SolicitacaoPrazoDiasSolicitados: 0 } as Prazo,
-      creditos: (itemReuniaoObject) ? itemReuniaoObject.creditos : [] as Credito[]
+      creditos: (itemReuniaoObject) ? itemReuniaoObject.creditos : [] as Credito[],
+      disciplinaEspecial: (itemReuniaoObject) ? itemReuniaoObject.disciplinaEspecial : [] as DisciplinaEspecial[]
   });
 mylog ("ERROR",filename, 'AddPauta', 'creditos = ', formData.creditos);
 
@@ -173,7 +175,12 @@ const handleOrientadorChange = (orientadorData: Orientador) => {
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   }
 
-const handleBancaChange = (bancaData: Banca[]) => {
+const handleDisciplinaEspecialChange = (disciplinaEspecialData: DisciplinaEspecial[]) => {
+    setFormData(prev => ({ ...prev, disciplinaEspecial: disciplinaEspecialData  }));
+    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+  };
+
+  const handleBancaChange = (bancaData: Banca[]) => {
     setFormData(prev => ({ ...prev, bancaMembers: bancaData }));
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   };
@@ -334,8 +341,12 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
                                       />)} {/* 2 .. */}
         {/* DONE Banca Examinadora */}
         
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_DisciplinaEspecial === 'S' && ( <AddDisciplina />)} {/* 20 */}
-        {/* TODO Disciplina Especial Importante*/}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_DisciplinaEspecial === 'S' && ( <AddDisciplina 
+                                        data={formData.disciplinaEspecial}
+                                        onChange={handleDisciplinaEspecialChange} 
+                                        maxMembers={10}
+                                    />)} {/* 20 */}
+        {/* DOING Disciplina Especial Importante*/}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Estagio === 'S' && ( <AddEstagio data={formData.estagio} onChange={handleEstagioChange}/>) }{/* 38 */}
         {/* DONE Estagio */}
         

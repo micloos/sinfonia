@@ -58,9 +58,7 @@ export default function AddCreditos({
     console.log("AddCreditos - formData", formData);
 
     useEffect(() => {
-        // Simulate fetching tiposAtribuidorCredito
         const fetchTiposAtribuidorCreditos = async () => {
-            // Replace this with your actual API call
             const tipos = await fetchTipoAtribuidorCredito() as AtribuidorName[];
             setTiposAtribuidorCredito(tipos);
         };
@@ -68,7 +66,6 @@ export default function AddCreditos({
         fetchTiposAtribuidorCreditos();
     }, []);
 
-    console.log("AddCreditos - tiposAtribuidorCredito", tipos);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;

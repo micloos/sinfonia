@@ -3,7 +3,7 @@
 import { mssql } from '@/app/lib/db';
 import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
 import { mylog } from '../mylogger';
-import { Banca, Credito, ItemReuniaoResponse, PrazoName } from './definitions';
+import { Banca, Credito, DisciplinaEspecial, ItemReuniaoResponse, PrazoName } from './definitions';
 
 
 
@@ -286,6 +286,12 @@ export async function fetchItemObject (irid: number) {
         if (creditos && creditos.length > 0 && toreturn) {
             toreturn.creditos = creditos as Credito[];
             mylog("ERROR",filename,"fetchItemObject","creditos = ",creditos)
+        }
+        const myreq4 = `select * from REUNIAO_T3800_DisciplinaEspecial where cd_itemreuniao = ${irid}`;
+        const disciplinas = await mssql(myreq4) as DisciplinaEspecial[];
+        if (disciplinas && disciplinas.length > 0 && toreturn) {
+            toreturn.disciplinaEspecial = disciplinas as DisciplinaEspecial[];
+            mylog("ERROR",filename,"fetchItemObject","disciplinas = ",disciplinas)
         }
 
         return (toreturn)
