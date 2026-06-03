@@ -120,6 +120,32 @@ export async function getNextDisciplinaEspecialItem ()
     }
 }
 
+export async function deleteBancaItem (cd_BancaExaminadoraReuniao: string) {
+    const myreq1 = `delete from REUNIAO_T0900_BancaExaminadoraReuniao where cd_BancaExaminadoraReuniao = ${cd_BancaExaminadoraReuniao}`;
+    try {
+        await mssql(myreq1);
+    } catch (error) {
+        mylog("ERROR",filename,"deleteBancaItem","Error",error);
+    }
+}
+
+export async function deleteCreditosItem (cd_AtribuidorCredito: string) {
+    const myreq1 = `delete from REUNIAO_T3900_AtribuidorCreditos where cd_AtribuidorCredito = ${cd_AtribuidorCredito}`;
+    try {
+        await mssql(myreq1);
+    } catch (error) {
+        mylog("ERROR",filename,"deleteCreditosItem","Error",error);     
+    }
+}
+
+export async function deleteDisciplinaEspecialItem (cd_DisciplinaEspecial: string) {
+    const myreq1 = `delete from REUNIAO_T3800_DisciplinaEspecial where cd_DisciplinaEspecial = ${cd_DisciplinaEspecial}`;
+    try {
+        await mssql(myreq1);
+    } catch (error) {
+        mylog("ERROR",filename,"deleteDisciplinaEspecialItem","Error",error);           
+    }
+}
 
 
 export async function createItem () {

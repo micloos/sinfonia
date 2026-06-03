@@ -9,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { Tooltip } from "@mui/material";
 import {  TrashIcon } from '@heroicons/react/24/outline';
 import { useState } from "react";
+import { deleteDisciplinaEspecialItem } from "@/app/lib/reuniao/pauta/actions";
 
 const filename = "AddDisciplina.tsx";
 
@@ -125,6 +126,8 @@ export default function AddDisciplina ({
 
     const deleteMember = (id: string) => {
             if (confirm('Vc tem certeza de querer remover isso?')) {
+                console.log("deleteMember - id:", id);
+                deleteDisciplinaEspecialItem(id);
                 const updated = data.filter(member => member.cd_DisciplinaEspecial  !== id);
                 
                 onChange(updated);
