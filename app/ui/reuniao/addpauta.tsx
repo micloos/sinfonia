@@ -346,7 +346,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
                                         onChange={handleDisciplinaEspecialChange} 
                                         maxMembers={10}
                                     />)} {/* 20 */}
-        {/* DOING Disciplina Especial Importante*/}
+        {/* DONE Disciplina Especial Importante*/}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Estagio === 'S' && ( <AddEstagio data={formData.estagio} onChange={handleEstagioChange}/>) }{/* 38 */}
         {/* DONE Estagio */}
         

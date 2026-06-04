@@ -37,6 +37,7 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
                 value = {interessado.nm_interessado}
                 onChange={handleChange}      
                 required={isRequired}
+                
                 className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      
             />
           </div>
