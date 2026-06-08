@@ -126,6 +126,32 @@ export async function deleteAssuntoFromReuniao (id: string) {
 	} catch (error) {
 		mylog ("INFO", "app/lib/actions", "deleteAssuntoFromReuniao", "error=",error);
 	}
+
+		const myreq1 = `
+		DELETE FROM REUNIAO_T3900_AtribuidorCreditos
+		WHERE Cd_ItemReuniao = ${id}
+	`;
+	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "myreq1=",myreq1.replace(/\s/g," "));
+	try {
+		const answer = await mssql (myreq1);
+		mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "answer=",answer);
+	} catch (error) {
+		mylog ("INFO", "app/lib/actions", "deleteAssuntoFromReuniao", "error=",error);
+	}
+
+		const myreq2 = `
+		DELETE FROM REUNIAO_T3800_DisciplinaEspecial
+		WHERE Cd_ItemReuniao = ${id}
+	`;
+	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "myreq2=",myreq2.replace(/\s/g," "));
+	try {
+		const answer = await mssql (myreq2);
+		mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "answer=",answer);
+	} catch (error) {
+		mylog ("INFO", "app/lib/actions", "deleteAssuntoFromReuniao", "error=",error);
+	}
+
+
 	const myreq = `
 		DELETE FROM REUNIAO_T1010_ItemReuniao
 		WHERE Cd_ItemReuniao = ${id}

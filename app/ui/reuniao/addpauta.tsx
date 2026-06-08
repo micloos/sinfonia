@@ -12,10 +12,6 @@ import AddBanca from "./pauta/addbanca";
 import AddRelator from "./pauta/addrelator";
 import AddCreditos from "./pauta/addcreditos";
 import AddPrazo from "./pauta/addpraz";
-
-
-
-// import Interessado from "./pauta/interessado";
 import SelectAssunto from "./pauta/selectAssunto";
 import AddCredenciamentoDisciplina from "./pauta/addcreddisc";
 import AddObsNaoPub from "./pauta/addobsnaopub";
@@ -124,6 +120,8 @@ mylog ("ERROR",filename, 'AddPauta', 'creditos = ', formData.creditos);
 
 
 // const [numAssunto, setNumAssunto] = useState<number>(0);
+
+const shadowData = structuredClone(formData); 
 
 const handleObservacaoChange = (observacaoData: Observacao) => {
     setFormData(prev => ({ 
@@ -303,7 +301,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         
         <SelectAssunto assuntos={assuntos} data={formData.cd_AssuntoReuniao}  onChange={handleAssuntoChange} />
         {/* DONE Assunto Reuniao */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Interessado === 'S' && (<AddPautaInteressado data={formData.interessado} onChange={handleInteressadoChange } isRequired />)}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Interessado === 'S' && (<AddPautaInteressado data={formData.interessado} onChange={handleInteressadoChange } shadow={shadowData} isRequired />)}
         {/* DONE Interessado */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Orientador === 'S' && (<AddPautaOrientador data={formData.orientador} onChange={handleOrientadorChange}  />)}
         {/* DONE Orientador */}

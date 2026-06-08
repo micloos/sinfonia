@@ -147,6 +147,16 @@ export async function deleteDisciplinaEspecialItem (cd_DisciplinaEspecial: strin
     }
 }
 
+export interface SearchResult {
+    id: string;
+    name: string;
+    ds_AreaInteressado?: string;
+    ds_NivelInteressado?: string;
+    nm_Orientador?: string;
+    ds_LotOrientador?: string;
+}
+
+
 
 export async function createItem () {
     const cd_itemreuniao = await getNextItem();

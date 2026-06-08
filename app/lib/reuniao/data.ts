@@ -4,6 +4,7 @@ import { mssql } from '@/app/lib/db';
 import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
 import { mylog } from '../mylogger';
 import { Banca, Credito, DisciplinaEspecial, ItemReuniaoResponse, PrazoName } from './definitions';
+import { SearchResult } from './pauta/actions';
 
 
 
@@ -108,9 +109,28 @@ export async function fetchParticipantesByReuniao (id: number, currentPage: numb
     }
 }
 
+export async function fetchUsers (query: string) {
+    try {
+        const myreq = `SELECT 
+          t1.nm_Interessado as name, t1.Cd_ItemReuniao as id, t1.ds_AreaInteressado as ds_AreaInteressado, t1.ds_NivelInteressado as ds_NivelInteressado 
+          FROM reuniao_t1010_itemreuniao t1
+          inner join (
+            SELECT nm_Interessado, MAX(Cd_ItemReuniao) as MaxItem
+            FROM reuniao_t1010_itemreuniao
+            WHERE nm_Interessado LIKE '%${query}%' GROUP BY nm_Interessado) t2
+            ON t1.nm_Interessado = t2.nm_Interessado AND t1.Cd_ItemReuniao = t2.MaxItem
+            where t1.nm_Interessado like '%${query}%'`;
+        const users = await mssql(myreq);
+        return (users) as SearchResult[];
+    } catch (error) {
+        mylog ("ERROR", filename, "fetchUsers","error=",error);
+        throw new Error('Failed to fetch users');
+    }
+}
+
 export async function fetchFilteredPauta     (id: number, query: string, currentPage: number)
 {
-    mylog("DBG",filename,"fetchFilteredPauta","{id, query, currentPage}=",{id, query, currentPage})
+    mylog("ERROR",filename,"fetchFilteredPauta","{id, query, currentPage}=",{id, query, currentPage})
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
     if (isNaN(+query) || query.trim() === '') {
     try {

@@ -1,19 +1,32 @@
 import Myhr from "./myhr"
-import type { Interessado  } from "@/app/lib/reuniao/definitions"
+import type { AddPautaFormData, Interessado  } from "@/app/lib/reuniao/definitions"
 import { useState } from 'react';
+import SearchableSelect from "@/app/ui/reuniao/searchableSelect";
+import { SearchResult } from "@/app/lib/reuniao/pauta/actions";
+import { fetchUsers } from "@/app/lib/reuniao/data";
+import { mylog } from "@/app/lib/mylogger";
+
+const filename = "app/ui/reuniao/pauta/interessado";
 
 interface InteressadoSubformProps {
-  data: Interessado;
+  data: Interessado; 
+  shadow: AddPautaFormData;
   onChange: (data: Interessado) => void;
   isRequired?: boolean;
 }
 
 
 
-export default  function AddPautaInteressado({ data, onChange, isRequired = false }: InteressadoSubformProps) 
+export default  function AddPautaInteressado({ data, onChange, isRequired = false , shadow }: InteressadoSubformProps) 
 {
   const [interessado, setInteressado] = useState<Interessado>(data || { nm_interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' });
+  const [selectedUser, setSelectedUser] = useState<SearchResult | null>(null);
+  const [searchHistory, setSearchHistory] = useState<{ type: string; item: SearchResult; timestamp: string }[]>([]);
 
+  mylog('DBG', filename, 'AddPautaInteressado', 'data=', data);
+  mylog('DBG', filename, 'AddPautaInteressado', 'isrequired=', isRequired);
+  mylog('DBG', filename, 'AddPautaInteressado', 'shadow=', shadow);
+  mylog('DBG', filename, 'AddPautaInteressado', 'selectUser=', selectedUser);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     const updatedInteressado = { ...interessado, [name]: value };
@@ -21,15 +34,45 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
     onChange(updatedInteressado);
   };
 
+  const addToHistory = (type: string, item: SearchResult) => {
+    setSearchHistory(prev => [...prev, 
+      { type, item, timestamp: new Date().toLocaleTimeString() },
+      ...prev.slice(0,4)
+    ]);
+    console.log('Search history updated:', searchHistory);
+  }
+
+  const handleUserSelect = (user: SearchResult) => {
+    setSelectedUser(user);
+    addToHistory('User', user);
+    console.log('Selected user:', user);
+    const updatedInteressado = { 
+      ...interessado, 
+      nm_interessado: user.name, 
+      ds_areainteressado: user.ds_AreaInteressado || '', 
+      ds_nivelinteressado: user.ds_NivelInteressado || '' 
+    };
+    setInteressado(updatedInteressado);
+    onChange(updatedInteressado);
+  };
+
+
   return (
     <div className="rounded-md bg-gray-50 p-4 md:p-2">
       <div className="mb-4 inline-block pr-4 w-2/3">
         <label htmlFor="nm_interessado" className="block text-sm font-medium text-gray-700">
           Interessado  
         </label>
-        <div className="relative mt-2 rounded-md w-70 ">
+       <div className="relative mt-2 rounded-md w-70 ">
             <div className="relative">
-              <input 
+              <SearchableSelect
+                  
+                  onSelect={handleUserSelect}
+                  value={interessado.nm_interessado}
+                  searchFunction={fetchUsers}
+                  placeholder="Search by name, email, or department..."
+              />
+{/*              <input 
                 id="nm_interessado" 
                 name="nm_interessado"
                 type="string"
@@ -40,6 +83,8 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
                 
                 className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      
             />
+            */}
+            <input type="hidden" name="nm_interessado" value={interessado.nm_interessado} readOnly />
           </div>
         </div>
       </div>  
