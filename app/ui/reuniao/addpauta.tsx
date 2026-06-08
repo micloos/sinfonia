@@ -40,7 +40,8 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
    Estagio,
    Prazo,
    Credito,
-   DisciplinaEspecial} from "@/app/lib/reuniao/definitions";
+   DisciplinaEspecial,
+   Shadow} from "@/app/lib/reuniao/definitions";
 // import { set, string } from "zod";
 // import { create } from "domain";
 // import BancaTable from "./pauta/banca";
@@ -99,7 +100,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
       apresentacao: itemReuniaoObject ? { dt_apresentacao: itemReuniaoObject.dt_Apresentacao } as Apresentacao : { dt_apresentacao: '' } as Apresentacao,
       planotrabalho: itemReuniaoObject ? { ds_TituloPlanoTrabalho: itemReuniaoObject.ds_TituloPlanoTrabalho } as Plano : { ds_TituloPlanoTrabalho: '' } as Plano,
       ds_TituloDissertacaoTese: (itemReuniaoObject && itemReuniaoObject.ds_TituloDissertacaoTese) ? { ds_TituloDissertacaoTese : itemReuniaoObject.ds_TituloDissertacaoTese } as TituloTese: {ds_TituloDissertacaoTese: ''} as TituloTese,
-      orientador: itemReuniaoObject ? { nm_orientador: itemReuniaoObject.nm_Orientador, ds_LotOrientador: itemReuniaoObject.ds_LotOrientador } : { nm_orientador: '', ds_LotOrientador: '' } as Orientador,
+      orientador: itemReuniaoObject ? { nm_Orientador: itemReuniaoObject.nm_Orientador, ds_LotOrientador: itemReuniaoObject.ds_LotOrientador } : { nm_Orientador: '', ds_LotOrientador: '' } as Orientador,
       observacao: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoItem) ? { ds_ObservacaoItem: itemReuniaoObject.ds_ObservacaoItem } as Observacao : { ds_ObservacaoItem: '' } as Observacao,
       observacaoNP: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoNaoPublicavelItem) ? { ds_ObservacaoNaoPublicavelItem: itemReuniaoObject.ds_ObservacaoNaoPublicavelItem } as ObservacaoNP : { ds_ObservacaoNaoPublicavelItem: '' } as ObservacaoNP,
       relatorData: (itemReuniaoObject && itemReuniaoObject.nm_Relator) ? { nm_Relator: itemReuniaoObject.nm_Relator, ds_ObservacaoRelator: itemReuniaoObject.ds_ObservacaoRelator, ds_LotRelator: itemReuniaoObject.ds_LotRelator } as Relator : { nm_Relator: '', ds_ObservacaoRelator: '', ds_LotRelator: '' } as Relator,
@@ -121,7 +122,7 @@ mylog ("ERROR",filename, 'AddPauta', 'creditos = ', formData.creditos);
 
 // const [numAssunto, setNumAssunto] = useState<number>(0);
 
-const shadowData = structuredClone(formData); 
+const shadowData = {} as Shadow; 
 
 const handleObservacaoChange = (observacaoData: Observacao) => {
     setFormData(prev => ({ 
@@ -193,12 +194,13 @@ const handleNovoProfessorChange = (novoProfessorData: NovoProfessor) => {
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   };
 
-const handleInteressadoChange = (interessadoData: Interessado) => {
+const handleInteressadoChange = (interessadoData: Interessado, shadowData: Orientador ) => {
     setFormData(prev => ({ 
         ...prev,
+        orientador: shadowData,
         interessado: interessadoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'AddPauta', 'HandleInterassodChange formData = ', formData);
   }
 
 const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
@@ -301,7 +303,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         
         <SelectAssunto assuntos={assuntos} data={formData.cd_AssuntoReuniao}  onChange={handleAssuntoChange} />
         {/* DONE Assunto Reuniao */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Interessado === 'S' && (<AddPautaInteressado data={formData.interessado} onChange={handleInteressadoChange } shadow={shadowData} isRequired />)}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Interessado === 'S' && (<AddPautaInteressado data={formData.interessado} onChange={handleInteressadoChange} shadow={shadowData} isRequired />)}
         {/* DONE Interessado */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Orientador === 'S' && (<AddPautaOrientador data={formData.orientador} onChange={handleOrientadorChange}  />)}
         {/* DONE Orientador */}

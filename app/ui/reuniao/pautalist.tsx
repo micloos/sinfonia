@@ -1,7 +1,7 @@
 import { fetchFilteredPauta } from '@/app/lib/reuniao/data';
 import { PautaRed } from '@/app/lib/definitions';
 // import AddPauta  from './addpauta';
-import { AddAssuntoToReuniao, EditAssuntoFromReuniao, DeleteAssuntoFromReuniao } from './buttons';
+import { AddAssuntoToReuniao, EditAssuntoFromReuniao, DeleteAssuntoFromReuniao, AddAssuntoToReuniaoFromAssunto } from './buttons';
 import { mylog } from '@/app/lib/mylogger';
 
 const fileName = 'pautalist.tsx';
@@ -53,6 +53,9 @@ export default async function PautaList(
                                             <td className="flex justify-start py-3 pl-6 pr-3">
                                                 <EditAssuntoFromReuniao id={pauta.iid} reuniao={reuniao} />
                                                 <DeleteAssuntoFromReuniao id={pauta.iid} />
+                                                {pauta.assuntoRetornavel && (
+                                                    <AddAssuntoToReuniaoFromAssunto id={pauta.iid} reuniao={reuniao} afrom={pauta.assuntoRetornavel} />
+                                                )}
                                             </td>
                                             <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                                 <div className="flex items-center gap-3">

@@ -205,7 +205,7 @@ export type Plano = {
 }
 
 export type Orientador = {
-    nm_orientador: string;
+    nm_Orientador: string;
     ds_LotOrientador: string;
 }
 
@@ -213,6 +213,11 @@ export type Interessado = {
     nm_interessado: string;
     ds_areainteressado: string;
     ds_nivelinteressado: string;
+}
+
+export type Shadow = {
+    nm_Orientador: string;
+    ds_LotOrientador: string;
 }
 
 export type AdReferendumType = {

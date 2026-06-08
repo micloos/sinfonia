@@ -36,7 +36,7 @@ const ItemAssunto = z.object ({
     nm_interessado: minstr3,
     ds_areainteressado: minstr3,
     ds_nivelinteressado: minstr3,
-    nm_orientador: minstr3,
+    nm_Orientador: minstr3,
     ds_LotOrientador: minstr3,
     dt_Apresentacao: mydate,
     ds_TituloPlanoTrabalho: minstr3,
@@ -154,6 +154,7 @@ export interface SearchResult {
     ds_NivelInteressado?: string;
     nm_Orientador?: string;
     ds_LotOrientador?: string;
+    ds_TituloPlanoTrabalho?: string;
 }
 
 
@@ -222,7 +223,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             nm_interessado = '${essentialFields.data.nm_interessado}',
             ds_areainteressado = '${essentialFields.data.ds_areainteressado}',
             ds_nivelinteressado = '${essentialFields.data.ds_nivelinteressado}',
-            nm_orientador = '${essentialFields.data.nm_orientador}',
+            nm_Orientador = '${essentialFields.data.nm_Orientador}',
             ds_LotOrientador = '${essentialFields.data.ds_LotOrientador}',
             dt_Apresentacao = '${essentialFields.data.dt_Apresentacao}',
             ind_adreferendum = '${essentialFields.data.ind_adreferendum}',

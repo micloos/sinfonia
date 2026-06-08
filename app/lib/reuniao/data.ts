@@ -112,7 +112,8 @@ export async function fetchParticipantesByReuniao (id: number, currentPage: numb
 export async function fetchUsers (query: string) {
     try {
         const myreq = `SELECT 
-          t1.nm_Interessado as name, t1.Cd_ItemReuniao as id, t1.ds_AreaInteressado as ds_AreaInteressado, t1.ds_NivelInteressado as ds_NivelInteressado 
+          t1.nm_Interessado as name, t1.Cd_ItemReuniao as id, t1.ds_AreaInteressado as ds_AreaInteressado, t1.ds_NivelInteressado as ds_NivelInteressado,
+          t1.nm_Orientador as nm_Orientador, t1.ds_LotOrientador as ds_LotOrientador, t1.ds_TituloPlanoTrabalho as ds_TituloPlanoTrabalho 
           FROM reuniao_t1010_itemreuniao t1
           inner join (
             SELECT nm_Interessado, MAX(Cd_ItemReuniao) as MaxItem
@@ -139,7 +140,8 @@ export async function fetchFilteredPauta     (id: number, query: string, current
             ip.nm_Interessado as interessado, 
             ip.Cd_AssuntoReuniao as assuntoId,
             a.Ds_AssuntoAtaReuniao as assunto,
-            ip.Ds_AreaInteressado as area
+            ip.Ds_AreaInteressado as area,
+            a.Cd_AssuntoReuniaoRetornavel as assuntoRetornavel
         from 
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a
@@ -163,7 +165,8 @@ export async function fetchFilteredPauta     (id: number, query: string, current
             ip.nm_Interessado as interessado, 
             ip.Cd_AssuntoReuniao as assuntoId,
             a.Ds_AssuntoAtaReuniao as assunto,
-            ip.Ds_AreaInteressado as area
+            ip.Ds_AreaInteressado as area,
+            a.Cd_AssuntoReuniaoRetornavel as assuntoRetornavel
         from 
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a

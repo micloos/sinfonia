@@ -51,6 +51,21 @@ export function AddAssunto({ reuniao }: { reuniao: number }) {
   );
 }
 
+export function AddAssuntoToReuniaoFromAssunto({ id, afrom, reuniao }: { id: string, afrom: number, reuniao: number }) {
+  return (
+    <Tooltip title="Criar Volta">
+    <Link
+      href={`/sinfonia/reuniao/${reuniao}/${id}/addpauta?afrom=${afrom}`}
+      className="rounded-md border p-2 hover:bg-gray-100">
+      
+      <span className="sr-only">Criar Assunto</span>
+      <PlusIcon className="w-5" />
+    </Link>
+    </Tooltip>
+  );
+}
+
+
 export function EditAssuntoFromReuniao({ id, reuniao }: { id: string, reuniao: number }) {
   
   mylog("DBG",filename, 'EditAssuntoFromReuniao' , "id=", id);

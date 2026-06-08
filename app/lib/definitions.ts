@@ -17,6 +17,7 @@ export type PautaRed = {
 	assunto: string;
 	interessado: string;
 	area: string;
+	assuntoRetornavel: number;
 }
 
 export type Assuntos = {

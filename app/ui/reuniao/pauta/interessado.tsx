@@ -1,5 +1,5 @@
 import Myhr from "./myhr"
-import type { AddPautaFormData, Interessado  } from "@/app/lib/reuniao/definitions"
+import type { Orientador, Interessado, Shadow  } from "@/app/lib/reuniao/definitions"
 import { useState } from 'react';
 import SearchableSelect from "@/app/ui/reuniao/searchableSelect";
 import { SearchResult } from "@/app/lib/reuniao/pauta/actions";
@@ -10,8 +10,8 @@ const filename = "app/ui/reuniao/pauta/interessado";
 
 interface InteressadoSubformProps {
   data: Interessado; 
-  shadow: AddPautaFormData;
-  onChange: (data: Interessado) => void;
+  shadow: Orientador;
+  onChange: (data: Interessado, shadow: Shadow) => void;
   isRequired?: boolean;
 }
 
@@ -22,16 +22,20 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
   const [interessado, setInteressado] = useState<Interessado>(data || { nm_interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' });
   const [selectedUser, setSelectedUser] = useState<SearchResult | null>(null);
   const [searchHistory, setSearchHistory] = useState<{ type: string; item: SearchResult; timestamp: string }[]>([]);
+  const [orientador, setShadow] = useState<Orientador>(shadow);
 
   mylog('DBG', filename, 'AddPautaInteressado', 'data=', data);
   mylog('DBG', filename, 'AddPautaInteressado', 'isrequired=', isRequired);
-  mylog('DBG', filename, 'AddPautaInteressado', 'shadow=', shadow);
+  console.log('shadow=', shadow);
+  console.log('orientador', orientador);
   mylog('DBG', filename, 'AddPautaInteressado', 'selectUser=', selectedUser);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     const updatedInteressado = { ...interessado, [name]: value };
+    const updatedOrientador = {...orientador, [name]: value}
     setInteressado(updatedInteressado);
-    onChange(updatedInteressado);
+    setShadow(updatedOrientador)
+    onChange(updatedInteressado, updatedOrientador);
   };
 
   const addToHistory = (type: string, item: SearchResult) => {
@@ -52,8 +56,17 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
       ds_areainteressado: user.ds_AreaInteressado || '', 
       ds_nivelinteressado: user.ds_NivelInteressado || '' 
     };
+    const updatedOrientador = {
+      ...orientador,           
+        nm_Orientador: user.nm_Orientador || '',
+        ds_LotOrientador: user.ds_LotOrientador || '',
+      } ;
+    
+    console.log('Updated shadow:', updatedOrientador);
     setInteressado(updatedInteressado);
-    onChange(updatedInteressado);
+    setShadow(updatedOrientador);
+    console.log('Updated orientador:', orientador);
+    onChange(updatedInteressado, updatedOrientador);
   };
 
 
