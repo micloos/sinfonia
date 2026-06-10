@@ -54,7 +54,7 @@ export default async function PautaList(
                                                 <EditAssuntoFromReuniao id={pauta.iid} reuniao={reuniao} />
                                                 <DeleteAssuntoFromReuniao id={pauta.iid} />
                                                 {pauta.assuntoRetornavel && (
-                                                    <AddAssuntoToReuniaoFromAssunto id={pauta.iid} reuniao={reuniao} afrom={pauta.assuntoRetornavel} />
+                                                    <AddAssuntoToReuniaoFromAssunto id="0" reuniao={reuniao} afrom={Number(pauta.iid)} />
                                                 )}
                                             </td>
                                             <td className="whitespace-nowrap py-3 pl-6 pr-3">

@@ -11,6 +11,9 @@ import { ItemReuniaoResponse } from '@/app/lib/reuniao/definitions';
 const filename="/app/sinfonia/reuniao/[id]/[irid]/addpauta/page";
 
 export default async function Page(props: {
+  searchParams?: Promise<{ 
+    afrom?: string; 
+  }>,
   params?: Promise<{
     id:string;
     irid:string;
@@ -18,17 +21,23 @@ export default async function Page(props: {
 }
 ) {
   const params = await props.params;
+  const sparams = await props.searchParams;
+  mylog("DBG",filename, 'Page' , "params=", params);
+  mylog("DBG",filename, 'Page' , "sparams=", sparams);
   const id = params?.id || '1';
   const irid = Number(params?.irid) || 0;
   const nid = Number(id);
+  const safrom = sparams?.afrom || '';
+  const afrom = Number(safrom) || 0;
   const [reuniao] = await Promise.all([
       fetchReuniaoById(id),
     ]);
   // mylog("DBG",filename, 'Page' , "id=", nid);
   mylog("DBG",filename, 'Page' , "irid=", irid);
+  mylog("DBG",filename, 'Page' , "afrom=", afrom);
   const assuntos = await fetchAssuntos() as Assuntos[];
   const indices = await fetchIndices();
-  const itemReuniaoObject = await fetchItemObject(irid) as ItemReuniaoResponse;
+  const itemReuniaoObject = irid > 0 ? await fetchItemObject(irid) as ItemReuniaoResponse : await fetchItemObject(afrom) as ItemReuniaoResponse;
   // mylog("DBG",filename, 'Page' , "assuntos=", assuntos);
   // mylog("DBG",filename, 'Page' , "indices=", indices);
   // mylog("DBG",filename, 'Page' , "itemReuniao=", itemReuniaoObject);
@@ -38,7 +47,7 @@ export default async function Page(props: {
   return (
 	<main>
     <ReuniaoForm reuniao={reuniao} withsavebutton={0} withbackbutton={1}/>
-	  <AddPauta reuniao={nid} assuntos={assuntos} indices={indices} itemReuniao={irid} itemReuniaoObject={itemReuniaoObject}  />
+	  <AddPauta reuniao={nid} assuntos={assuntos} indices={indices} itemReuniao={irid} itemReuniaoObject={itemReuniaoObject} />
 	</main>
   );
 }

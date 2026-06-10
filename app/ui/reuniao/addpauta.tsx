@@ -81,6 +81,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
             createItemReuniao(0)
           }
       createNextItem()
+      console.log(filename, 'AddPauta', 'useEffect createNextItem itemReuniao=', itemReuniao);
     }
   },[itemReuniao])
   
