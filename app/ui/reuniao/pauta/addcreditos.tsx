@@ -335,7 +335,7 @@ export default function AddCreditos({
                           </label>
                           <div className="w-full" >
                             <DatePicker defaultValue={docDateIni}
-                              onChange={handleInitChange} />
+                              onChange={(date) => {if (date && date.isValid()) {handleInitChange(date)}}} />
                             <input type="hidden" id="dt_PeriodoInicial" name="dt_PeriodoInicial" value={docDateIni.toISOString()}
                             />
                           </div>
@@ -350,7 +350,7 @@ export default function AddCreditos({
                           </label>
                           <div className="w-full" >
                             <DatePicker defaultValue={docDateFim}
-                              onChange={handleFimChange} />
+                              onChange={(date) => {if (date && date.isValid()) {handleFimChange(date)}}} />
                             <input type="hidden" id="dt_PeriodoFinal" name="dt_PeriodoFinal" value={docDateFim.toISOString()}
                             />
                           </div>
