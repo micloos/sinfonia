@@ -30,7 +30,7 @@ export default function AddDtApresentacao ({data}: ApresentacaoSubformProps) {
                 </label>
                 <div className="w-full" >
                 <DatePicker defaultValue={docDate}
-                   onChange={(date) => {if(date) {setDocDate(date)}}} />
+                   onChange={(date) => {if(date && date.isValid()) {setDocDate(date)}}} />
                    <input type="hidden" id="dt_Apresentacao" name="dt_Apresentacao" value={docDate.toISOString()}
                 />
                 </div>

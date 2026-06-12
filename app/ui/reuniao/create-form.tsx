@@ -74,7 +74,7 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
           <label htmlFor="d_ini" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
-          <DateTimePicker defaultValue={reuniaoDate} onChange={(date) => {if(date) {setReuniaoDate(date)}}} />
+          <DateTimePicker defaultValue={reuniaoDate} onChange={(date) => {if(date && date.isValid()) {setReuniaoDate(date)}}} />
           <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
@@ -83,7 +83,7 @@ export default function ReuniaoForm({reuniao,reuniaoNumber}: {reuniao: Reunioes;
             Data Final para Apresentação de Documentos:
         </label>
             <DatePicker defaultValue={docDate}  
-            onChange={(date) => {if(date) {setDocDate(date)}}} />
+            onChange={(date) => {if(date && date.isValid()) {setDocDate(date)}}} />
             <input type="hidden" id="d_lim" name="d_lim" value={docDate.toISOString()} />
         </div>
       <div>

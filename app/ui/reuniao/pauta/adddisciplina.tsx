@@ -55,7 +55,7 @@ export default function AddDisciplina ({
     }
 
     const handleInitChange = (date: dayjs.Dayjs | null) => {
-            if(date) 
+            if(date && date.isValid()) 
               {setDocDateIni(date); console.log(docDateIni.toISOString())
                 setFormData(prev => ({
                   ...prev,
@@ -65,7 +65,7 @@ export default function AddDisciplina ({
     }
 
     const handleFimChange = (date: dayjs.Dayjs | null) => {
-            if(date) 
+            if(date && date.isValid()) 
               {setDocDateFim(date); console.log(docDateFim.toISOString())
                 setFormData(prev => ({
                   ...prev,

@@ -70,7 +70,7 @@ export default  function AdReferendum({ data, onChange }: AdReferendumSubformPro
                 </label>
                 <div className="w-full" >
                 <DatePicker defaultValue={docDate}
-                   onChange={(date) => {if(date) {setDocDate(date)}}} />
+                   onChange={(date) => {if(date && date.isValid()) {setDocDate(date)}}} />
                    <input type="hidden" id="dt_adreferendum" name="dt_adreferendum" value={docDate.toISOString()}
                 />
                 </div>

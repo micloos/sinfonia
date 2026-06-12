@@ -105,7 +105,7 @@ export default function EditReuniaoForm({
                        />
                        */}
           
-          <DateTimePicker disabled={withsavebutton == 0} defaultValue={reuniaoDate} onChange={(date) => {if(date) {setReuniaoDate(date)}}} />
+          <DateTimePicker disabled={withsavebutton == 0} defaultValue={reuniaoDate} onChange={(date) => {if(date && date.isValid()) {setReuniaoDate(date)}}} />
           <input type="hidden" id="d_ini" name="d_ini" value={reuniaoDate.toISOString()} />
         </div>
         
@@ -114,7 +114,7 @@ export default function EditReuniaoForm({
             Data Final para Apresentação de Documentos:
         </label>
             <DatePicker disabled={withsavebutton == 0} defaultValue={docDate}  
-            onChange={(date) => {if(date) {setDocDate(date)}}} />
+            onChange={(date) => {if(date && date.isValid()) {setDocDate(date)}}} />
             <input type="hidden" id="d_lim" name="d_lim" value={docDate.toISOString()} />
         </div>
       <div>

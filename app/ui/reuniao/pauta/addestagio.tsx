@@ -57,7 +57,7 @@ export default function AddEstagio ({ data, onChange }: EstagioSubformProps) {
                 </label>
                 <div className="w-full" >
                 <DatePicker defaultValue={docDateIni}
-                   onChange={(date) => {if(date) {setDocDateIni(date)}}} />
+                   onChange={(date) => {if(date && date.isValid()) {setDocDateIni(date)}}} />
                    <input type="hidden" id="dt_EstagioPeriodoInicio" name="dt_EstagioPeriodoInicio" value={docDateIni.toISOString()}
                 />
                 </div>
@@ -70,7 +70,7 @@ export default function AddEstagio ({ data, onChange }: EstagioSubformProps) {
                 </label>
                 <div className="w-full" >
                 <DatePicker defaultValue={docDateFim}
-                   onChange={(date) => {if(date) {setDocDateFim(date)}}} />
+                   onChange={(date) => {if(date && date.isValid()) {setDocDateFim(date)}}} />
                    <input type="hidden" id="dt_EstagioPeriodoFim" name="dt_EstagioPeriodoFim" value={docDateFim.toISOString()}
                 />
                 </div>

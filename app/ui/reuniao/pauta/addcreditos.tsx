@@ -78,7 +78,7 @@ export default function AddCreditos({
         console.log("handleInputChange - data", data);
       }
     const handleInitChange = (date: dayjs.Dayjs | null) => {
-        if(date) 
+        if(date && date.isValid()) 
           {setDocDateIni(date); console.log(docDateIni.toISOString())
             setFormData(prev => ({
               ...prev,
@@ -87,7 +87,7 @@ export default function AddCreditos({
           }
         }
     const handleFimChange = (date: dayjs.Dayjs | null) => {
-        if(date) 
+        if(date && date.isValid()) 
           {setDocDateFim(date); console.log(docDateFim.toISOString())
             setFormData(prev => ({
               ...prev,

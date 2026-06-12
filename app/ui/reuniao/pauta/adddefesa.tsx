@@ -32,7 +32,7 @@ export default function AddDefesa ({data}: DefesaSubformProps ) {
                 <div className="w-full" >
                 <DatePicker 
                     defaultValue={docDate}
-                    onChange={(date) => {if(date) {setDocDate(date)}}} />
+                    onChange={(date) => {if(date && date.isValid()) {setDocDate(date)}}} />
                     <input type="hidden" id="Dt_Defesa" name="Dt_Defesa" value={docDate.toISOString()}
                 />
                 </div>

@@ -30,7 +30,7 @@ export default function AddDeposito ({ data  }: DepositoSubformProps) {
                 </label>
                 <div className="w-full" >
                 <DatePicker defaultValue={docDate}
-                   onChange={(date) => {if(date) {setDocDate(date)}}} />
+                   onChange={(date) => {if(date && date.isValid()) {setDocDate(date)}}} />
                    <input type="hidden" id="dt_Deposito" name="dt_Deposito" value={docDate.toISOString()}
                 />
                 </div>
