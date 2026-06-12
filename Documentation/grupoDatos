@@ -53,7 +53,7 @@ ind_adreferendum='S'   // 30049 DONE
 [DONE AdReferendum]
 
 ind_interessado='S'  // 21607 DONE
-    nm_interessado : string
+    nm_Interessado : string
     ds_areainteressado : string
     ds_nivelinteressado : string
 [DONE Interessado]
@@ -269,7 +269,7 @@ REUNIAO_T0900_BancaExaminadoraReuniao
             UPDATE REUNIAO_T1010_ItemReuniao set 
             cd_reuniao = ${essentialFields.data.cd_reuniao},
             cd_assuntoreuniao = ${essentialFields.data.cd_assuntoreuniao},
-            nm_interessado = '${essentialFields.data.nm_interessado}',
+            nm_Interessado = '${essentialFields.data.nm_Interessado}',
             ds_areainteressado = '${essentialFields.data.ds_areainteressado}',
             ds_nivelinteressado = '${essentialFields.data.ds_nivelinteressado}',
             nm_orientador = '${essentialFields.data.nm_orientador}',

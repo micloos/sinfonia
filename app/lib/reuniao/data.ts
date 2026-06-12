@@ -121,13 +121,82 @@ export async function fetchUsers (query: string) {
             WHERE nm_Interessado LIKE '%${query}%' GROUP BY nm_Interessado) t2
             ON t1.nm_Interessado = t2.nm_Interessado AND t1.Cd_ItemReuniao = t2.MaxItem
             where t1.nm_Interessado like '%${query}%'`;
-        const users = await mssql(myreq);
-        return (users) as SearchResult[];
+        const users = await mssql(myreq) as SearchResult[];
+        const toreturn = { results: users , query, total: users.length}
+        return (toreturn);
     } catch (error) {
         mylog ("ERROR", filename, "fetchUsers","error=",error);
         throw new Error('Failed to fetch users');
     }
 }
+
+export async function fetchPendingAssuntosPages (age: number) {
+	const myreq = `SELECT COUNT(1) as n FROM_T1010_ITEMREUNIAO 
+					where cd_reuniao is null and cd_reuniaoOrigem is not null and dt_atualizacao > dateadd(year, -${age}, current_date)`
+	try {
+		const count = await mssql(myreq) as Numres[];
+		const totalPages = Math.ceil(count[0].n / ITEMS_PER_PAGE);
+		return(totalPages);
+	} catch (error) {
+		mylog("ERROR", filename, "fetchPendingAssuntosPages","error=",error);
+		throw new Error('Failed to fetch Number of Ordem do Dia');
+	};
+}
+
+export async function fetchFilteredPendingAssuntos (
+	query: string, 
+	currentPage: number,
+	age: number) {
+		const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+        if (isNaN(+query) || query.trim() === '') {
+		const myreq = `SELECT
+			ip.Cd_ItemReuniao as iid,
+            ip.nm_Interessado as interessado, 
+            ip.Cd_AssuntoReuniao as assuntoId,
+            a.Ds_AssuntoAtaReuniao as assunto,
+            ip.Ds_AreaInteressado as area,
+            a.Cd_AssuntoReuniaoRetornavel as assuntoRetornavel
+        from 
+            Reuniao_T1010_ItemReuniao as ip 
+        inner join Reuniao_T0200_AssuntoReuniao as a
+        on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
+		where cd_reuniao is null and cd_reuniaoOrigem is not null and dt_atualizacao > dateadd(year, -${age}, current_date)
+            and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao like '%${query}%')
+        order by ip.cd_assuntoReuniao, ip.Cd_ItemReuniao, ip.nm_Interessado 
+        offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
+        try {
+            const pauta = await mssql(myreq);
+            return (pauta);
+        } catch(error) {
+            mylog ("ERROR", filename, "fetchFilteredAssuntosPendentes","error=",error);
+            throw new Error('Failed to fetch AssuntosPendentes');
+        };
+    	} else {
+            const myreq = `SELECT
+			ip.Cd_ItemReuniao as iid,
+            ip.nm_Interessado as interessado, 
+            ip.Cd_AssuntoReuniao as assuntoId,
+            a.Ds_AssuntoAtaReuniao as assunto,
+            ip.Ds_AreaInteressado as area,
+            a.Cd_AssuntoReuniaoRetornavel as assuntoRetornavel
+        from 
+            Reuniao_T1010_ItemReuniao as ip 
+        inner join Reuniao_T0200_AssuntoReuniao as a
+        on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
+		where cd_reuniao is null and cd_reuniaoOrigem is not null and dt_atualizacao > dateadd(year, -${age}, current_date)
+            and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao =${query})
+        order by ip.cd_assuntoReuniao, ip.Cd_ItemReuniao, ip.nm_Interessado 
+        offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
+        try {
+            const pauta = await mssql(myreq);
+            return (pauta);
+        } catch(error) {
+            mylog ("ERROR", filename, "fetchFilteredAssuntosPendentes","error=",error);
+            throw new Error('Failed to fetch AssuntosPendentes');
+        };
+
+        }
+    }
 
 export async function fetchFilteredPauta     (id: number, query: string, currentPage: number)
 {
@@ -316,6 +385,8 @@ export async function fetchOrdemDiaPages (id: string) {
 		throw new Error('Failed to fetch Number of Ordem do Dia');
 	} 
 }
+
+
 
 export async function fetchItemObject (irid: number) {
     mylog("DBG",filename,"fetchItemObject","irid = ",irid)

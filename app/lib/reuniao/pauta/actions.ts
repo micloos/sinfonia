@@ -33,7 +33,7 @@ const ItemAssunto = z.object ({
     cd_reuniao: z.string().regex(/^\d+$/),
     cd_AssuntoReuniao: z.string().regex(/^\d+$/),
     cd_itemreuniao: z.string().regex(/^\d+$/),
-    nm_interessado: minstr3,
+    nm_Interessado: minstr3,
     ds_areainteressado: minstr3,
     ds_nivelinteressado: minstr3,
     nm_Orientador: minstr3,
@@ -155,6 +155,8 @@ export interface SearchResult {
     nm_Orientador?: string;
     ds_LotOrientador?: string;
     ds_TituloPlanoTrabalho?: string;
+    isNew?: boolean;
+    [key: string]: any;
 }
 
 
@@ -220,7 +222,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             UPDATE REUNIAO_T1010_ItemReuniao set 
             cd_reuniao = ${essentialFields.data.cd_reuniao},
             cd_assuntoreuniao = ${essentialFields.data.cd_AssuntoReuniao},
-            nm_interessado = '${essentialFields.data.nm_interessado}',
+            nm_Interessado = '${essentialFields.data.nm_Interessado}',
             ds_areainteressado = '${essentialFields.data.ds_areainteressado}',
             ds_nivelinteressado = '${essentialFields.data.ds_nivelinteressado}',
             nm_Orientador = '${essentialFields.data.nm_Orientador}',

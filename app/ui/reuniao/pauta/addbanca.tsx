@@ -37,7 +37,7 @@ interface BancaTableProps {
 export default function AddBanca({ 
   data = [], 
   onChange, 
-  maxMembers = 10,
+  maxMembers = 20,
   readOnly = false 
 }: BancaTableProps) {
     const [isAdding, setIsAdding] = useState<boolean>(false);
@@ -97,7 +97,7 @@ export default function AddBanca({
         };
 
         const deleteMember = (id: string) => {
-            if (confirm('Are you sure you want to remove this family member?')) {
+            if (confirm('Tem certeza de querer remover esse membro?')) {
                 const updated = data.filter(member => member.Cd_BancaExaminadoraReuniao  !== id);
                 onChange(updated);
             }

@@ -96,7 +96,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
 
   const [formData, setFormData] = useState<AddPautaFormData>({
       bancaMembers: itemReuniaoObject ? itemReuniaoObject.banca : [],
-      interessado: itemReuniaoObject ? { nm_interessado: itemReuniaoObject.nm_Interessado, ds_areainteressado: itemReuniaoObject.ds_AreaInteressado, ds_nivelinteressado: itemReuniaoObject.ds_NivelInteressado } : { nm_interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' },
+      interessado: itemReuniaoObject ? { nm_Interessado: itemReuniaoObject.nm_Interessado, ds_areainteressado: itemReuniaoObject.ds_AreaInteressado, ds_nivelinteressado: itemReuniaoObject.ds_NivelInteressado } : { nm_Interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' },
       adReferendum: itemReuniaoObject ? { ind_adreferendum: itemReuniaoObject.Ind_AdReferendum, ds_AdReferendum: itemReuniaoObject.ds_AdReferendum, dt_AdReferendum: itemReuniaoObject.dt_AdReferendum } : { ind_adreferendum: '', ds_AdReferendum: '', dt_AdReferendum: '' } as AdReferendumType,
       apresentacao: itemReuniaoObject ? { dt_apresentacao: itemReuniaoObject.dt_Apresentacao } as Apresentacao : { dt_apresentacao: '' } as Apresentacao,
       planotrabalho: itemReuniaoObject ? { ds_TituloPlanoTrabalho: itemReuniaoObject.ds_TituloPlanoTrabalho } as Plano : { ds_TituloPlanoTrabalho: '' } as Plano,
@@ -195,13 +195,12 @@ const handleNovoProfessorChange = (novoProfessorData: NovoProfessor) => {
     mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
   };
 
-const handleInteressadoChange = (interessadoData: Interessado, shadowData: Orientador ) => {
+const handleInteressadoChange = (interessadoData: Interessado ) => {
     setFormData(prev => ({ 
         ...prev,
-        orientador: shadowData,
         interessado: interessadoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'HandleInterassodChange formData = ', formData);
+    mylog ("DBG",filename, 'AddPauta', 'HandleInterassodChange shadowData = ', formData);
   }
 
 const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {

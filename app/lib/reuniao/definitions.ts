@@ -210,7 +210,7 @@ export type Orientador = {
 }
 
 export type Interessado = {
-    nm_interessado: string;
+    nm_Interessado: string;
     ds_areainteressado: string;
     ds_nivelinteressado: string;
 }
@@ -248,7 +248,7 @@ export type Prazo = {
 
 export type ItemReuniaoState = {
     errors?: {
-        nm_interessado?: string[];
+        nm_Interessado?: string[];
     };
     message?: string | null;
 }
@@ -258,7 +258,7 @@ export type ItemReuniao = {
     cd_reuniao: string;
     cd_assuntoreuniao?: string;
     // Interessado
-        nm_interessado?: string;
+        nm_Interessado?: string;
         ds_areainteressado?: string;
         ds_nivelinteressado?: string;
     // Orientador
