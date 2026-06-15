@@ -134,7 +134,7 @@ export async function fetchUsers (query: string) {
 export async function fetchPendingAssuntosPages () {
     
 	const myreq = `SELECT COUNT(1) as n FROM Reuniao_T1010_ITEMREUNIAO 
-					where cd_reuniao is null and cd_reuniaoOrigem is not null and dt_atualizacao > dateadd(year, -${age}, current_date)`
+					where cd_reuniao is null and cd_reuniaoOrigem is not null and dt_atualizacao > dateadd(year, -${age}, getdate())`
 	try {
 		const count = await mssql(myreq) as Numres[];
 		const totalPages = Math.ceil(count[0].n / ITEMS_PER_PAGE);
@@ -164,7 +164,7 @@ export async function fetchFilteredPendingAssuntos (
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a
         on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
-		where cd_reuniao is null and cd_reuniaoOrigem is not null and ip.dt_atualizacao > dateadd(year, -${age}, current_date)
+		where cd_reuniao is null and cd_reuniaoOrigem is not null and ip.dt_atualizacao > dateadd(year, -${age}, getdate())
             and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao like '%${query}%')
         order by ip.cd_assuntoReuniao,  ip.nm_Interessado , ip.Cd_ItemReuniao
         offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
@@ -187,7 +187,7 @@ export async function fetchFilteredPendingAssuntos (
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a
         on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
-		where cd_reuniao is null and cd_reuniaoOrigem is not null and ip.dt_atualizacao > dateadd(year, -${age}, current_date)
+		where cd_reuniao is null and cd_reuniaoOrigem is not null and ip.dt_atualizacao > dateadd(year, -${age}, getdate())
             and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao =${query})
         order by ip.cd_assuntoReuniao,  ip.nm_Interessado , ip.Cd_ItemReuniao
         offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
