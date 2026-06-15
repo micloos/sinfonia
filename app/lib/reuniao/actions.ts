@@ -391,6 +391,13 @@ export async function comporPauta (id: string)
 	redirect (goto);
 }
 
+export async function addPendentes (id: number)
+{
+	const goto = "/sinfonia/reuniao/"+id+"/pauta?pendente=1";
+	redirect(goto)
+}
+
+
 export async function reorderOrdemDiaDo (newSeq: {id: number, seq: number}[])
 {
 	mylog ("DBG", filename, "reorderOrdemDia", "ordemDia}", newSeq);

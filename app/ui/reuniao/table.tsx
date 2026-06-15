@@ -1,4 +1,4 @@
-import { UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
+import { AddAssuntosPendente, UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
 import { fetchFilteredReunioes } from '@/app/lib/reuniao/data';
 import { Reunioes } from '@/app/lib/definitions';
 import * as moment from 'moment-timezone';
@@ -60,7 +60,8 @@ export default async function ReunioesTable({
                       <EscParticipantes id={reuniao.id.toString()} active={reuniao.active} />
                       <EscOrdemDoDia id={reuniao.id.toString()}  active={reuniao.active} />
                       <ComporPauta id={reuniao.id.toString()}  active={reuniao.active} />
-                      <ReativarReuniao id={reuniao.id.toString()}  active={reuniao.active} />
+                      {(!reuniao.active) && <ReativarReuniao id={reuniao.id.toString()}  active={reuniao.active} />}
+                      <AddAssuntosPendente reuniao = {reuniao.id} />
                     </div>
                     
                   </td>

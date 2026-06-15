@@ -1,7 +1,7 @@
-import { fetchFilteredPauta } from '@/app/lib/reuniao/data';
+import { fetchFilteredPauta, fetchFilteredPendingAssuntos } from '@/app/lib/reuniao/data';
 import { PautaRed } from '@/app/lib/definitions';
 // import AddPauta  from './addpauta';
-import { AddAssuntoToReuniao, EditAssuntoFromReuniao, DeleteAssuntoFromReuniao, AddAssuntoToReuniaoFromAssunto } from './buttons';
+import { AddAssuntoToReuniao, EditAssuntoFromReuniao, DeleteAssuntoFromReuniao, AddAssuntoToReuniaoFromAssunto, AddPendenteToReuniao } from './buttons';
 import { mylog } from '@/app/lib/mylogger';
 
 const fileName = 'pautalist.tsx';
@@ -9,16 +9,23 @@ const fileName = 'pautalist.tsx';
 
 
 export default async function PautaList(
-    {query, currentPage, reuniao }: { query: string; currentPage: string; reuniao: number }) 
+    {query, currentPage, reuniao, pendente }: { query: string; currentPage: string; reuniao: number; pendente: number }) 
     {
-    const pautaItems = await fetchFilteredPauta(reuniao,query,Number(currentPage)) as PautaRed[];
+    mylog("DBG",fileName,'PautaList','pendente = ', pendente);
+    mylog("DBG",fileName,'PautaList','query=',query)
+    const pautaItems =  pendente == 0 ? await fetchFilteredPauta(reuniao,query,Number(currentPage)) as PautaRed[] : await fetchFilteredPendingAssuntos(query,Number(currentPage)) as PautaRed[] ;
     mylog("DBG",fileName,'PautaList','pautaItems=',pautaItems);
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-6" >
             <div className="flex justify-between">
                 <div className={`w-7/8 mb-8 inline-block`}>
-                    Pauta da Reuniao {reuniao}
+                <h1 className="text-2xl">
+                    {pendente == 0  && ( "Pauta da Reuniao  ") }
+                    { pendente != 0 && ("Assuntos pendentes para a Reuniao  ") }
+                    {reuniao}
+                </h1>
                 </div>
+                
                 <div className="w-1/8 mb-8 inline-block">
                                 <AddAssuntoToReuniao reuniao={reuniao} />
                 </div>
@@ -51,7 +58,8 @@ export default async function PautaList(
                                             className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                                           >
                                             <td className="flex justify-start py-3 pl-6 pr-3">
-                                                <EditAssuntoFromReuniao id={pauta.iid} reuniao={reuniao} />
+                                                { pendente == 0 && <EditAssuntoFromReuniao id={pauta.iid} reuniao={reuniao} /> }
+                                                { pendente == 1 && <AddPendenteToReuniao id={pauta.iid} reuniao={reuniao} />}
                                                 <DeleteAssuntoFromReuniao id={pauta.iid} />
                                                 {pauta.assuntoRetornavel && (
                                                     <AddAssuntoToReuniaoFromAssunto id="0" reuniao={reuniao} afrom={Number(pauta.iid)} />

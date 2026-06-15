@@ -1,6 +1,6 @@
-import { PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia  } from '@/app/lib/reuniao/actions';
+import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia, addPendentes  } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
 // import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
 import { deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
@@ -79,6 +79,41 @@ export function EditAssuntoFromReuniao({ id, reuniao }: { id: string, reuniao: n
       </Tooltip>
     
   );
+}
+
+export function AddPendenteToReuniao ({ id, reuniao }: { id: string, reuniao: number }) {
+  
+  mylog("DBG",filename, 'EditAssuntoFromReuniao' , "id=", id);
+  return (
+    
+      <Tooltip title="Adicionar">
+      <Link href={`/sinfonia/reuniao/${reuniao}/${id}/addpauta`} className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Adicionar</span>
+        <PlusIcon className="w-5" />
+      </Link>
+      </Tooltip>
+    
+  );
+}
+
+
+
+export function AddAssuntosPendente ({reuniao}:{ reuniao: number}) {
+  mylog("DBG", filename, "AddAssuntoPendente", "reuniao = ", reuniao)
+  const addPendentesWithId = addPendentes.bind(null,reuniao);
+  return (
+    <form action={addPendentesWithId}>
+      <Tooltip title="Assuntos Pendentes">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Pendentes</span>       
+            <ClipboardDocumentListIcon className="w-5"  />      
+      </button>
+      
+      </Tooltip>
+    </form>
+    
+
+  )
 }
 
 export function DeleteReuniao({ id }: { id: string }) {

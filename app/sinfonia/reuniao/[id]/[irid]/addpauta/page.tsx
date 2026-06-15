@@ -12,7 +12,8 @@ const filename="/app/sinfonia/reuniao/[id]/[irid]/addpauta/page";
 
 export default async function Page(props: {
   searchParams?: Promise<{ 
-    afrom?: string; 
+    afrom?: string;
+    pendente?:number; 
   }>,
   params?: Promise<{
     id:string;
@@ -29,12 +30,14 @@ export default async function Page(props: {
   const nid = Number(id);
   const safrom = sparams?.afrom || '';
   const afrom = Number(safrom) || 0;
+  const pendente = sparams?.pendente || 0
   const [reuniao] = await Promise.all([
       fetchReuniaoById(id),
     ]);
   // mylog("DBG",filename, 'Page' , "id=", nid);
   mylog("DBG",filename, 'Page' , "irid=", irid);
   mylog("DBG",filename, 'Page' , "afrom=", afrom);
+  mylog("DBG",filename, 'Page' , "pendente=", pendente);
   const assuntos = await fetchAssuntos() as Assuntos[];
   const indices = await fetchIndices();
   const itemReuniaoObject = irid > 0 ? await fetchItemObject(irid) as ItemReuniaoResponse : await fetchItemObject(afrom) as ItemReuniaoResponse;
