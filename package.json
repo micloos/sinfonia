@@ -14,6 +14,7 @@
     "@heroicons/react": "^2.2.0",
     "@mui/material": "^6.3.1",
     "@mui/x-date-pickers": "^7.25.0",
+    "@react-pdf/renderer": "^4.5.1",
     "@types/md5": "^2.3.5",
     "@types/mssql": "^9.1.5",
     "antd": "^5.25.1",

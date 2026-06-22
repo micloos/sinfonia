@@ -19,7 +19,7 @@ interface InteressadoSubformProps {
 
 export default  function AddPautaInteressado({ data, onChange, isRequired = false , shadow }: InteressadoSubformProps) 
 {
-  const [interessado, setInteressado] = useState<Interessado>(data || { nm_Interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' });
+  const [interessado, setInteressado] = useState<Interessado>(data || { nm_Interessado: '', ds_AreaInteressado: '', ds_NivelInteressado: '' });
   const [selectedUser, setSelectedUser] = useState<SearchResult | null>(null);
   const [searchHistory, setSearchHistory] = useState<{ type: string; item: SearchResult; timestamp: string }[]>([]);
   const [orientador, setShadow] = useState<Orientador>(shadow);
@@ -54,8 +54,8 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
     const updatedInteressado = { 
       ...interessado, 
       nm_Interessado: user.name, 
-      ds_areainteressado: user.ds_AreaInteressado || '', 
-      ds_nivelinteressado: user.ds_NivelInteressado || '' 
+      ds_AreaInteressado: user.ds_AreaInteressado || '', 
+      ds_NivelInteressado: user.ds_NivelInteressado || '' 
     };
     console.log('Interessado',interessado);
     const updatedOrientador = {
@@ -106,14 +106,14 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
       </div>  
       
       <div className="mb-4 inline-block p-4 w-1/6">
-        <label htmlFor="ds_areainteressado" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="ds_AreaInteressado" className="block text-sm font-medium text-gray-700">
           Área
         </label>
         <div className="relative mt-2 rounded-md">
           <div className="relative">
-            <select id="ds_areainteressado" name="ds_areainteressado" 
+            <select id="ds_AreaInteressado" name="ds_AreaInteressado" 
               className="peer w-full inline rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              value={interessado.ds_areainteressado}
+              value={interessado.ds_AreaInteressado}
               onChange={handleChange} 
             >
               <option value="0">Escolhe Area</option>
@@ -127,14 +127,14 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
       </div>
       
       <div className="mb-4 inline-block w-1/6">
-        <label htmlFor="ds_nivelinteressado" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="ds_NivelInteressado" className="block text-sm font-medium text-gray-700">
           Nivel
         </label>
         <div className="relative mt-2 rounded-md">
           <div className="relative">
-            <select id="ds_nivelinteressado" name="ds_nivelinteressado" 
+            <select id="ds_NivelInteressado" name="ds_NivelInteressado" 
               className="peer w-full inline rounded-md border-gray-200 py-2 pl-10 test-sm outline-2 placeholder:text-gray-500"
-              value={interessado.ds_nivelinteressado}
+              value={interessado.ds_NivelInteressado}
               onChange={handleChange} 
             >
               <option value="0" >Escolhe Nivel</option>

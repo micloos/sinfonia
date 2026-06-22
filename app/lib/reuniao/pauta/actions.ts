@@ -15,7 +15,7 @@ const filename="/app/lib/reuniao/pauta/actions";
 // type charanswer = { s : string};
 
 // const AdReferendumSchema = z.object ({
-//    ind_adreferendum: z.enum(['S','N']),
+//    Ind_AdReferendum: z.enum(['S','N']),
 //    ds_AdReferendum: z.string(),
 //    dt_AdReferendum: z.string().date()
 // })
@@ -32,17 +32,17 @@ const mybool = z.enum(['S','N']).default('N')
 const ItemAssunto = z.object ({
     cd_reuniao: z.string().regex(/^\d+$/),
     cd_AssuntoReuniao: z.string().regex(/^\d+$/),
-    cd_itemreuniao: z.string().regex(/^\d+$/),
+    Cd_ItemReuniao: z.string().regex(/^\d+$/),
     nm_Interessado: minstr3,
-    ds_areainteressado: minstr3,
-    ds_nivelinteressado: minstr3,
+    ds_AreaInteressado: minstr3,
+    ds_NivelInteressado: minstr3,
     nm_Orientador: minstr3,
     ds_LotOrientador: minstr3,
     dt_Apresentacao: mydate,
     ds_TituloPlanoTrabalho: minstr3,
     ds_ObservacaoItem: minstr3,
     ds_ObservacaoNaoPublicavelItem: minstr3,
-    ind_adreferendum: mybool,
+    Ind_AdReferendum: mybool,
     dt_adreferendum: mydate,
     ds_AdReferendum: minstr3,
     nm_Relator: minstr3,
@@ -67,7 +67,7 @@ const ItemAssunto = z.object ({
 })
 
 export async function getNextItem () {
-    const myreq1 = `select max(cd_itemreuniao)+ 1 as n from reuniao_t1010_itemreuniao`;
+    const myreq1 = `select max(Cd_ItemReuniao)+ 1 as n from reuniao_t1010_itemreuniao`;
     try {
         const nextitem = await mssql(myreq1) as {n: number }[];
         mylog("DBG",filename,"getNextItem","nextitem",nextitem);
@@ -162,18 +162,18 @@ export interface SearchResult {
 
 
 export async function createItem () {
-    const cd_itemreuniao = await getNextItem();
-    mylog("ERROR",filename,"createItem","cd_itemreuniao = ",cd_itemreuniao)
-    if (cd_itemreuniao > 0) {
+    const Cd_ItemReuniao = await getNextItem();
+    mylog("ERROR",filename,"createItem","Cd_ItemReuniao = ",Cd_ItemReuniao)
+    if (Cd_ItemReuniao > 0) {
         try {
-            const myreq = `insert into reuniao_t1010_itemreuniao (cd_itemreuniao) values (${cd_itemreuniao})`
+            const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao) values (${Cd_ItemReuniao})`
             mssql (myreq)
         } catch (error) {
             mylog ("ERROR",filename,"createItem","Error",error)
             return(-2)
         }
     }
-    return (cd_itemreuniao)
+    return (Cd_ItemReuniao)
 }
  
 export async function createItemObject (prevState: ItemReuniaoState, formData:FormData) {
@@ -196,14 +196,14 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
 			message: 'Missing Fields, failed to create',
 		}
 	}
-// Criar o ItemReuniao se não existir, ou seja, se cd_itemreuniao for 0. O createItemObject é chamado tanto para criação quanto para edição, então precisamos garantir que o item exista antes de tentar atualizá-lo. A função createItemObject2 é uma alternativa que recebe os dados já em formato JSON, mas a lógica de criação do item seria a mesma.
-    if (essentialFields.data.cd_itemreuniao === '0') {
-        const cd_itemreuniao = await getNextItem();
-        if (cd_itemreuniao > 0) {
+// Criar o ItemReuniao se não existir, ou seja, se Cd_ItemReuniao for 0. O createItemObject é chamado tanto para criação quanto para edição, então precisamos garantir que o item exista antes de tentar atualizá-lo. A função createItemObject2 é uma alternativa que recebe os dados já em formato JSON, mas a lógica de criação do item seria a mesma.
+    if (essentialFields.data.Cd_ItemReuniao === '0') {
+        const Cd_ItemReuniao = await getNextItem();
+        if (Cd_ItemReuniao > 0) {
             try {
-                const myreq = `insert into reuniao_t1010_itemreuniao (cd_itemreuniao) values (${cd_itemreuniao})`
+                const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao) values (${Cd_ItemReuniao})`
                 mssql (myreq)
-                essentialFields.data.cd_itemreuniao = String(cd_itemreuniao);
+                essentialFields.data.Cd_ItemReuniao = String(Cd_ItemReuniao);
             } catch (error) {
                 mylog ("DBG",filename,"createItemObject","Error",error)
                 return({
@@ -221,14 +221,14 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             const myreq0 = `
             UPDATE REUNIAO_T1010_ItemReuniao set 
             cd_reuniao = ${essentialFields.data.cd_reuniao},
-            cd_assuntoreuniao = ${essentialFields.data.cd_AssuntoReuniao},
+            Cd_AssuntoReuniao = ${essentialFields.data.cd_AssuntoReuniao},
             nm_Interessado = '${essentialFields.data.nm_Interessado}',
-            ds_areainteressado = '${essentialFields.data.ds_areainteressado}',
-            ds_nivelinteressado = '${essentialFields.data.ds_nivelinteressado}',
+            ds_AreaInteressado = '${essentialFields.data.ds_AreaInteressado}',
+            ds_NivelInteressado = '${essentialFields.data.ds_NivelInteressado}',
             nm_Orientador = '${essentialFields.data.nm_Orientador}',
             ds_LotOrientador = '${essentialFields.data.ds_LotOrientador}',
             dt_Apresentacao = '${essentialFields.data.dt_Apresentacao}',
-            ind_adreferendum = '${essentialFields.data.ind_adreferendum}',
+            Ind_AdReferendum = '${essentialFields.data.Ind_AdReferendum}',
             ds_adreferendum = '${essentialFields.data.ds_AdReferendum}',
             dt_adreferendum = '${essentialFields.data.dt_adreferendum}',
             ds_TituloPlanoTrabalho = '${essentialFields.data.ds_TituloPlanoTrabalho}',
@@ -255,7 +255,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},
             qt_SolicitacaoPrazoDiasConcedidos = ${essentialFields.data.qt_SolicitacaoPrazoDiasConcedidos}`
         const fim = `
-            where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
+            where Cd_ItemReuniao = ${essentialFields.data.Cd_ItemReuniao}
             `;
         const myreq = myreq0 + add1 + fim;
             mylog ("ERROR",filename,"createItemObject","myreq =",myreq.replace(/\s/g," "));
@@ -282,9 +282,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                     mylog("ERROR",filename,"createItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO REUNIAO_T0900_BancaExaminadoraReuniao 
-                        (cd_BancaExaminadoraReuniao, cd_itemreuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
+                        (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
                         VALUES 
-                        (${i}, ${essentialFields.data.cd_itemreuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador})
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador})
                     `;
                     
                     const answer = await mssql(myreq);
@@ -311,10 +311,10 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                     element.nu_Volume = element.nu_Volume ? element.nu_Volume : '0';
                      const myreq = `
                         INSERT INTO REUNIAO_T3900_AtribuidorCreditos 
-                        (cd_AtribuidorCredito, cd_itemreuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                        (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
                         
                         VALUES 
-                        (${i}, ${essentialFields.data.cd_itemreuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
                     `;
                     mylog("ERROR",filename,"createItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
                     const answer = await mssql(myreq);
@@ -338,9 +338,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                     mylog("ERROR",filename,"createItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO REUNIAO_T3800_DisciplinaEspecial 
-                        (cd_DisciplinaEspecial, cd_itemreuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                        (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
                         VALUES 
-                        (${i}, ${essentialFields.data.cd_itemreuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}')
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}')
                     `;
                     
                     const answer = await mssql(myreq);

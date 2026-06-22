@@ -1,0 +1,4 @@
+                        | ui/reuniao/buttons            | lib/reuniao/actions    
+Ativo -> Imprimir pauta | ImprimirPauta                 | imprimirCoisas(pauta)
+Inativo -> Imprimir  Ata| ImprimirAta                   | imprimirCoisas(ata)
+Inativo -> Imprimir  Del| ImprimirDeliberacao           | imprimirCoisas(deliberacao)

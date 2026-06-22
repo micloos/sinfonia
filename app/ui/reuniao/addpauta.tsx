@@ -96,8 +96,8 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
 
   const [formData, setFormData] = useState<AddPautaFormData>({
       bancaMembers: itemReuniaoObject ? itemReuniaoObject.banca : [],
-      interessado: itemReuniaoObject ? { nm_Interessado: itemReuniaoObject.nm_Interessado, ds_areainteressado: itemReuniaoObject.ds_AreaInteressado, ds_nivelinteressado: itemReuniaoObject.ds_NivelInteressado } : { nm_Interessado: '', ds_areainteressado: '', ds_nivelinteressado: '' },
-      adReferendum: itemReuniaoObject ? { ind_adreferendum: itemReuniaoObject.Ind_AdReferendum, ds_AdReferendum: itemReuniaoObject.ds_AdReferendum, dt_AdReferendum: itemReuniaoObject.dt_AdReferendum } : { ind_adreferendum: '', ds_AdReferendum: '', dt_AdReferendum: '' } as AdReferendumType,
+      interessado: itemReuniaoObject ? { nm_Interessado: itemReuniaoObject.nm_Interessado, ds_AreaInteressado: itemReuniaoObject.ds_AreaInteressado, ds_NivelInteressado: itemReuniaoObject.ds_NivelInteressado } : { nm_Interessado: '', ds_AreaInteressado: '', ds_NivelInteressado: '' },
+      adReferendum: itemReuniaoObject ? { Ind_AdReferendum: itemReuniaoObject.Ind_AdReferendum, ds_AdReferendum: itemReuniaoObject.ds_AdReferendum, dt_AdReferendum: itemReuniaoObject.dt_AdReferendum } : { Ind_AdReferendum: '', ds_AdReferendum: '', dt_AdReferendum: '' } as AdReferendumType,
       apresentacao: itemReuniaoObject ? { dt_apresentacao: itemReuniaoObject.dt_Apresentacao } as Apresentacao : { dt_apresentacao: '' } as Apresentacao,
       planotrabalho: itemReuniaoObject ? { ds_TituloPlanoTrabalho: itemReuniaoObject.ds_TituloPlanoTrabalho } as Plano : { ds_TituloPlanoTrabalho: '' } as Plano,
       ds_TituloDissertacaoTese: (itemReuniaoObject && itemReuniaoObject.ds_TituloDissertacaoTese) ? { ds_TituloDissertacaoTese : itemReuniaoObject.ds_TituloDissertacaoTese } as TituloTese: {ds_TituloDissertacaoTese: ''} as TituloTese,
@@ -298,7 +298,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
      {/* <form  action={handleSubmit}> */}
       <form  action={formaction}> 
         <input type="hidden" id="cd_reuniao" name="cd_reuniao" value={reuniao} />
-        <input type="hidden" id="cd_itemreuniao" name="cd_itemreuniao" value={cd_itemReuniao} />
+        <input type="hidden" id="Cd_ItemReuniao" name="Cd_ItemReuniao" value={cd_itemReuniao} />
         <input type="hidden" id="cd_AssuntoReuniao" name="cd_AssuntoReuniao" value={formData.cd_AssuntoReuniao.cd_AssuntoReuniao} />
         
         <SelectAssunto assuntos={assuntos} data={formData.cd_AssuntoReuniao}  onChange={handleAssuntoChange} />
@@ -309,7 +309,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         {/* DONE Orientador */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_NovoOrientador === 'S' && ( <AddNovoOrientador data={formData.novoOrientador} onChange={handleNovoOrientadorChange} />)}  {/* 9 10 */}
         {/* DONE Novo Orientador */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AdReferendum === 'S' && (<AddAdReferendum data={formData.adReferendum || { ind_adreferendum: 'N', ds_AdReferendum: '', dt_AdReferendum: '' }} onChange={handleAdReferendumChange} />)}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AdReferendum === 'S' && (<AddAdReferendum data={formData.adReferendum || { Ind_AdReferendum: 'N', ds_AdReferendum: '', dt_AdReferendum: '' }} onChange={handleAdReferendumChange} />)}
         {/* DONE Ad Referendum */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Defesa === 'S' && (<AddDefesa data={formData.defesa}  onChange={handleDefesaChange}/>)}
         {/* DONE Defesa */}

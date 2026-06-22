@@ -211,8 +211,8 @@ export type Orientador = {
 
 export type Interessado = {
     nm_Interessado: string;
-    ds_areainteressado: string;
-    ds_nivelinteressado: string;
+    ds_AreaInteressado: string;
+    ds_NivelInteressado: string;
 }
 
 export type Shadow = {
@@ -221,7 +221,7 @@ export type Shadow = {
 }
 
 export type AdReferendumType = {
-    ind_adreferendum: string;
+    Ind_AdReferendum: string;
     ds_AdReferendum: string;
     dt_AdReferendum: string;
 }
@@ -236,10 +236,10 @@ export type Prazo = {
 }
 
 {/* ds_areainteressado?: string[];
-        ds_nivelinteressado?: string[];
+        ds_NivelInteressado?: string[];
         nm_orientador?: string[];
         ds_LotOrientador?: string[];
-        ind_adreferendum?: string[];
+        Ind_AdReferendum?: string[];
         ds_AdReferendum?: string[];
         dt_AdReferendum?: string[];
         dt_defesa?: string[]; */}
@@ -254,18 +254,19 @@ export type ItemReuniaoState = {
 }
 
 export type ItemReuniao = {
-    cd_itemreuniao: string;
+    Cd_ItemReuniao: string;
     cd_reuniao: string;
-    cd_assuntoreuniao?: string;
+    Cd_AssuntoReuniao?: string;
+    dt_Apresentacao?: string;
     // Interessado
         nm_Interessado?: string;
-        ds_areainteressado?: string;
-        ds_nivelinteressado?: string;
+        ds_AreaInteressado?: string;
+        ds_NivelInteressado?: string;
     // Orientador
         nm_orientador?: string;
         ds_LotOrientador?: string;
     // Ad Referendum
-        ind_adreferendum?: string;
+        Ind_AdReferendum?: string;
         ds_AdReferendum?: string;
         dt_AdReferendum?: string;
     // Defesa
@@ -273,7 +274,7 @@ export type ItemReuniao = {
     // Plano de Trabalho
         ds_TituloPlanoTrabalho?: string;
     // Relator
-        nm_relator?: string;
+        nm_Relator?: string;
         ds_ObservacaoRelator?: string;
         ds_lotRelator?: string;
     // Atribuicao de Creditos (TBD)
@@ -283,11 +284,16 @@ export type ItemReuniao = {
     // Solicitacao de Prazo
         Cd_TipoSolicitacaoPrazo?: number;
         qt_SolicitacaoPrazoDiasSolicitados?: number;
-    // 
+    // Observacao
+      ds_ObservacaoItem?: string;
+      ds_ObservacaoNaoPublicavelItem?: string;
+    // Deliberacao
+      Cd_ClassificacaoDeliberacao?: string;
+      Ds_ObservacaoDeliberacao?: string;
 }
 
 export type ItemReuniaoAdreferendum = {
-    ind_adreferendum?: string;
+    Ind_AdReferendum?: string;
     ds_AdReferendum?: string;
     dt_AdReferendum?: string;
 }

@@ -1,3 +1,5 @@
+import type { ItemReuniao } from "./reuniao/definitions";
+
 export type numericanswer = { n : number};
 
 export type Reunioes = {
@@ -26,6 +28,7 @@ export type Assuntos = {
 }
 
 export type AssuntoParameters	 = {
+	Cd_AssuntoReuniao: number
 	Ind_Interessado : bool_br
     Ind_Orientador : bool_br
     Ind_Defesa : bool_br
@@ -175,3 +178,22 @@ export type AdminAssuntoParametersType = {
 	ind_estagio: bool_br,
 	ind_disc_esp: bool_br,
 }	
+
+export interface BancaCompleta  {
+	Cd_ItemReuniao: number;
+    nm_ExaminadorBanca: string;
+    ds_LotExaminadorBanca: string;
+    Cd_TipoExaminador: number;
+    Cd_BancaExaminadoraReuniao: string;
+}
+
+export interface ImprimirData {
+	tipo: string;
+	reuniao: Reunioes;
+	participantes: Participantes[];
+	ordemDia: OrdemDia[];
+	assuntos: Assuntos[];
+	items: ItemReuniao[];
+	assuntoParameters: AssuntoParameters[];
+	bancas: BancaCompleta[];
+}

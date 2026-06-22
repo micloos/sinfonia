@@ -89,7 +89,8 @@ export async function fetchParticipantesByReuniaoPages (id:number)
 export async function fetchParticipantesByReuniao (id: number, currentPage: number)
 {
     mylog("DBG",filename,"fetchParticipantesByReuniao","{id,currentPage}=",{id,currentPage})
-    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+    const offset = currentPage > 0 ? (currentPage - 1) * ITEMS_PER_PAGE : 0;
+    const pagelength = currentPage > 0 ? ITEMS_PER_PAGE : 10000;
     try {
         const myreq = `Select
           part.Cd_ParticipanteReuniao as id,
@@ -101,7 +102,7 @@ export async function fetchParticipantesByReuniao (id: number, currentPage: numb
         where part.Cd_Reuniao = ${id}
         order by pos.Cd_Posicao
         offset ${offset} rows
-        fetch next ${ITEMS_PER_PAGE} rows only`;
+        fetch next ${pagelength} rows only`;
         const participantes = await mssql(myreq);
         return (participantes)
     } catch (error) {
@@ -141,7 +142,7 @@ export async function fetchPendingAssuntosPages () {
 		return(totalPages);
 	} catch (error) {
 		mylog("ERROR", filename, "fetchPendingAssuntosPages","error=",error);
-		throw new Error('Failed to fetch Number of Ordem do Dia');
+		throw new Error('Failed to fetch Number of Assuntos Pendentes');
 	};
 }
 
@@ -202,10 +203,59 @@ export async function fetchFilteredPendingAssuntos (
         }
     }
 
+export async function fetchPauta (id: number)
+{
+    const myreq = `select 
+        item.Cd_ItemReuniao as Cd_ItemReuniao,
+        item.Ind_AdReferendum as Ind_AdReferendum, 
+        item.ds_AdReferendum as ds_AdReferendum,
+        item.dt_AdReferendum as dt_AdReferendum,
+        item.ds_CredenciamentoDisciplina as ds_CredenciamentoDisciplina,
+        item.Nm_CredProfessorResponsavel as Nm_CredProfessorResponsavel,
+        item.Nm_CredNovoProfessor as Nm_CredNovoProfessor,
+        item.Dt_Defesa as Dt_Defesa,
+        class.Ds_ClassificacaoDeliberacao as Cd_ClassificacaoDeliberacao,
+        item.Ds_ObservacaoDeliberacao as Ds_ObservacaoDeliberacao,
+        item.nm_Interessado as nm_Interessado,
+        item.nm_Orientador as nm_Orientador,
+        item.ds_MotivoItem as ds_MotivoItem,
+        item.ds_ObservacaoItem as ds_ObservacaoItem,
+        item.ds_ObservacaoNaoPublicavelItem as ds_ObservacaoNaoPublicavelItem,
+        item.nm_Relator as nm_Relator,
+        item.ds_ObservacaoRelator as ds_ObservacaoRelator,
+        item.nm_NovoOrientador as nm_NovoOrientador,
+        item.Cd_TipoSolicitacaoPrazo as Cd_TipoSolicitacaoPrazo,
+        item.qt_SolicitacaoPrazoDiasSolicitados as qt_SolicitacaoPrazoDiasSolicitados, 
+        item.qt_SolicitacaoPrazoDiasConcedidos as qt_SolicitacaoPrazoDiasConcedidos, 
+        item.Cd_AssuntoReuniao as Cd_AssuntoReuniao, 
+        item.ds_AreaInteressado as ds_AreaInteressado,
+        item.ds_NivelInteressado as ds_NivelInteressado,
+        item.ds_LotOrientador as ds_LotOrientador,
+        item.ds_LotRelator as ds_LotRelator,
+        item.cd_Reuniao as cd_Reuniao,
+        item.dt_Deposito as dt_Deposito,
+        item.ds_TituloDissertacaoTese as ds_TituloDissertacaoTese,
+        item.ds_TituloPlanoTrabalho as ds_TituloPlanoTrabalho,
+        item.ds_TituloPlanoTrabalho_NovoPlano as ds_TituloPlanoTrabalho_NovoPlano,
+        item.dt_Apresentacao as dt_Apresentacao,
+        item.ds_EstagioDisciplina as ds_EstagioDisciplina,
+        item.dt_EstagioPeriodoInicio as dt_EstagioPeriodoInicio,
+        item.dt_EstagioPeriodoFim as dt_EstagioPeriodoFim,
+        item.qt_EstagioCreditos as qt_EstagioCreditos,
+        item.cd_ReuniaoOrigem as cd_ReuniaoOrigem
+    from Reuniao_T1010_ItemReuniao as item 
+    inner join REUNIAO_T1400_ClassificacaoDeliberacao as class
+    on item.Cd_ClassificacaoDeliberacao = class.Cd_ClassificacaoDeliberacao
+    where item.cd_reuniao=${id}`;
+    const pauta = await mssql(myreq);
+    return(pauta)
+}
+
 export async function fetchFilteredPauta     (id: number, query: string, currentPage: number)
 {
     mylog("ERROR",filename,"fetchFilteredPauta","{id, query, currentPage}=",{id, query, currentPage})
-    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+    const offset = currentPage ===0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE;
+    const numitens = currentPage ===0 ? 100000 : ITEMS_PER_PAGE;
     if (isNaN(+query) || query.trim() === '') {
     try {
         const myreq = `Select 
@@ -221,7 +271,7 @@ export async function fetchFilteredPauta     (id: number, query: string, current
         on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
         where ip.cd_reuniao = ${id} and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao like '%${query}%')
         order by ip.cd_assuntoReuniao, ip.Cd_ItemReuniao, ip.nm_Interessado 
-        offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
+        offset ${offset} rows fetch next ${numitens} rows only`;
         mylog("DBG",filename,"fetchFilteredPauta","myreq=",myreq.replace(/\s/g," "));
         const pauta = await mssql(myreq);
         mylog("DBG",filename,"fetchFilteredPauta","pauta=",pauta);
@@ -246,7 +296,7 @@ export async function fetchFilteredPauta     (id: number, query: string, current
         on ip.Cd_AssuntoReuniao = a.Cd_AssuntoReuniao
         where ip.cd_reuniao = ${id} and (ip.nm_Interessado like '%${query}%' or ip.Cd_AssuntoReuniao = ${query})
         order by ip.cd_assuntoReuniao, ip.Cd_ItemReuniao, ip.nm_Interessado 
-        offset ${offset} rows fetch next ${ITEMS_PER_PAGE} rows only`;
+        offset ${offset} rows fetch next ${numitens} rows only`;
         mylog("DBG",filename,"fetchFilteredPauta","myreq=",myreq.replace(/\s/g," "));
         const pauta = await mssql(myreq);
         mylog("DBG",filename,"fetchFilteredPauta","pauta=",pauta);
@@ -259,31 +309,8 @@ export async function fetchFilteredPauta     (id: number, query: string, current
 }
 
 export async function fetchAssuntoParameters ()
-{    const myreq = `select
-    Cd_ParametroAssuntoReuniao as id, 
-    Ind_Interessado,
-    Ind_Orientador,
-    Ind_Defesa,
-    Ind_PlanoTrabalho,
-    Ind_BancaExaminadora,
-    Ind_Relator,
-    Ind_AtribuiCreditos,
-    Ind_CredenciamentoDisciplina,
-    Ind_SolicitaPrazo,
-    Ind_AdReferendum,
-    Ind_Deliberacao,
-    Ind_ObservacaoNaoPublicavel,
-    Ind_ObservacaoAssunto,
-    Ind_MotivoAssunto,
-    Ind_NovoPlano,
-    Ind_NovoOrientador,
-    Ind_NovoProfessor,
-    Ind_DataDeposito,
-    Ind_DisertacaoTese,
-    Ind_DataApresentacao,
-    Ind_Estagio,
-    Ind_DisciplinaEspecial
-    from REUNIAO_T1200_ParametroAssuntoReuniao`
+{    const myreq = `select * 
+    from REUNIAO_T1200_ParametroAssuntoReuniao order by cd_assuntoreuniao`
     try {        const parameters = await mssql(myreq) as AssuntoParameters[];  
         return (parameters)
     } catch (error) {
@@ -390,28 +417,36 @@ export async function fetchOrdemDiaPages (id: string) {
 	} 
 }
 
-
+export async function fetchBancas(inline:string) {
+    const myreq = `select * from  REUNIAO_T0900_BancaExaminadoraReuniao where Cd_ItemReuniao in ${inline}`;
+    try {
+        const resp = mssql(myreq);
+        return (resp);
+    }catch(error) {
+        mylog("ERROR", filename, "fetchBancas","Error =",error);
+    }
+}
 
 export async function fetchItemObject (irid: number) {
     mylog("DBG",filename,"fetchItemObject","irid = ",irid)
     if (irid) {
-    const myreq = `select * from reuniao_t1010_itemreuniao where cd_itemreuniao = ${irid}`;
+    const myreq = `select * from reuniao_t1010_itemreuniao where Cd_ItemReuniao = ${irid}`;
     try {
         const item = await mssql(myreq) as ItemReuniaoResponse[];
         const toreturn = item[0] ? item[0] : null;
-        const myreq2 = `select * from REUNIAO_T0900_BancaExaminadoraReuniao where cd_itemreuniao = ${irid}`;
+        const myreq2 = `select * from REUNIAO_T0900_BancaExaminadoraReuniao where Cd_ItemReuniao = ${irid}`;
         const banca = await mssql(myreq2) as Banca[];
         if (banca && banca.length > 0 && toreturn) {
             toreturn.banca = banca as Banca[];
             mylog("ERROR",filename,"fetchItemObject","banca = ",banca)
         }
-        const myreq3 = `select * from REUNIAO_T3900_AtribuidorCreditos where cd_itemreuniao = ${irid}`;
+        const myreq3 = `select * from REUNIAO_T3900_AtribuidorCreditos where Cd_ItemReuniao = ${irid}`;
         const creditos = await mssql(myreq3) as Credito[];
         if (creditos && creditos.length > 0 && toreturn) {
             toreturn.creditos = creditos as Credito[];
             mylog("ERROR",filename,"fetchItemObject","creditos = ",creditos)
         }
-        const myreq4 = `select * from REUNIAO_T3800_DisciplinaEspecial where cd_itemreuniao = ${irid}`;
+        const myreq4 = `select * from REUNIAO_T3800_DisciplinaEspecial where Cd_ItemReuniao = ${irid}`;
         const disciplinas = await mssql(myreq4) as DisciplinaEspecial[];
         if (disciplinas && disciplinas.length > 0 && toreturn) {
             toreturn.disciplinaEspecial = disciplinas as DisciplinaEspecial[];
@@ -452,7 +487,10 @@ export async function fetchTipoAtribuidorCredito () {
 export async function fetchOrdemDia (id: number, currentPage: number) 
 {
 	mylog("DBG",filename,"fetchOrdemDia","{id, currentPage}=",{id,currentPage});
-	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+	
+    const offset = currentPage > 0 ? (currentPage - 1) * ITEMS_PER_PAGE : 0;
+    const pagelength = currentPage > 0 ? ITEMS_PER_PAGE : 10000;
+    
 	const myreq = `select 
 		Cd_OrdemDia as id, 
 		Cd_SequenciaOrdemDia as seq, 
@@ -463,7 +501,7 @@ export async function fetchOrdemDia (id: number, currentPage: number)
 		where cd_reuniao =${id}
 		order by seq
 		offset ${offset} rows
-		fetch next ${ITEMS_PER_PAGE} rows only`;
+		fetch next ${pagelength} rows only`;
 	mylog("DBG",filename,"fetchOrdemDia","myreq=",myreq.replace(/\s/g," "));
 	try {
 		const ordemdia = await mssql(myreq) as OrdemDia[];

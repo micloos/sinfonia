@@ -1,6 +1,9 @@
-import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, 
+          BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, comporPauta, escParticipante, deleteOrdemDia, addPendentes  } from '@/app/lib/reuniao/actions';
+import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, 
+          comporPauta, escParticipante, deleteOrdemDia, addPendentes
+      } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
 // import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
 import { deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
@@ -247,6 +250,50 @@ export function ComporPauta({id,active}: {id: string, active: string }) {
   );
 }
 
+
+{/*
+export function ImprimirPauta ({id}: {id : string}) {
+  const imprimirPautaWithId = imprimirCoisas.bind(null,id,"pauta");
+  return (
+    <form action={imprimirPautaWithId}>
+      <Tooltip title="Imprimir Pauta">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Imprimir Pauta</span>
+        <PrinterIcon className="w-5" />
+      </button>
+      </Tooltip>
+    </form>
+  )
+}
+
+export function ImprimirAta ({id}: {id : string}) {
+  const imprimirAtaWithId = imprimirCoisas.bind(null,id,"ata");
+  return (
+    <form action={imprimirAtaWithId}>
+      <Tooltip title="Imprimir Ata">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Imprimir Ata</span>
+        <PrinterIcon className="w-5 text-red-500" />
+      </button>
+      </Tooltip>
+    </form>
+  )
+}
+
+export function ImprimirDeliberacao ({id}: {id : string}) {
+  const imprimirDeliberacaoWithId = imprimirCoisas.bind(null,id,"deliberacao");
+  return (
+    <form action={imprimirDeliberacaoWithId}>
+      <Tooltip title="Imprimir Deliberacao">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Imprimir Deliberacao</span>
+        <PrinterIcon className="w-5 text-green-600" />
+      </button>
+      </Tooltip>
+    </form>
+  )
+}
+*/}
 export function AddAssuntoToReuniao({ reuniao }: { reuniao: number }) {
   const addAssuntoToReuniaoWithId = addOrdemDia.bind(null, reuniao);
   mylog("DBG",filename, 'AddAssuntoToReuniao' , "reuniao=", reuniao);

@@ -18,7 +18,7 @@ interface AdReferendumSubformProps {
 }
 
 export default  function AdReferendum({ data, onChange }: AdReferendumSubformProps) {
-    const [adReferendum, setAdReferendum] = useState<AdReferendumType>(data || { ind_adreferendum: 'N', ds_AdReferendum: '', dt_AdReferendum: '' });
+    const [adReferendum, setAdReferendum] = useState<AdReferendumType>(data || { Ind_AdReferendum: 'N', ds_AdReferendum: '', dt_AdReferendum: '' });
     const [docDate, setDocDate] = useState(data.dt_AdReferendum ? dayjs(data.dt_AdReferendum) : dayjs.utc());
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -30,20 +30,20 @@ export default  function AdReferendum({ data, onChange }: AdReferendumSubformPro
 
     return (
         <div className="rounded-md bg-gray-50 p-4 md:p-2">
-            <div id="ind_adreferendum" className="mb-4 inline-block pr-4 w-1/6">
-                <label htmlFor="ind_adreferendum" className="mb2 block text-sm font-medium">
+            <div id="Ind_AdReferendum" className="mb-4 inline-block pr-4 w-1/6">
+                <label htmlFor="Ind_AdReferendum" className="mb2 block text-sm font-medium">
                     Ad Referendum
                 </label>
                 <input 
                     type="checkbox"
-                    id="ind_adreferendum"
-                    name="ind_adreferendum"
+                    id="Ind_AdReferendum"
+                    name="Ind_AdReferendum"
                     value="S"
                     className="mb-2 mr-4"
-                    checked={adReferendum.ind_adreferendum === 'S'}
+                    checked={adReferendum.Ind_AdReferendum === 'S'}
                     onChange={(e) => {
                         const value = e.target.checked ? 'S' : 'N';
-                        const updatedAdReferendum = { ...adReferendum, ind_adreferendum: value };
+                        const updatedAdReferendum = { ...adReferendum, Ind_AdReferendum: value };
                         setAdReferendum(updatedAdReferendum);
                         onChange(updatedAdReferendum);
                         }    }                

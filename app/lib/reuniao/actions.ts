@@ -166,6 +166,20 @@ export async function deleteAssuntoFromReuniao (id: string) {
 	revalidatePath('/sinfonia/reuniao/pauta');
 }
 
+{/*
+export async function imprimirCoisas (id:string,opcao:string) {
+	mylog("DBG",filename,"imprimirCoisas","{id,opcao}",{id,opcao})
+	const data:ImprimirData = { 
+		tipo: opcao,
+		reuniao: id,
+		date : '01/01/2026'
+	}
+	mylog("DBG",filename,"imprimirCoisas","data",data);
+	data.sala = '222';
+	mylog("DBG",filename,"imprimirCoisas","data",data);
+}
+	*/}
+
 
 export async function deleteReuniao (id: string)
 {

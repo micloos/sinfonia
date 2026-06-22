@@ -46,16 +46,16 @@ REUNIAO_T1010_ItemReuniao
 
 
 
-ind_adreferendum='S'   // 30049 DONE
-    ind_adreferendum: 'S' | 'N'
+Ind_AdReferendum='S'   // 30049 DONE
+    Ind_AdReferendum: 'S' | 'N'
     ds_adreferendum : string
     dt_adreferendum : Date
 [DONE AdReferendum]
 
 ind_interessado='S'  // 21607 DONE
     nm_Interessado : string
-    ds_areainteressado : string
-    ds_nivelinteressado : string
+    ds_AreaInteressado : string
+    ds_NivelInteressado : string
 [DONE Interessado]
 
     ind_orientador='S'  // 14673  DONE
@@ -68,7 +68,7 @@ ind_planotrabalho='S'  // 7886
 [DONE Plano de Trabalho]
 
 ind_relator='S'  // 5671
-    nm_relator : string
+    nm_Relator : string
     ds_ObservacaoRelator : string
     ds_lotRelator : string
 [DONE Relator]
@@ -125,17 +125,7 @@ ind_defesa='S'   //  3454
 
 ind_datadeposito='S' //  2397
     dt_Deposito : Date
- [TODO Data Deposito]
-
-
-
-ind_estagio='S' // 57
-    ds_EstagioDisciplina : string
-    dt_EstagioPeriodoInicio : Date
-    dt_EstagioPeriodoFim : Date
-    qt_EstagioCreditos : int
-[TODO Estagio]
-
+ [DONE Data Deposito]
 
 
 ind_solicitaprazo='S'  //  967
@@ -144,29 +134,21 @@ ind_solicitaprazo='S'  //  967
     REUNIAO_T3700_TipoSolicitacaoPrazo[2] fix
         Cd_TipoSolicitacaoPrazo : int
         nm_TipoSolicitacaoPrazo : string
+[DONE Solicita Prazo]
 
 
-
-
-
-    
-
-ind_disciplinaespecial='S' // 778
-    REUNIAO_T3800_DisciplinaEspecial
-        cd_DisciplinaEspecial : int
-        cd_itemreuniao : int
-        nm_DisciplinaEspecial : string
-        qt_creditos : int
-        dt_periodoinicial : Date
-        dt_periodofinal : Date
-        ds_frequencia : string
-        ds_conceito : string
+ind_estagio='S' // 57
+    ds_EstagioDisciplina : string
+    dt_EstagioPeriodoInicio : Date
+    dt_EstagioPeriodoFim : Date
+    qt_EstagioCreditos : int
+[DONE Estagio]
 
 ind_atribuicreditos='S'           // 211
     REUNIAO_T3900_AtribuidorCreditos 
         cd_AtribuidorCredito : int
         cd_ItemReuniao : int
-        Cd_TipoAtribuidorCredito : int
+        cd_TipoAtribuidorCredito : int
         ds_TituloTrabalho : string
         ds_TituloPeriodicoLivroCongresso : string
         ds_Pais : string
@@ -177,7 +159,25 @@ ind_atribuicreditos='S'           // 211
     REUNIAO_T3600_TipoAtribuidorCredito[5] fix
         Cd_TipoAtribuidorCredito : int
         Nm_TipoAtribuidorCredito : string
+[DONE Atribuição de Créditos]
 
+
+
+
+
+    
+
+ind_disciplinaespecial='S' // 778
+    REUNIAO_T3800_DisciplinaEspecial
+        cd_DisciplinaEspecial : int
+        Cd_ItemReuniao : int
+        nm_DisciplinaEspecial : string
+        qt_creditos : int
+        dt_periodoinicial : Date
+        dt_periodofinal : Date
+        ds_frequencia : string
+        ds_conceito : string
+[DOING Disciplina Especial]
 
 
 
@@ -268,21 +268,21 @@ REUNIAO_T0900_BancaExaminadoraReuniao
             const myreq = `
             UPDATE REUNIAO_T1010_ItemReuniao set 
             cd_reuniao = ${essentialFields.data.cd_reuniao},
-            cd_assuntoreuniao = ${essentialFields.data.cd_assuntoreuniao},
+            Cd_AssuntoReuniao = ${essentialFields.data.Cd_AssuntoReuniao},
             nm_Interessado = '${essentialFields.data.nm_Interessado}',
-            ds_areainteressado = '${essentialFields.data.ds_areainteressado}',
-            ds_nivelinteressado = '${essentialFields.data.ds_nivelinteressado}',
+            ds_AreaInteressado = '${essentialFields.data.ds_AreaInteressado}',
+            ds_NivelInteressado = '${essentialFields.data.ds_NivelInteressado}',
             nm_orientador = '${essentialFields.data.nm_orientador}',
             ds_LotOrientador = '${essentialFields.data.ds_LotOrientador}',
             dt_Apresentacao = '${essentialFields.data.dt_Apresentacao}',
-            ind_adreferendum = '${essentialFields.data.ind_adreferendum}',
+            Ind_AdReferendum = '${essentialFields.data.Ind_AdReferendum}',
             ds_adreferendum = '${essentialFields.data.ds_AdReferendum}',
             dt_adreferendum = '${essentialFields.data.dt_adreferendum}',
             ds_TituloPlanoTrabalho = '${essentialFields.data.ds_TituloPlanoTrabalho}',
             ds_ObservacaoItem = '${essentialFields.data.ds_ObservacaoItem}',
             ds_ObservacaoNaoPublicavelItem = '${essentialFields.data.ds_ObservacaoNaoPublicavelItem}'
 
-            where cd_itemreuniao = ${essentialFields.data.cd_itemreuniao}
+            where Cd_ItemReuniao = ${essentialFields.data.Cd_ItemReuniao}
             `;
             mylog ("DBG",filename,"createItemReuniao","myreq =",myreq.replace(/\s/g," "));
             const answer = mssql(myreq)

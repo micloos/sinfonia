@@ -1,7 +1,9 @@
-import { AddAssuntosPendente, UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, ComporPauta   } from '@/app/ui/reuniao/buttons';
+import { AddAssuntosPendente, UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, 
+   ComporPauta   } from '@/app/ui/reuniao/buttons';
 import { fetchFilteredReunioes } from '@/app/lib/reuniao/data';
 import { Reunioes } from '@/app/lib/definitions';
 import * as moment from 'moment-timezone';
+import { DownloadButton } from './DownloadButton';
 
 const tz ="UTC";
 
@@ -56,12 +58,15 @@ export default async function ReunioesTable({
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-start ">
                       <DeleteReuniao id={reuniao.id.toString()} /> 
-                      <UpdateReuniao id={reuniao.id.toString()}  active={reuniao.active} />
-                      <EscParticipantes id={reuniao.id.toString()} active={reuniao.active} />
-                      <EscOrdemDoDia id={reuniao.id.toString()}  active={reuniao.active} />
-                      <ComporPauta id={reuniao.id.toString()}  active={reuniao.active} />
-                      {(!reuniao.active) && <ReativarReuniao id={reuniao.id.toString()}  active={reuniao.active} />}
-                      <AddAssuntosPendente reuniao = {reuniao.id} />
+                      { (reuniao.active === 'N') && <UpdateReuniao id={reuniao.id.toString()}  active={reuniao.active} />}
+                      { (reuniao.active === 'N') && <EscParticipantes id={reuniao.id.toString()} active={reuniao.active} />}
+                      { (reuniao.active === 'N') && <EscOrdemDoDia id={reuniao.id.toString()}  active={reuniao.active} />}
+                      { (reuniao.active === 'N') && <ComporPauta id={reuniao.id.toString()}  active={reuniao.active} />}
+                      { (reuniao.active === 'S') && <ReativarReuniao id={reuniao.id.toString()}  active={reuniao.active} />}
+                      { (reuniao.active === 'N') && <AddAssuntosPendente reuniao = {reuniao.id} /> }
+                      { (reuniao.active === 'N') && <DownloadButton id={reuniao.id.toString()} tipo='pauta'/>}
+                      { (reuniao.active === 'S') && <DownloadButton id={reuniao.id.toString()} tipo='ata' />}
+                      { (reuniao.active === 'S') && <DownloadButton id={reuniao.id.toString()} tipo='deliberacao'/>}
                     </div>
                     
                   </td>
