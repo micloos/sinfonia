@@ -1,0 +1,12 @@
+allowBuilds:
+      esbuild: true
+      eslint-config-next: true
+      postcss: true
+      tailwindcss: true
+      typescript: true
+      eslint/eslintrc: true
+      playwright/test: true
+      types/node: true
+      types/react: true
+      types/react-dom: true 
+      sharp@0.33.5: true
