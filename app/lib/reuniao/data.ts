@@ -2,6 +2,7 @@
 
 import { mssql } from '@/app/lib/db';
 import { Numres, Reunioes, OrdemDia, AssuntoParameters, Assuntos } from '@/app/lib/definitions';
+import type { AtribuidorName } from "@/app/lib/reuniao/definitions";
 import { mylog } from '../mylogger';
 import { Banca, Credito, DisciplinaEspecial, ItemReuniaoResponse, PrazoName } from './definitions';
 import { SearchResult } from './pauta/actions';
@@ -351,6 +352,11 @@ export async function fetchFilteredPauta     (id: number, query: string, current
 }
 }
 
+
+    
+
+
+
 export async function fetchTipoPrazos ()
 {
     const myreq = `select nm_TipoSolicitacaoPrazo from REUNIAO_T3700_TipoSolicitacaoPrazo order by cd_TipoSolicitacaoPrazo`;
@@ -527,9 +533,9 @@ export async function fetchPrazoNames () {
 }
 
 export async function fetchTipoAtribuidorCredito () {
-    const myreq = `select Cd_TipoAtribuidorCredito as id, nm_TipoAtribuidorCredito as name from REUNIAO_T3600_TipoAtribuidorCredito`;
+    const myreq = `select cd_TipoAtribuidorCredito as id, nm_TipoAtribuidorCredito as name from REUNIAO_T3600_TipoAtribuidorCredito`;
     try {
-        const tipos = await mssql(myreq) as {id: string, name: string}[];
+        const tipos = await mssql(myreq) as AtribuidorName[];
         return (tipos)
     } catch (error) {
         mylog("DBG",filename,"fetchTipoAtribuidorCredito","Error",error);

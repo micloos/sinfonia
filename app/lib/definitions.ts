@@ -1,4 +1,4 @@
-import type { ItemReuniao } from "./reuniao/definitions";
+import type { ItemReuniao,AtribuidorName } from "./reuniao/definitions";
 
 export type numericanswer = { n : number};
 
@@ -220,6 +220,7 @@ export interface ImprimirData {
 	assuntoParameters: AssuntoParameters[];
 	bancas: BancaCompleta[];
 	tipoPrazos: string[];
+	tipoAttrCreditos: AtribuidorName[];
 	attrCreditos: AttrCreditos[];
 	discEspecial: DiscEspecial[];
 }

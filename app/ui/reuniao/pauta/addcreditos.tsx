@@ -2,19 +2,20 @@
 
 import Myhr from "./myhr";
 import { mylog } from "@/app/lib/mylogger";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import { useDebouncedCallback } from 'use-debounce';
 // import { Button } from "../../button";
 import { CreditosFormData, Credito, AtribuidorName } from "@/app/lib/reuniao/definitions";
 import { Tooltip } from "@mui/material";
 import {  TrashIcon } from '@heroicons/react/24/outline';
-import { fetchTipoAtribuidorCredito } from "@/app/lib/reuniao/data";
+
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import utc from 'dayjs/plugin/utc'
 import "dayjs/locale/pt-br"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+
 
 
 const filename = 'app/ui/reuniao/pauta/addcreditos';
@@ -25,13 +26,15 @@ dayjs.extend(utc);
 
 interface CreditosTableProps {
   data: Credito[];
+  tipoAttrCreditos: AtribuidorName[];
   onChange: (data: Credito[]) => void;
   maxMembers?: number;
   readOnly?: boolean;
 }
 
 export default function AddCreditos({ 
-  data = [], 
+  data = [],
+  tipoAttrCreditos = [], 
   onChange, 
   maxMembers = 10,
   readOnly = false 
@@ -54,19 +57,11 @@ export default function AddCreditos({
 
     const [docDateIni, setDocDateIni] = useState(formData.dt_PeriodoInicial ? dayjs.utc(formData.dt_PeriodoInicial) : dayjs.utc());
     const [docDateFim, setDocDateFim] = useState(formData.dt_PeriodoFinal ? dayjs.utc(formData.dt_PeriodoFinal) : dayjs.utc());
+    setTiposAtribuidorCredito(tipoAttrCreditos)
     console.log("AddCreditos - data", data);
     console.log("AddCreditos - formData", formData);
 
-    useEffect(() => {
-        const fetchTiposAtribuidorCreditos = async () => {
-            const tipos = await fetchTipoAtribuidorCredito() as AtribuidorName[];
-            setTiposAtribuidorCredito(tipos);
-        };
-
-        fetchTiposAtribuidorCreditos();
-    }, []);
-
-
+    
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ 
