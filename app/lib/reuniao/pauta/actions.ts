@@ -275,24 +275,37 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         mylog("ERROR",filename,"createItemObject","banca = ",banca);
         const cd_BancaExaminadoraReuniaoInit =  await getNextBancaItem();
         mylog("ERROR",filename,"createItemObject","next cd_BancaExaminadoraReuniao = ",cd_BancaExaminadoraReuniaoInit);
+        let myreqtotal = "create table TEMPBANCA (cd_BancaExaminadoraReuniao int, Cd_ItemReuniao int, nm_ExaminadorBanca varchar(200), ds_LotExaminadorBanca varchar(200), Cd_TipoExaminador int); ";
+        
         for (let i = cd_BancaExaminadoraReuniaoInit; i < cd_BancaExaminadoraReuniaoInit + banca.length; i++) {
-            const element = banca[i - cd_BancaExaminadoraReuniaoInit];
-            try {
-                
+            const element = banca[i - cd_BancaExaminadoraReuniaoInit];            
                     mylog("ERROR",filename,"createItemObject","i = ",i);
                      const myreq = `
-                        INSERT INTO REUNIAO_T0900_BancaExaminadoraReuniao 
+                        INSERT INTO TEMPBANCA 
                         (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
                         VALUES 
                         (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador})
-                    `;
-                    
-                    const answer = await mssql(myreq);
-                    mylog ("ERROR",filename,"createItemObject","answer for banca = ", answer);
-                
-            } catch (error) {
-                mylog ("ERROR",filename,"createItemObject","Error in banca insertion loop = ", error);
-            }                  
+                    ; `;
+                    myreqtotal = myreqtotal + myreq
+        }
+        const myreqf= `
+            MERGE Reuniao_t0900_BancaExaminadoraReuniao as Target
+            USING TEMPBANCA as Source
+                ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
+                AND Target.Nm_ExaminadorBanca = Source.Nm_ExaminadorBanca
+            WHEN NOT MATCHED BY TARGET THEN
+                INSERT (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
+                VALUES (Source.cd_BancaExaminadoraReuniao, Source.Cd_ItemReuniao, Source.nm_ExaminadorBanca, 
+                Source.ds_LotExaminadorBanca, Source.Cd_TipoExaminador);
+
+            DROP TABLE TEMPBANCA;
+`;
+        myreqtotal = myreqtotal + myreqf
+        try { 
+            await mssql(myreqtotal)
+            
+        } catch (error) {
+                    mylog ("ERROR",filename,"createItemObject","Error in banca insertion loop = ", error);
         }
     }
 
