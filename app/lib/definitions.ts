@@ -187,6 +187,29 @@ export interface BancaCompleta  {
     Cd_BancaExaminadoraReuniao: string;
 }
 
+export interface AttrCreditos {
+	cd_AtribuidorCredito: number;
+	ds_TituloTrabalho: string;
+	ds_TituloPeriodicoLivroCongresso: string;
+	ds_Pais: string;
+	dt_PeriodoInicial: string;
+	dt_PeriodoFinal: string;
+	nu_Volume: number;
+	ds_Paginas: string;
+	ds_Ano: string;
+	Cd_TipoAtribuidorCredito: string;
+}
+
+export interface DiscEspecial {
+	cd_DisciplinaEspecial: number;
+	nm_DisciplinaEspecial: string;
+	qt_Creditos: number;
+	dt_PeriodoInicial: string;
+	dt_PeriodoFinal: string;
+	ds_Frequencia: string;
+	ds_Conceito: string;
+}
+
 export interface ImprimirData {
 	tipo: string;
 	reuniao: Reunioes;
@@ -196,4 +219,7 @@ export interface ImprimirData {
 	items: ItemReuniao[];
 	assuntoParameters: AssuntoParameters[];
 	bancas: BancaCompleta[];
+	tipoPrazos: string[];
+	attrCreditos: AttrCreditos[];
+	discEspecial: DiscEspecial[];
 }

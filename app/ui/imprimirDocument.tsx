@@ -138,7 +138,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
   
   const toprintordemdia = tipo === 'pauta'?  
      data.ordemDia.map((item)=>(
-          <View key="{item.id}" style={styles.row} wrap={false} >
+          <View key={item.id} style={styles.row} wrap={false} >
             <View key={'ordem'+item.id} style={styles.section}>
               <Text >
                 {item.seq.toString()} 
@@ -150,7 +150,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
           </View>
         )) : (tipo === 'ata')?
         data.ordemDia.map((item)=>(
-          <View key="{item.id}" style={styles.row}  wrap={false} >
+          <View key={item.id} style={styles.row}  wrap={false} >
             <View key={'ordem'+item.id} style={styles.section}>
             <Text >
               {item.seq.toString()} 
@@ -165,7 +165,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
           </View>
         )): 
         data.ordemDia.filter(item => item.publicavel==='S').map((item)=>(
-          <View key="{item.id}" style={styles.row}  wrap={false} >
+          <View key={item.id} style={styles.row}  wrap={false} >
             <View key={'ordem'+item.id} style={styles.section}>
             <Text >
               {item.seq.toString()} 
@@ -210,7 +210,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
       </View>
         {/* General Reuniao Info */}
         <View style={styles.section}>
-          <Text style={styles.section}>Pauta da {reuniao.id.toString()}ª reunião da Comissão de Pós-Graduação, realizada em {reuniao.d_end}, às 9:00 , 
+          <Text style={styles.section}>Pauta da {reuniao.id.toString()}ª reunião da Comissão de Pós-Graduação, realizada em {reuniao.d_ini}, às 9:00 , 
             na sala {reuniao.sala} do Prédio {reuniao.predio}, com a participação dos integrantes abaixo 
             relacionados tomaram as deliberações indicadas nas paginas seguintes:</Text> 
         </View>
@@ -230,7 +230,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
           </View>
           
             {data.participantes.filter(user => (user.title==='Docente')).map((item) => (
-              <View key="{item.id}" style={styles.row}>
+              <View key={item.id} style={styles.row}>
               <Text> {item.name}</Text>
               </View>
             ))}
@@ -255,7 +255,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
         </View>
           {data.assuntos.map((item)=>
           (
-            <View key="{item.id}" >
+            <View key={item.id} >
               <View key={'assunto'+item.id} style={styles.sectionSubTitle}  >
                 <Text> {item.assunto} </Text>
               </View>
@@ -267,9 +267,15 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
                 {data.items.filter(assuntoid => (Number(assuntoid.Cd_AssuntoReuniao) === item.id)).map((assunto, index)=>(
                   < View key={'pauta'+item.id+'.'+index} wrap style={styles.section}>
                     <Text style={styles.bold} > {item.id.toString()}.{(index+1).toString()} {assunto.nm_Interessado} - {assunto.ds_AreaInteressado} </Text>
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_Orientador==='S')?<Text>Orientador(a): Prof(a) Dr(a) {assunto.nm_Orientador} - {assunto.ds_LotOrientador} </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoOrientador==='S')?<Text>Novo Orientador(a): Prof(a) Dr(a) {assunto.nm_NovoOrientador}  </Text>:<Text></Text>}
                     <Text> Nivel: {assunto.ds_NivelInteressado} </Text>
                     {(data.assuntoParameters[Number(item.id)-1].Ind_DataApresentacao==='S')? <Text> Data de Apresentação: {moment.tz(assunto.dt_Apresentacao, tz).format('DD/MM/YYYY')} </Text>:<Text></Text> }
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_Defesa)==='S'? <Text> Data da Defesa: {moment.tz(assunto.Dt_Defesa, tz).format('DD/MM/YYYY')} </Text>:<Text></Text> }
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_DataDeposito==='S')? <Text> Data de Apresentação: {moment.tz(assunto.dt_Deposito, tz).format('DD/MM/YYYY')} </Text>:<Text></Text> }
                     {(data.assuntoParameters[Number(item.id)-1].Ind_PlanoTrabalho==='S')? <Text> Plano de Trabalho: {assunto.ds_TituloPlanoTrabalho} </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoPlano==='S')?<Text>Novo Plano de Trabalho: {assunto.ds_TituloPlanoTrabalho_NovoPlano} </Text>:<Text></Text>};
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_DissertacaoTese==='S')?<Text>Dissertação / Tese: {assunto.ds_TituloDissertacaoTese} </Text>:<Text></Text>};
 
                     {(data.assuntoParameters[Number(item.id)-1].Ind_BancaExaminadora==='S')?<View key={'banca'+assunto.Cd_ItemReuniao} ><Text>Banca: </Text>
 
@@ -281,6 +287,21 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
 
                     </View>
                     :<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_Estagio==='S')?
+                    <View key={'estagio'+assunto.Cd_AssuntoReuniao}>
+                      <Text>Periodo Programa PAE: {moment.tz(assunto.dt_EstagioPeriodoInicio, tz).format('DD/MM/YYYY')} a {moment.tz(assunto.dt_EstagioPeriodoFim, tz).format('DD/MM/YYYY')}</Text>
+                      </View>
+                      :<Text></Text>};
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_CredenciamentoDisciplina==='S')?
+                    <View>
+                      <Text>Disciplina: {assunto.ds_CredenciamentoDisciplina} </Text>
+                      <Text>Responsável(eis): Prof.(a) Dr.(a) {assunto.Nm_CredProfessorResponsavel}   </Text>
+                    </View>
+                    :<Text></Text>};
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoProfessor==='S')?
+                      <Text>Novo Responsável: Prof.(a) Dr.(a) {assunto.Nm_CredNovoProfessor} </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_MotivoAssunto==='S')?
+                      <Text>Motivo: {assunto.ds_MotivoItem} </Text>:<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_Relator==='S') ? <View key={'orientador'+assunto.Cd_ItemReuniao}>
                       <Text>Relator Indicado: {assunto.nm_Relator} - {assunto.ds_lotRelator} </Text> 
                       {(assunto.ds_ObservacaoRelator && assunto.ds_ObservacaoRelator.length>0)?
@@ -288,7 +309,12 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
                       :<Text></Text>}
                     </View>
                      :<Text></Text>}
-                    
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_SolicitaPrazo==='S')?
+                    <Text> Prazo de {data.tipoPrazos[Number(assunto.Cd_TipoSolicitacaoPrazo)-1]} Solicitado: {assunto.qt_SolicitacaoPrazoDiasSolicitados} </Text>
+                  : <Text></Text>  
+                  }
+                    {tipo !== 'deliberacao' && assunto.ds_ObservacaoNaoPublicavelItem && assunto.ds_ObservacaoNaoPublicavelItem.length>0?
+                      <Text>{assunto.ds_ObservacaoNaoPublicavelItem} </Text>:<Text></Text>}
                     {(assunto.Ind_AdReferendum==='S')?
                     <View key={'adref'+item.id} style={styles.red}>
                       <Text style={styles.red}>
@@ -297,8 +323,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
                     </View>
                     :<View> <Text></Text></View>}
                     {tipo === 'pauta' && assunto.ds_ObservacaoItem && assunto.ds_ObservacaoItem.length>0? <Text>Observação: {assunto.ds_ObservacaoItem}</Text>:<Text></Text>}
-                    {tipo !== 'deliberacao' && assunto.ds_ObservacaoNaoPublicavelItem && assunto.ds_ObservacaoNaoPublicavelItem.length>0?
-                      <Text>{assunto.ds_ObservacaoNaoPublicavelItem} </Text>:<Text></Text>}
+                    
                     {(tipo === 'ata' || tipo ==='deliberacao')? <Text style={styles.blue}> Obs: {assunto.Cd_ClassificacaoDeliberacao} {assunto.Ds_ObservacaoDeliberacao} </Text>: <Text></Text>}
                   </View>
               ))}

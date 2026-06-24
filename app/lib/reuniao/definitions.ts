@@ -237,7 +237,7 @@ export type Prazo = {
 
 {/* ds_areainteressado?: string[];
         ds_NivelInteressado?: string[];
-        nm_orientador?: string[];
+        nm_Orientador?: string[];
         ds_LotOrientador?: string[];
         Ind_AdReferendum?: string[];
         ds_AdReferendum?: string[];
@@ -263,16 +263,33 @@ export type ItemReuniao = {
         ds_AreaInteressado?: string;
         ds_NivelInteressado?: string;
     // Orientador
-        nm_orientador?: string;
+        nm_Orientador?: string;
         ds_LotOrientador?: string;
+    // Novo Orientador
+        nm_NovoOrientador?: string;
     // Ad Referendum
         Ind_AdReferendum?: string;
         ds_AdReferendum?: string;
         dt_AdReferendum?: string;
     // Defesa
         Dt_Defesa?: string;
+    // Data de Deposito
+        dt_Deposito?: string;
     // Plano de Trabalho
         ds_TituloPlanoTrabalho?: string;
+    // Estagio
+        ds_EstagioDisciplina?: string;
+        dt_EstagioPeriodoInicio?: string;
+        dt_EstagioPeriodoFim?: string;
+        qt_EstagioCreditos?: string
+    // Novo Plano de Trabalho
+        ds_TituloPlanoTrabalho_NovoPlano?: string;
+    // Dissertacao/Tese
+        ds_TituloDissertacaoTese?: string;
+    // Novo Professor
+        Nm_CredNovoProfessor?: string;
+    // Motivo
+        ds_MotivoItem?: string;
     // Relator
         nm_Relator?: string;
         ds_ObservacaoRelator?: string;

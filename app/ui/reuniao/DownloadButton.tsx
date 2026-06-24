@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import { ImprimirDocument } from '@/app/ui/imprimirDocument';
 import type { ImprimirData, Reunioes, Participantes, OrdemDia, BancaCompleta } from '@/app/lib/definitions';
-import { fetchAssuntos, fetchPauta, fetchBancas, fetchOrdemDia, fetchParticipantesByReuniao, fetchReuniaoById, fetchAssuntoParameters } from '@/app/lib/reuniao/data';
+import { fetchAssuntos, fetchPauta, fetchBancas, fetchOrdemDia, fetchTipoPrazos,
+  fetchParticipantesByReuniao, fetchReuniaoById, fetchAssuntoParameters } from '@/app/lib/reuniao/data';
 import { ItemReuniao } from '@/app/lib/reuniao/definitions';
 import Tooltip from '@mui/material/Tooltip';
 import { PrinterIcon } from '@heroicons/react/24/outline';
@@ -43,7 +44,10 @@ export const DownloadButton = ({
     assuntos:[],
     items:[],
     assuntoParameters:[],
-    bancas:[]
+    bancas:[],
+    tipoPrazos:[],
+    attrCreditos:[],
+    discEspecial:[]
 };
   const generateAndDownloadPdf = async (): Promise<void> => {
     setStatus('generating');
@@ -55,16 +59,22 @@ export const DownloadButton = ({
       console.log("reuniao = ",reuniao);
       const options: Intl.DateTimeFormatOptions = { year: "numeric", month: 'long', day: 'numeric' };
       const d_end_date = new Date(reuniao.d_lim);
+      const d_ini_date = new Date(reuniao.d_ini);
       reuniao.d_end = new Intl.DateTimeFormat('pt-BR',options).format(d_end_date);
-      reuniao.d_ini = reuniao.d_ini.toString();
+      reuniao.d_ini = new Intl.DateTimeFormat('pt-BR',options).format(d_ini_date);
       reuniao.d_lim = reuniao.d_lim.toString();
       data.reuniao=reuniao;
       const participantes: Participantes[] = await fetchParticipantesByReuniao(Number(id),0) as Participantes[];
       data.participantes=participantes;
+      console.log("participantes",data.participantes);
       const ordemdia:OrdemDia[] = await fetchOrdemDia (Number(id),0);
       data.ordemDia = ordemdia;
+      console.log("ordemDia",data.ordemDia);
       data.assuntos = await fetchAssuntos();
-      data.items = await fetchPauta(Number(id)) as ItemReuniao[];
+      console.log("assuntos",data.assuntos);
+      console.log("tipo",tipo);
+      data.items = await fetchPauta(Number(id), tipo) as ItemReuniao[];
+      console.log("items", data.items);
       let listaItems = '(';
       for (let i=0; i < data.items.length; i++) {
         listaItems = listaItems + data.items[i].Cd_ItemReuniao;
@@ -74,6 +84,7 @@ export const DownloadButton = ({
       console.log(listaItems);
       data.bancas = listaItems==='()'?[]:await fetchBancas(listaItems) as BancaCompleta[];
       data.assuntoParameters = await fetchAssuntoParameters();
+      data.tipoPrazos = await fetchTipoPrazos();
       console.log("data=",data)
       const blob = await pdf(<ImprimirDocument data={data} />).toBlob();
 

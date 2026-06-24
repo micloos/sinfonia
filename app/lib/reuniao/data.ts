@@ -203,9 +203,51 @@ export async function fetchFilteredPendingAssuntos (
         }
     }
 
-export async function fetchPauta (id: number)
+export async function fetchPauta (id: number, tipo: string)
 {
-    const myreq = `select 
+    const myreq = (tipo==='pauta')?
+    `select 
+        item.Cd_ItemReuniao as Cd_ItemReuniao,
+        item.Ind_AdReferendum as Ind_AdReferendum, 
+        item.ds_AdReferendum as ds_AdReferendum,
+        item.dt_AdReferendum as dt_AdReferendum,
+        item.ds_CredenciamentoDisciplina as ds_CredenciamentoDisciplina,
+        item.Nm_CredProfessorResponsavel as Nm_CredProfessorResponsavel,
+        item.Nm_CredNovoProfessor as Nm_CredNovoProfessor,
+        item.Dt_Defesa as Dt_Defesa,
+        item.Cd_ClassificacaoDeliberacao as Cd_ClassificacaoDeliberacao,
+        item.Ds_ObservacaoDeliberacao as Ds_ObservacaoDeliberacao,
+        item.nm_Interessado as nm_Interessado,
+        item.nm_Orientador as nm_Orientador,
+        item.ds_MotivoItem as ds_MotivoItem,
+        item.ds_ObservacaoItem as ds_ObservacaoItem,
+        item.ds_ObservacaoNaoPublicavelItem as ds_ObservacaoNaoPublicavelItem,
+        item.nm_Relator as nm_Relator,
+        item.ds_ObservacaoRelator as ds_ObservacaoRelator,
+        item.nm_NovoOrientador as nm_NovoOrientador,
+        item.Cd_TipoSolicitacaoPrazo as Cd_TipoSolicitacaoPrazo,
+        item.qt_SolicitacaoPrazoDiasSolicitados as qt_SolicitacaoPrazoDiasSolicitados, 
+        item.qt_SolicitacaoPrazoDiasConcedidos as qt_SolicitacaoPrazoDiasConcedidos, 
+        item.Cd_AssuntoReuniao as Cd_AssuntoReuniao, 
+        item.ds_AreaInteressado as ds_AreaInteressado,
+        item.ds_NivelInteressado as ds_NivelInteressado,
+        item.ds_LotOrientador as ds_LotOrientador,
+        item.ds_LotRelator as ds_LotRelator,
+        item.cd_Reuniao as cd_Reuniao,
+        item.dt_Deposito as dt_Deposito,
+        item.ds_TituloDissertacaoTese as ds_TituloDissertacaoTese,
+        item.ds_TituloPlanoTrabalho as ds_TituloPlanoTrabalho,
+        item.ds_TituloPlanoTrabalho_NovoPlano as ds_TituloPlanoTrabalho_NovoPlano,
+        item.dt_Apresentacao as dt_Apresentacao,
+        item.ds_EstagioDisciplina as ds_EstagioDisciplina,
+        item.dt_EstagioPeriodoInicio as dt_EstagioPeriodoInicio,
+        item.dt_EstagioPeriodoFim as dt_EstagioPeriodoFim,
+        item.qt_EstagioCreditos as qt_EstagioCreditos,
+        item.cd_ReuniaoOrigem as cd_ReuniaoOrigem
+    from Reuniao_T1010_ItemReuniao as item 
+    where item.cd_reuniao=${id}`
+
+    : `select 
         item.Cd_ItemReuniao as Cd_ItemReuniao,
         item.Ind_AdReferendum as Ind_AdReferendum, 
         item.ds_AdReferendum as ds_AdReferendum,
@@ -247,6 +289,7 @@ export async function fetchPauta (id: number)
     inner join REUNIAO_T1400_ClassificacaoDeliberacao as class
     on item.Cd_ClassificacaoDeliberacao = class.Cd_ClassificacaoDeliberacao
     where item.cd_reuniao=${id}`;
+    mylog("DBG",filename,"fetchPauta","myreq = ",myreq.replace(/\s/g," "));
     const pauta = await mssql(myreq);
     return(pauta)
 }
@@ -306,6 +349,17 @@ export async function fetchFilteredPauta     (id: number, query: string, current
         throw new Error('Failed to fetch Pauta');
     }
 }
+}
+
+export async function fetchTipoPrazos ()
+{
+    const myreq = `select nm_TipoSolicitacaoPrazo from REUNIAO_T3700_TipoSolicitacaoPrazo order by cd_TipoSolicitacaoPrazo`;
+    try { const tipos = await mssql(myreq) as string[];
+        return(tipos);
+    } catch(error) {
+        mylog ("ERROR", filename, "fetchTipoPrazos","error=",error);
+        throw new Error('Failed to fetch Tipo Prazos');
+    }
 }
 
 export async function fetchAssuntoParameters ()

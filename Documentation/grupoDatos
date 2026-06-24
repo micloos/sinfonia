@@ -58,8 +58,8 @@ ind_interessado='S'  // 21607 DONE
     ds_NivelInteressado : string
 [DONE Interessado]
 
-    ind_orientador='S'  // 14673  DONE
-    nm_orientador : string
+ind_orientador='S'  // 14673  DONE
+    nm_Orientador : string
     ds_LotOrientador : string 
 [DONE Orientador]
 
@@ -205,8 +205,8 @@ ind_deliberacao='S'
 
 REuniao_T1200_ParametroAssuntoReuniao
     Cd_AssuntoReuniao : int
-    Ind_Interessado : 'S' | 'N'
-    Ind_Orientador : 'S' | 'N'
+    Ind_Interessado : 'S' | 'N'      | Done
+    Ind_Orientador : 'S' | 'N'       | 
     Ind_Defesa : 'S' | 'N'
     Ind_PlanoTrabalho : 'S' | 'N'
     Ind_BancaExaminadora : 'S' | 'N'
