@@ -41,7 +41,8 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
    Prazo,
    Credito,
    DisciplinaEspecial,
-   Shadow} from "@/app/lib/reuniao/definitions";
+   Shadow,
+   AtribuidorName} from "@/app/lib/reuniao/definitions";
 // import { set, string } from "zod";
 // import { create } from "domain";
 // import BancaTable from "./pauta/banca";
@@ -69,6 +70,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
   const [cd_itemReuniao, createItemReuniao] = useState(0);
 
   const listaItemReuniao = itemReuniaoObject ? [itemReuniaoObject] : [];
+  const tipoAttrCreditos: AtribuidorName[] = [];
   mylog("ERROR",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
   // mylog("ERROR",filename, 'AddPauta Teste' , "listaitemReuniao=", JSON.stringify(listaItemReuniao[0].banca));
 
@@ -318,7 +320,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_PlanoTrabalho === 'S' && ( <AddPlano data={formData.planotrabalho} onChange={handlePlanoChange}  />)}
         {/* DONE Plano de Trabalho */}
         
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AtribuiCreditos === 'S' && ( <AddCreditos data={formData.creditos} onChange={handleCreditosChange} />)}
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_AtribuiCreditos === 'S' && ( <AddCreditos data={formData.creditos} onChange={handleCreditosChange} tipoAttrCreditos={tipoAttrCreditos} />)}
         {/* DONE Creditos */}
         
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_SolicitaPrazo === 'S' && ( <AddPrazo data={formData.prazo} onChange={handlePrazoChange}/>)}
