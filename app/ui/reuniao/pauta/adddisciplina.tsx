@@ -129,7 +129,6 @@ export default function AddDisciplina ({
                 console.log("deleteMember - id:", id);
                 deleteDisciplinaEspecialItem(id);
                 const updated = data.filter(member => member.cd_DisciplinaEspecial  !== id);
-                
                 onChange(updated);
             }
     };

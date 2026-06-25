@@ -15,6 +15,7 @@ import utc from 'dayjs/plugin/utc'
 import "dayjs/locale/pt-br"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { deleteCreditosItem } from "@/app/lib/reuniao/pauta/actions";
 
 
 
@@ -145,7 +146,7 @@ export default function AddCreditos({
         const deleteMember = (id: string) => {
             if (confirm('Vc tem certeza de querer remover isso?')) {
                 const updated = data.filter(member => member.cd_AtribuidorCredito  !== id);
-                
+                deleteCreditosItem(id);
                 onChange(updated);
             }
         };

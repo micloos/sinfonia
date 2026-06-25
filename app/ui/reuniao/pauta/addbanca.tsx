@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Banca, BancaFormData } from "@/app/lib/reuniao/definitions";
 import { Tooltip } from "@mui/material";
 import {  TrashIcon } from '@heroicons/react/24/outline';
+import { deleteBancaItem } from "@/app/lib/reuniao/pauta/actions";
 
 const filename = 'app/ui/reuniao/pauta/addbanca';
 
@@ -99,6 +100,7 @@ export default function AddBanca({
         const deleteMember = (id: string) => {
             if (confirm('Tem certeza de querer remover esse membro?')) {
                 const updated = data.filter(member => member.Cd_BancaExaminadoraReuniao  !== id);
+                deleteBancaItem(id);
                 onChange(updated);
             }
         };

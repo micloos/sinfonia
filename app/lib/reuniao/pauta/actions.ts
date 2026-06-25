@@ -314,55 +314,104 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
     if (creditos.length > 0) {
         mylog("ERROR",filename,"createItemObject","creditos = ",creditos);
         const cd_CreditosInit =  await getNextCreditosItem();
-        mylog("ERROR",filename,"createItemObject","next cd_Creditos = ",cd_CreditosInit);
+        let myreqtotal = `
+            CREATE TABLE TEMPCREDITOS (cd_AtribuidorCredito int, ds_TituloTrabalho varchar(1000), ds_TituloPeriodicoLivroCongresso varchar(500),
+            ds_Pais varchar(100), dt_PeriodoInicial datetime, dt_PeriodoFinal datetime, nu_Volume int, ds_Paginas varchar(20), ds_Ano int,
+            Cd_ItemReuniao int, Cd_TipoAtribuidorCredito int); 
+        `
         for (let i = cd_CreditosInit; i < cd_CreditosInit + creditos.length; i++) {
             const element = creditos[i - cd_CreditosInit];
             if (isNaN(+element.cd_AtribuidorCredito)) {
-            try {
+
                 
                     mylog("ERROR",filename,"createItemObject","i = ",i);
                     element.nu_Volume = element.nu_Volume ? element.nu_Volume : '0';
                      const myreq = `
-                        INSERT INTO REUNIAO_T3900_AtribuidorCreditos 
+                        INSERT INTO TEMPCREDITOS 
                         (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
                         
                         VALUES 
                         (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
                     `;
                     mylog("ERROR",filename,"createItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
-                    const answer = await mssql(myreq);
-                    mylog ("ERROR",filename,"createItemObject","answer for banca = ", answer);
-                
-            } catch (error) {
-                mylog ("ERROR",filename,"createItemObject","Error in banca insertion loop = ", error);
-            }                  
+                    myreqtotal = myreqtotal+myreq
+                                 
         }
         }
+        const myreqf= `
+            MERGE REUNIAO_T3900_AtribuidorCreditos as Target
+            USING TEMPCREDITOS as Source
+                ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
+                AND Target.ds_TituloTrabalho = Source.ds_TituloTrabalho
+            WHEN NOT MATCHED BY TARGET THEN
+                INSERT (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                VALUES (Source.cd_AtribuidorCredito, Source.Cd_ItemReuniao, Source.Cd_TipoAtribuidorCredito, Source.ds_titulotrabalho, 
+                        Source.ds_tituloperiodicolivrocongresso, Source.ds_pais, Source.ds_paginas, Source.ds_ano, Source.nu_volume, 
+                        Source.dt_periodoinicial, Source.dt_periodofinal) ;
+
+                DROP TABLE TEMPCREDITOS;
+        `;
+        myreqtotal = myreqtotal + myreqf
+        try { 
+            await mssql(myreqtotal)
+            
+        } catch (error) {
+                    mylog ("DBG",filename,"createItemObject","Error in creditos insertion loop = ", error);
+        }
+       
     }
 
     const disciplinaEspecial= myform.disciplinas_json ? JSON.parse(myform.disciplinas_json as string) as DisciplinaEspecial[] : [];
     if (disciplinaEspecial.length > 0) {
         mylog("ERROR",filename,"createItemObject","disciplinaEspecial = ",disciplinaEspecial);
         const cd_DisciplinaEspecialInit =  await getNextDisciplinaEspecialItem();
+        mylog("ERROR",filename,"createItemObject","next cd_Creditos = ",cd_DisciplinaEspecialInit);
+        let myreqtotal = `create table TEMPESPECIAIS (
+            cd_DisciplinaEspecial int,
+            nm_DisciplinaEspecial varchar(255), 
+            qt_Creditos int, 
+            dt_PeriodoInicial datetime, 
+            dt_PeriodoFinal datetime,
+            ds_Frequencia varchar(50),
+            ds_Conceito varchar(50),
+            Cd_ItemReuniao int
+            )`
         for (let i = cd_DisciplinaEspecialInit; i < cd_DisciplinaEspecialInit + disciplinaEspecial.length; i++) {
             const element = disciplinaEspecial[i - cd_DisciplinaEspecialInit];
             if (isNaN(+element.cd_DisciplinaEspecial)) {
-                try {
+            
                     mylog("ERROR",filename,"createItemObject","i = ",i);
                      const myreq = `
-                        INSERT INTO REUNIAO_T3800_DisciplinaEspecial 
+                        INSERT INTO TEMPESPECIAIS 
                         (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}')
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}');
+
                     `;
                     
-                    const answer = await mssql(myreq);
-                    mylog ("ERROR",filename,"createItemObject","answer for disciplinaEspecial = ", answer);
-                } catch (error) {
-                    mylog ("ERROR",filename,"createItemObject","Error in disciplinaEspecial insertion loop = ", error);
-                }                     
-        }}
+                    myreqtotal = myreqtotal + myreq;                     
+            }
         }
+        const myreqf= `
+            MERGE reuniao_t3800_disciplinaEspecial as Target
+            USING TEMPESPECIAIS as Source
+                ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
+                AND Target.nm_DisciplinaEspecial = Source.nm_DisciplinaEspecial
+            WHEN NOT MATCHED BY TARGET THEN
+                INSERT (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                VALUES (Source.cd_DisciplinaEspecial,Source.Cd_ItemReuniao, Source.nm_DisciplinaEspecial, Source.qt_Creditos, 
+                Source.dt_PeriodoInicial, Source.dt_PeriodoFinal, Source.ds_Frequencia, Source.ds_Conceito);
+
+            DROP TABLE TEMPESPECIAIS;
+        `
+        myreqtotal = myreqtotal + myreqf
+        try { 
+            await mssql(myreqtotal)
+            
+        } catch (error) {
+                    mylog ("ERROR",filename,"createItemObject","Error in DisciplinaEspecial insertion loop = ", error);
+        }
+    }
 
     revalidatePath("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
     redirect("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")

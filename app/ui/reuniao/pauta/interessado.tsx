@@ -1,5 +1,5 @@
 import Myhr from "./myhr"
-import type { Orientador, Interessado } from "@/app/lib/reuniao/definitions"
+import type { Interessado } from "@/app/lib/reuniao/definitions"
 import { useState } from 'react';
 import SearchableSelect from "@/app/ui/reuniao/searchableSelect";
 import { SearchResult } from "@/app/lib/reuniao/pauta/actions";
@@ -10,24 +10,20 @@ const filename = "app/ui/reuniao/pauta/interessado";
 
 interface InteressadoSubformProps {
   data: Interessado; 
-  shadow: Orientador;
   onChange: (data: Interessado) => void;
   isRequired?: boolean;
 }
 
 
 
-export default  function AddPautaInteressado({ data, onChange, isRequired = false , shadow }: InteressadoSubformProps) 
+export default  function AddPautaInteressado({ data, onChange, isRequired = false  }: InteressadoSubformProps) 
 {
   const [interessado, setInteressado] = useState<Interessado>(data || { nm_Interessado: '', ds_AreaInteressado: '', ds_NivelInteressado: '' });
   const [selectedUser, setSelectedUser] = useState<SearchResult | null>(null);
   const [searchHistory, setSearchHistory] = useState<{ type: string; item: SearchResult; timestamp: string }[]>([]);
-  const [orientador, setShadow] = useState<Orientador>(shadow);
 
   mylog('DBG', filename, 'AddPautaInteressado', 'data=', data);
   mylog('DBG', filename, 'AddPautaInteressado', 'isrequired=', isRequired);
-  console.log('shadow=', shadow);
-  console.log('orientador', orientador);
   mylog('DBG', filename, 'AddPautaInteressado', 'selectUser=', selectedUser);
 
   
@@ -58,16 +54,8 @@ export default  function AddPautaInteressado({ data, onChange, isRequired = fals
       ds_NivelInteressado: user.ds_NivelInteressado || '' 
     };
     console.log('Interessado',interessado);
-    const updatedOrientador = {
-      ...orientador,           
-        nm_Orientador: user.nm_Orientador || '',
-        ds_LotOrientador: user.ds_LotOrientador || '',
-      } ;
     
-    console.log('Updated shadow:', updatedOrientador);
     setInteressado(updatedInteressado);
-    setShadow(updatedOrientador);
-    console.log('Updated orientador:', orientador);
     onChange(updatedInteressado);
   };
 
