@@ -487,6 +487,19 @@ export async function fetchBancas(inline:string) {
     }
 }
 
+export async function fetchDisciplinasEspeciais (inline:string) 
+{
+    const myreq = `select * from REUNIAO_T3800_DisciplinaEspecial where Cd_ItemReuniao in ${inline}`;
+    try {
+        const resp = mssql(myreq);
+        return (resp);
+    }catch(error) {
+        mylog("ERROR", filename, "fetchBancas","Error =",error);
+    }
+
+}
+
+
 export async function fetchItemObject (irid: number) {
     mylog("DBG",filename,"fetchItemObject","irid = ",irid)
     if (irid) {

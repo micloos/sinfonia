@@ -5,8 +5,9 @@ import { pdf } from '@react-pdf/renderer';
 import { ImprimirDocument } from '@/app/ui/imprimirDocument';
 import type { ImprimirData, Reunioes, Participantes, OrdemDia, BancaCompleta } from '@/app/lib/definitions';
 import { fetchAssuntos, fetchPauta, fetchBancas, fetchOrdemDia, fetchTipoPrazos, fetchTipoAtribuidorCredito,
-  fetchParticipantesByReuniao, fetchReuniaoById, fetchAssuntoParameters } from '@/app/lib/reuniao/data';
-import { ItemReuniao } from '@/app/lib/reuniao/definitions';
+  fetchParticipantesByReuniao, fetchReuniaoById, fetchAssuntoParameters, 
+  fetchDisciplinasEspeciais} from '@/app/lib/reuniao/data';
+import { DisciplinaEspeciais, ItemReuniao } from '@/app/lib/reuniao/definitions';
 import Tooltip from '@mui/material/Tooltip';
 import { PrinterIcon } from '@heroicons/react/24/outline';
 
@@ -84,10 +85,11 @@ export const DownloadButton = ({
       listaItems= listaItems+')';
       console.log(listaItems);
       data.bancas = listaItems==='()'?[]:await fetchBancas(listaItems) as BancaCompleta[];
+      data.discEspecial = listaItems==='()'?[]:await fetchDisciplinasEspeciais(listaItems) as DisciplinaEspeciais[];
       data.assuntoParameters = await fetchAssuntoParameters();
       data.tipoPrazos = await fetchTipoPrazos();
       data.tipoAttrCreditos = await fetchTipoAtribuidorCredito();
-      console.log("data=",data)
+      console.log("data=",data);
       const blob = await pdf(<ImprimirDocument data={data} />).toBlob();
 
       // Create download link

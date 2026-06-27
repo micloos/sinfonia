@@ -50,10 +50,11 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
 
 const filename = 'app/ui/reuniao/addpauta';
 
-export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, itemReuniaoObject}: {  
+export default  function AddPauta( {reuniao, assuntos, indices, tiposAttrCreditos, itemReuniao, itemReuniaoObject}: {  
     reuniao:number;
     assuntos: Assuntos[];
     indices: AssuntoParameters[];
+    tiposAttrCreditos: AtribuidorName[];
     itemReuniao: number;
     itemReuniaoObject: ItemReuniaoResponse;
 }) 
@@ -69,7 +70,8 @@ export default  function AddPauta( {reuniao, assuntos, indices, itemReuniao, ite
   const [cd_itemReuniao, createItemReuniao] = useState(0);
 
   const listaItemReuniao = itemReuniaoObject ? [itemReuniaoObject] : [];
-  const tipoAttrCreditos: AtribuidorName[] = [];
+  const tipoAttrCreditos: AtribuidorName[] = tiposAttrCreditos ? tiposAttrCreditos:[];
+  console.log("addpauta, tipoAttrCreditos = ",tipoAttrCreditos );
   mylog("ERROR",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
   // mylog("ERROR",filename, 'AddPauta Teste' , "listaitemReuniao=", JSON.stringify(listaItemReuniao[0].banca));
 
@@ -345,7 +347,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_DisciplinaEspecial === 'S' && ( <AddDisciplina 
                                         data={formData.disciplinaEspecial}
                                         onChange={handleDisciplinaEspecialChange} 
-                                        maxMembers={10}
+                                        maxMembers={100}
                                     />)} {/* 20 */}
         {/* DONE Disciplina Especial Importante*/}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Estagio === 'S' && ( <AddEstagio data={formData.estagio} onChange={handleEstagioChange}/>) }{/* 38 */}

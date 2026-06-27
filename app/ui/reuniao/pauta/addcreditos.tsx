@@ -2,7 +2,7 @@
 
 import Myhr from "./myhr";
 import { mylog } from "@/app/lib/mylogger";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useDebouncedCallback } from 'use-debounce';
 // import { Button } from "../../button";
 import { CreditosFormData, Credito, AtribuidorName } from "@/app/lib/reuniao/definitions";
@@ -58,9 +58,12 @@ export default function AddCreditos({
 
     const [docDateIni, setDocDateIni] = useState(formData.dt_PeriodoInicial ? dayjs.utc(formData.dt_PeriodoInicial) : dayjs.utc());
     const [docDateFim, setDocDateFim] = useState(formData.dt_PeriodoFinal ? dayjs.utc(formData.dt_PeriodoFinal) : dayjs.utc());
-    setTiposAtribuidorCredito(tipoAttrCreditos)
-    console.log("AddCreditos - data", data);
-    console.log("AddCreditos - formData", formData);
+    console.log("AddCreditos - pretipos",tipoAttrCreditos);
+    useEffect (()=> {
+    setTiposAtribuidorCredito(tipoAttrCreditos);
+    },[])
+    console.log("AddCreditos - tipos",tipos);
+
 
     
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -198,7 +201,7 @@ export default function AddCreditos({
                     onClick={() => setIsAdding(true)}
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                   >
-                    + Incluir Paper
+                    + Incluir Publicação
                   </button>
                 )}
             </div>

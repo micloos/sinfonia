@@ -190,7 +190,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
             <View>
               <Text style={styles.title}> INSTITUTO DE PESQUISAS ENERGÉTICAS E NUCLEARES </Text>
               <Text style={styles.title}> Programa de Technologia Nuclear </Text>
-              <Text style={styles.title}> {titulo1} da {reuniao.id.toString()}ª Reunião - {moment.tz(reuniao.d_ini, tz).format('DD/MM/YYYY')} </Text>
+              <Text style={styles.title}> {titulo1} da {reuniao.id.toString()}ª Reunião - {moment.tz(reuniao.d_ini,tz).format('DD/MM/YYYY')} </Text>
             </View>
             <Image src='/logo.png' style={styles.inlineImage} />          
           </View>
@@ -214,16 +214,18 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
             na sala {reuniao.sala} do Prédio {reuniao.predio}, com a participação dos integrantes abaixo 
             relacionados tomaram as deliberações indicadas nas paginas seguintes:</Text> 
         </View>
+        
         <View style={[styles.section,styles.indentado]}>
           <Text style={styles.subtitle}> Comissão de Pós-Graduação </Text>
           <View style={styles.twocol}>
-            <Text style={styles.bold}> Presidente: </Text> <Text> {data.participantes.filter(user => (user.title==='Presidente'))[0].name}</Text>
+            <Text style={styles.bold}> Presidente: </Text>
+            <Text> {data.participantes.filter(user => (user.title==='Presidente'))[0].name}</Text>
           </View>
           <View style={styles.twocol}>
-            <Text style={styles.bold}> Vice Presidente: </Text> <Text> {data.participantes.filter(user => (user.title==='Vice Presidente'))[0].name}</Text>
+            <Text style={styles.bold}> Vice Presidente: </Text><Text> {data.participantes.filter(user => (user.title==='Vice Presidente'))[0].name}</Text>
           </View>
           <View style={styles.twocol}>
-            <Text style={styles.bold}> Assistente: </Text> <Text> {data.participantes.filter(user => (user.title==='Assistente'))[0].name}</Text>
+            <Text style={styles.bold}> Assistente: </Text><Text> {data.participantes.filter(user => (user.title==='Assistente'))[0].name}</Text>
           </View>
           <View style={styles.title3}>
             <Text> Representantes do Corpo Docente: </Text>
@@ -242,7 +244,8 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
               <View key={'disc'+item.id} style={styles.row}>
               <Text> {item.name}</Text>
               </View>
-            ))}
+            ))} 
+          
         </View>
         <View  >
           <Text style={styles.sectionTitle} >ORDEM DO DIA</Text>
@@ -253,55 +256,70 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
         <View>
           <Text style={styles.sectionTitle}> EXPEDIENTE </Text>
         </View>
-          {data.assuntos.map((item)=>
+        {data.assuntos.map((item)=>
           (
             <View key={item.id} >
-              <View key={'assunto'+item.id} style={styles.sectionSubTitle}  >
+              <View key={'assunto'+item.id} style={styles.sectionSubTitle}>
                 <Text> {item.assunto} </Text>
               </View>
               {data.items.filter(assuntoid => (Number(assuntoid.Cd_AssuntoReuniao) === item.id)).length > 0?
-              <View> 
-                <Text> </Text>
+              <View>
+                <Text></Text>
               </View> : <View><Text style={styles.section}>NÃO HOUVE OCORRÊNCIA </Text></View>
               }
-                {data.items.filter(assuntoid => (Number(assuntoid.Cd_AssuntoReuniao) === item.id)).map((assunto, index)=>(
-                  < View key={'pauta'+item.id+'.'+index} wrap style={styles.section}>
+               {data.items.filter(assuntoid => (Number(assuntoid.Cd_AssuntoReuniao) === item.id)).map((assunto, index)=>(
+                  < View key={'pauta'+item.id+'.'+index} wrap={false} style={styles.section}>
                     <Text style={styles.bold} > {item.id.toString()}.{(index+1).toString()} {assunto.nm_Interessado} - {assunto.ds_AreaInteressado} </Text>
                     {(data.assuntoParameters[Number(item.id)-1].Ind_Orientador==='S')?<Text>Orientador(a): Prof(a) Dr(a) {assunto.nm_Orientador} - {assunto.ds_LotOrientador} </Text>:<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_NovoOrientador==='S')?<Text>Novo Orientador(a): Prof(a) Dr(a) {assunto.nm_NovoOrientador}  </Text>:<Text></Text>}
                     <Text> Nivel: {assunto.ds_NivelInteressado} </Text>
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_DataApresentacao==='S')? <Text> Data de Apresentação: {moment.tz(assunto.dt_Apresentacao, tz).format('DD/MM/YYYY')} </Text>:<Text></Text> }
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_Defesa)==='S'? <Text> Data da Defesa: {moment.tz(assunto.Dt_Defesa, tz).format('DD/MM/YYYY')} </Text>:<Text></Text> }
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_DataDeposito==='S')? <Text> Data de Apresentação: {moment.tz(assunto.dt_Deposito, tz).format('DD/MM/YYYY')} </Text>:<Text></Text> }
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_DataApresentacao==='S')? <Text> Data de Apresentação: {moment.tz(assunto.dt_Apresentacao, tz).format('DD/MM/YYYY')} </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_Defesa)==='S'? <Text> Data da Defesa: {moment.tz(assunto.Dt_Defesa, tz).format('DD/MM/YYYY')} </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_DataDeposito==='S')? <Text> Data de Apresentação: {moment.tz(assunto.dt_Deposito, tz).format('DD/MM/YYYY')} </Text>:<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_PlanoTrabalho==='S')? <Text> Plano de Trabalho: {assunto.ds_TituloPlanoTrabalho} </Text>:<Text></Text>}
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoPlano==='S')?<Text>Novo Plano de Trabalho: {assunto.ds_TituloPlanoTrabalho_NovoPlano} </Text>:<Text></Text>};
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_DissertacaoTese==='S')?<Text>Dissertação / Tese: {assunto.ds_TituloDissertacaoTese} </Text>:<Text></Text>};
-
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoPlano==='S')?<Text>Novo Plano de Trabalho: {assunto.ds_TituloPlanoTrabalho_NovoPlano} </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_DissertacaoTese==='S')?<Text>Dissertação / Tese: {assunto.ds_TituloDissertacaoTese} </Text>:<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_BancaExaminadora==='S')?<View key={'banca'+assunto.Cd_ItemReuniao} ><Text>Banca: </Text>
-
-
                         {data.bancas.filter(bancamember => (bancamember.Cd_ItemReuniao === Number(assunto.Cd_ItemReuniao)))
                         .map((member)=>(
                         <Text key={'examinador'+member.Cd_BancaExaminadoraReuniao}>{(Number(member.Cd_TipoExaminador) < 6)?'Titular :':'Suplente :' } {member.nm_ExaminadorBanca} - {member.ds_LotExaminadorBanca}</Text>
-                      ))}
-
-                    </View>
+                      ))}</View>
                     :<Text></Text>}
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_Estagio==='S')?
-                    <View key={'estagio'+assunto.Cd_AssuntoReuniao}>
-                      <Text>Periodo Programa PAE: {moment.tz(assunto.dt_EstagioPeriodoInicio, tz).format('DD/MM/YYYY')} a {moment.tz(assunto.dt_EstagioPeriodoFim, tz).format('DD/MM/YYYY')}</Text>
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_DisciplinaEspecial==='S')?<View key={'discesc'+assunto.Cd_ItemReuniao} >
+                        {data.discEspecial.filter(bancamember => (bancamember.Cd_ItemReuniao === assunto.Cd_ItemReuniao))
+                        .map((member,index)=>(
+                          <View key={'disciplina'+member.cd_DisciplinaEspecial} wrap={false}>
+                        <Text style={styles.bold}>Disciplina {index+1}: {member.nm_DisciplinaEspecial} </Text>
+                        <Text> Periodo: {moment.tz(member.dt_PeriodoInicial, tz).format('DD/MM/YYYY')} a {moment.tz(member.dt_PeriodoFinal, tz).format('DD/MM/YYYY')}</Text>
+                        <Text> Conceito: {member.ds_Conceito} </Text>
+                        <Text> Frequencia: {member.ds_Frequencia}%</Text>
+                        <Text> Créditos: {member.qt_Creditos} </Text>
+                        </View>
+                      ))}
                       </View>
-                      :<Text></Text>};
+                    :<Text>Indice = {data.assuntoParameters[Number(item.id)-1].Ind_DisciplinaEspecial}</Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_Estagio==='S')?
+                      <View key={'estagio'+assunto.Cd_AssuntoReuniao}>
+                        <Text>Periodo Programa PAE: {moment.tz(assunto.dt_EstagioPeriodoInicio, tz).format('DD/MM/YYYY')} a {moment.tz(assunto.dt_EstagioPeriodoFim, tz).format('DD/MM/YYYY')}</Text>
+                      </View>
+                    :<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_CredenciamentoDisciplina==='S')?
-                    <View>
-                      <Text>Disciplina: {assunto.ds_CredenciamentoDisciplina} </Text>
-                      <Text>Responsável(eis): Prof.(a) Dr.(a) {assunto.Nm_CredProfessorResponsavel}   </Text>
-                    </View>
-                    :<Text></Text>};
+                      <View>
+                        <Text>Disciplina: {assunto.ds_CredenciamentoDisciplina} </Text>
+                        <Text>Responsável(eis): Prof.(a) Dr.(a) {assunto.Nm_CredProfessorResponsavel}   </Text>
+                      </View>
+                    :<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_NovoProfessor==='S')?
                       <Text>Novo Responsável: Prof.(a) Dr.(a) {assunto.Nm_CredNovoProfessor} </Text>:<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_MotivoAssunto==='S')?
                       <Text>Motivo: {assunto.ds_MotivoItem} </Text>:<Text></Text>}
+
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_AtribuiCreditos==='S')?
+                    <Text>Tem publicacoes</Text>
+                    : <Text>Nao tem publicacoes</Text>}
+
+
+
                     {(data.assuntoParameters[Number(item.id)-1].Ind_Relator==='S') ? <View key={'orientador'+assunto.Cd_ItemReuniao}>
                       <Text>Relator Indicado: {assunto.nm_Relator} - {assunto.ds_lotRelator} </Text> 
                       {(assunto.ds_ObservacaoRelator && assunto.ds_ObservacaoRelator.length>0)?
@@ -310,24 +328,28 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
                     </View>
                      :<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_SolicitaPrazo==='S')?
-                    <Text> Prazo de {data.tipoPrazos[Number(assunto.Cd_TipoSolicitacaoPrazo)-1]} Solicitado: {assunto.qt_SolicitacaoPrazoDiasSolicitados} </Text>
-                  : <Text></Text>  
-                  }
+                      <Text> Prazo de {data.tipoPrazos[Number(assunto.Cd_TipoSolicitacaoPrazo)-1]} Solicitado: {assunto.qt_SolicitacaoPrazoDiasSolicitados} </Text>
+                      :<Text></Text>  
+                    }
+                  
                     {tipo !== 'deliberacao' && assunto.ds_ObservacaoNaoPublicavelItem && assunto.ds_ObservacaoNaoPublicavelItem.length>0?
-                      <Text>{assunto.ds_ObservacaoNaoPublicavelItem} </Text>:<Text></Text>}
+                      <Text>Observação Não Publicavel: {assunto.ds_ObservacaoNaoPublicavelItem} </Text>:<Text></Text>}
+
+                  
                     {(assunto.Ind_AdReferendum==='S')?
                     <View key={'adref'+item.id} style={styles.red}>
                       <Text style={styles.red}>
                         Ad Referendum em {moment.tz(assunto.dt_AdReferendum, tz).format('DD/MM/YYYY')} </Text>
                         <Text style={styles.red}> Motivo: {assunto.ds_AdReferendum} </Text>                   
                     </View>
-                    :<View> <Text></Text></View>}
+                    :<View><Text></Text></View>}
+                    
                     {tipo === 'pauta' && assunto.ds_ObservacaoItem && assunto.ds_ObservacaoItem.length>0? <Text>Observação: {assunto.ds_ObservacaoItem}</Text>:<Text></Text>}
                     
-                    {(tipo === 'ata' || tipo ==='deliberacao')? <Text style={styles.blue}> Obs: {assunto.Cd_ClassificacaoDeliberacao} {assunto.Ds_ObservacaoDeliberacao} </Text>: <Text></Text>}
+                    {(tipo === 'ata' || tipo ==='deliberacao')? <Text style={styles.blue}> Obs: {assunto.Cd_ClassificacaoDeliberacao} {assunto.Ds_ObservacaoDeliberacao} </Text>: <Text></Text>} 
                   </View>
-              ))}
-              
+                ) 
+              )} 
             </View>
             )
           
@@ -363,13 +385,15 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
           <Text style={{ fontWeight: 'bold' }}>Total: ${total.toFixed(2)}</Text>
         </View>
 */}
-{/* Assinatura */} 
-          <View key='assinatura' style={styles.viewcenter} >
-            <Image src='/assinatura.png' style={styles.assinatura} />
-            <Text style={[styles.bold,styles.section]}> {data.participantes.filter(user => (user.title==='Presidente'))[0].name}</Text>  
+{/* Assinatura 
+          <View key='assinatura' style={styles.viewcenter}>
+            <Image src='/assinatura.png' style={styles.assinatura}/>
+            <Text style={[styles.bold,styles.section]}> {data.participantes.filter(user => (user.title==='Presidente'))[0].name}</Text>
             <Text style={styles.section}>Presidente </Text>
             <Text style={styles.section}> Comissão de Pós-Graduação </Text>
-          </View>
+          </View> */} 
+
+
       </Page>
     </Document>
   );

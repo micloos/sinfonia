@@ -27,7 +27,7 @@ export interface Banca  {
 
 export interface DisciplinaEspeciais {
     cd_DisciplinaEspecial : string;
-    cd_ItemReuniao : string;
+    Cd_ItemReuniao : string;
     nm_DisciplinaEspecial : string;
     qt_Creditos : number;
     dt_PeriodoInicial : string;
@@ -36,9 +36,9 @@ export interface DisciplinaEspeciais {
     ds_Conceito : string;
 }
 
-export type DisciplinaEspeciaisFormData = Omit<DisciplinaEspeciais, 'cd_DisciplinaEspecial' | 'cd_ItemReuniao'>;
+export type DisciplinaEspeciaisFormData = Omit<DisciplinaEspeciais, 'cd_DisciplinaEspecial' | 'Cd_ItemReuniao'>;
 
-export type DisciplinaEspecial = Omit<DisciplinaEspeciais, 'cd_ItemReuniao'>;
+export type DisciplinaEspecial = Omit<DisciplinaEspeciais, 'Cd_ItemReuniao'>;
 
 export interface Creditos {
     cd_AtribuidorCredito : string;

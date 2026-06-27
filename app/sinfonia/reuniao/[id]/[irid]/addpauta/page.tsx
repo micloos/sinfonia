@@ -2,7 +2,7 @@ import AddPauta from '@/app/ui/reuniao/addpauta';
 import { mylog } from '@/app/lib/mylogger';
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
 import { fetchReuniaoById } from '@/app/lib/reuniao/data2';
-import { fetchAssuntos } from '@/app/lib/reuniao/data';
+import { fetchAssuntos, fetchTipoAtribuidorCredito } from '@/app/lib/reuniao/data';
 import { Assuntos } from '@/app/lib/definitions';
 import { fetchIndices, fetchItemObject } from "@/app/lib/reuniao/data";
 import { ItemReuniaoResponse } from '@/app/lib/reuniao/definitions';
@@ -40,6 +40,7 @@ export default async function Page(props: {
   mylog("DBG",filename, 'Page' , "pendente=", pendente);
   const assuntos = await fetchAssuntos() as Assuntos[];
   const indices = await fetchIndices();
+  const tipoAtrrCreditos = await fetchTipoAtribuidorCredito();
   const itemReuniaoObject = irid > 0 ? await fetchItemObject(irid) as ItemReuniaoResponse : await fetchItemObject(afrom) as ItemReuniaoResponse;
   // mylog("DBG",filename, 'Page' , "assuntos=", assuntos);
   // mylog("DBG",filename, 'Page' , "indices=", indices);
@@ -50,7 +51,7 @@ export default async function Page(props: {
   return (
 	<main>
     <ReuniaoForm reuniao={reuniao} withsavebutton={0} withbackbutton={1}/>
-	  <AddPauta reuniao={nid} assuntos={assuntos} indices={indices} itemReuniao={irid} itemReuniaoObject={itemReuniaoObject} />
+	  <AddPauta reuniao={nid} assuntos={assuntos} indices={indices} tiposAttrCreditos={tipoAtrrCreditos} itemReuniao={irid} itemReuniaoObject={itemReuniaoObject} />
 	</main>
   );
 }
