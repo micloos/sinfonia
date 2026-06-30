@@ -31,7 +31,7 @@ export default  function AddPautaOrientador({ data, onChange, isRequired = false
                 type="string"
                 placeholder="Orientador"        
                 className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outlie-2 placeholder:text-gray-500"
-                value={orientador.nm_Orientador}
+                value={(orientador.nm_Orientador)?orientador.nm_Orientador:''}
                 onChange={handleChange}      
                 required={isRequired}      
               />
@@ -49,7 +49,7 @@ export default  function AddPautaOrientador({ data, onChange, isRequired = false
                     type="string"
                     className="peer inline w-full rounded-md border-gray-400 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     placeholder="Lotação do Orientador" 
-                    value={orientador.ds_LotOrientador} 
+                    value={(orientador.ds_LotOrientador)?orientador.ds_LotOrientador:''} 
                     onChange={handleChange}
                 />
             </div>

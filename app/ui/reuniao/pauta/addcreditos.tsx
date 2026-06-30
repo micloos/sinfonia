@@ -224,7 +224,7 @@ export default function AddCreditos({
                             className="w-full p-2 border rounded"
                         >
                             <option value="">[Selectionar Tipo]</option>
-                            {tipos.map((tipo) => (
+                            {tipoAttrCreditos.map((tipo) => (
                                 <option key={tipo.id} value={tipo.id}>
                                     {tipo.name}
                                 </option>
@@ -418,7 +418,7 @@ export default function AddCreditos({
                       </div>
                     </td>
                   )}
-                  <td className="px-4 py-2 border-b">{tipos[Number(member.Cd_TipoAtribuidorCredito)-1].name} </td>
+                  <td className="px-4 py-2 border-b">{tipoAttrCreditos.filter(tp => (tp.id===member.Cd_TipoAtribuidorCredito))[0].name} </td>
                   {/* <td className="px-4 py-2 border-b">{JSON.stringify(tipos[1])}</td> */}
                   <td className="px-4 py-2 border-b">{member.ds_TituloTrabalho}</td>
                   <td className="px-4 py-2 border-b">{member.ds_TituloPeriodicoLivroCongresso}

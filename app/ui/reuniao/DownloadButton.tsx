@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import { ImprimirDocument } from '@/app/ui/imprimirDocument';
-import type { ImprimirData, Reunioes, Participantes, OrdemDia, BancaCompleta } from '@/app/lib/definitions';
+import type { ImprimirData, AttrCreditos, Reunioes, Participantes, OrdemDia, BancaCompleta, TipoPrazos } from '@/app/lib/definitions';
 import { fetchAssuntos, fetchPauta, fetchBancas, fetchOrdemDia, fetchTipoPrazos, fetchTipoAtribuidorCredito,
   fetchParticipantesByReuniao, fetchReuniaoById, fetchAssuntoParameters, 
-  fetchDisciplinasEspeciais} from '@/app/lib/reuniao/data';
+  fetchDisciplinasEspeciais,
+  fetchAtribuidorCredito} from '@/app/lib/reuniao/data';
 import { DisciplinaEspeciais, ItemReuniao } from '@/app/lib/reuniao/definitions';
 import Tooltip from '@mui/material/Tooltip';
 import { PrinterIcon } from '@heroicons/react/24/outline';
@@ -60,11 +61,13 @@ export const DownloadButton = ({
       const reuniao: Reunioes = await fetchReuniaoById(id);
       console.log("reuniao = ",reuniao);
       const options: Intl.DateTimeFormatOptions = { year: "numeric", month: 'long', day: 'numeric' };
-      const d_end_date = new Date(reuniao.d_lim);
+      const d_end_date = new Date(reuniao.d_end);
       const d_ini_date = new Date(reuniao.d_ini);
+      const d_lim_date = new Date(reuniao.d_lim);
       reuniao.d_end = new Intl.DateTimeFormat('pt-BR',options).format(d_end_date);
       reuniao.d_ini = new Intl.DateTimeFormat('pt-BR',options).format(d_ini_date);
-      reuniao.d_lim = reuniao.d_lim.toString();
+      reuniao.d_lim = new Intl.DateTimeFormat('pt-BR',options).format(d_lim_date);
+      console.log('Datas',reuniao.d_ini,reuniao.d_lim,reuniao.d_end)
       data.reuniao=reuniao;
       const participantes: Participantes[] = await fetchParticipantesByReuniao(Number(id),0) as Participantes[];
       data.participantes=participantes;
@@ -87,8 +90,9 @@ export const DownloadButton = ({
       data.bancas = listaItems==='()'?[]:await fetchBancas(listaItems) as BancaCompleta[];
       data.discEspecial = listaItems==='()'?[]:await fetchDisciplinasEspeciais(listaItems) as DisciplinaEspeciais[];
       data.assuntoParameters = await fetchAssuntoParameters();
-      data.tipoPrazos = await fetchTipoPrazos();
+      data.tipoPrazos = await fetchTipoPrazos() as TipoPrazos[];
       data.tipoAttrCreditos = await fetchTipoAtribuidorCredito();
+      data.attrCreditos = await fetchAtribuidorCredito(listaItems) as AttrCreditos[];
       console.log("data=",data);
       const blob = await pdf(<ImprimirDocument data={data} />).toBlob();
 

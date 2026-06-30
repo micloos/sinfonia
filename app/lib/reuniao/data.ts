@@ -360,7 +360,7 @@ export async function fetchFilteredPauta     (id: number, query: string, current
 export async function fetchTipoPrazos ()
 {
     const myreq = `select nm_TipoSolicitacaoPrazo from REUNIAO_T3700_TipoSolicitacaoPrazo order by cd_TipoSolicitacaoPrazo`;
-    try { const tipos = await mssql(myreq) as string[];
+    try { const tipos = await mssql(myreq);
         return(tipos);
     } catch(error) {
         mylog ("ERROR", filename, "fetchTipoPrazos","error=",error);
@@ -380,7 +380,7 @@ export async function fetchAssuntoParameters ()
 }
 
 export async function fetchAssuntos() {
-    const myreq = `select Cd_AssuntoReuniao as id, concat(Cd_AssuntoReuniao,' - ',Ds_AssuntoAtaReuniao) as assunto from REUNIAO_T0200_AssuntoReuniao`;
+    const myreq = `select Cd_AssuntoReuniao as id, concat(Cd_AssuntoReuniao,' - ',Ds_AssuntoAtaReuniao) as assunto, Cd_AssuntoReuniaoRetornavel from REUNIAO_T0200_AssuntoReuniao`;
     try {
         const assuntos = await mssql(myreq) as Assuntos[];   
         return (assuntos)
@@ -535,7 +535,7 @@ export async function fetchItemObject (irid: number) {
 }
 
 export async function fetchPrazoNames () {
-    const myreq = `select Cd_TipoSolicitacaoPrazo as id, nm_TipoSolicitacaoPrazo as name from REUNIAO_T3700_TipoSolicitacaoPrazo`;
+    const myreq = `select cd_TipoSolicitacaoPrazo as id, nm_TipoSolicitacaoPrazo as name from REUNIAO_T3700_TipoSolicitacaoPrazo`;
     try {
         const prazos = await mssql(myreq) as {id: number, name: string}[] as PrazoName[];
         return (prazos)
@@ -553,6 +553,16 @@ export async function fetchTipoAtribuidorCredito () {
     } catch (error) {
         mylog("DBG",filename,"fetchTipoAtribuidorCredito","Error",error);
         throw new Error('Failed to fetch Tipo Atribuidor Creditos');
+    }
+}
+
+export async function fetchAtribuidorCredito (lista:string) {
+    const myreq = `select * from  REUNIAO_T3900_AtribuidorCreditos where Cd_ItemReuniao in ${lista}`;
+    try {
+        const resp = mssql(myreq);
+        return (resp);
+    }catch(error) {
+        mylog("ERROR", filename, "fetchBancas","Error =",error);
     }
 }
 

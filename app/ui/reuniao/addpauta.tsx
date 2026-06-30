@@ -107,7 +107,8 @@ export default  function AddPauta( {reuniao, assuntos, indices, tiposAttrCredito
       orientador: itemReuniaoObject ? { nm_Orientador: itemReuniaoObject.nm_Orientador, ds_LotOrientador: itemReuniaoObject.ds_LotOrientador } : { nm_Orientador: '', ds_LotOrientador: '' } as Orientador,
       observacao: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoItem) ? { ds_ObservacaoItem: itemReuniaoObject.ds_ObservacaoItem } as Observacao : { ds_ObservacaoItem: '' } as Observacao,
       observacaoNP: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoNaoPublicavelItem) ? { ds_ObservacaoNaoPublicavelItem: itemReuniaoObject.ds_ObservacaoNaoPublicavelItem } as ObservacaoNP : { ds_ObservacaoNaoPublicavelItem: '' } as ObservacaoNP,
-      relatorData: (itemReuniaoObject && itemReuniaoObject.nm_Relator) ? { nm_Relator: itemReuniaoObject.nm_Relator, ds_ObservacaoRelator: itemReuniaoObject.ds_ObservacaoRelator, ds_LotRelator: itemReuniaoObject.ds_LotRelator } as Relator : { nm_Relator: '', ds_ObservacaoRelator: '', ds_LotRelator: '' } as Relator,
+      relatorData: (itemReuniaoObject && itemReuniaoObject.nm_Relator ) ? { nm_Relator: itemReuniaoObject.nm_Relator, ds_ObservacaoRelator: itemReuniaoObject.ds_ObservacaoRelator, ds_LotRelator: itemReuniaoObject.ds_LotRelator } as Relator : { nm_Relator: '', ds_ObservacaoRelator: '', ds_LotRelator: '' } as Relator,
+
       cd_AssuntoReuniao: (itemReuniaoObject && itemReuniaoObject.Cd_AssuntoReuniao) ? {cd_AssuntoReuniao : itemReuniaoObject.Cd_AssuntoReuniao } as Assunto : {cd_AssuntoReuniao : '1'} as Assunto,
       ds_MotivoItem: (itemReuniaoObject && itemReuniaoObject.ds_MotivoItem) ? { ds_MotivoItem: itemReuniaoObject.ds_MotivoItem } as MotivoAssunto : { ds_MotivoItem: '' } as MotivoAssunto,
       novoOrientador: (itemReuniaoObject && itemReuniaoObject.nm_NovoOrientador) ? { nm_NovoOrientador: itemReuniaoObject.nm_NovoOrientador } as NovoOrientador : { nm_NovoOrientador: '' } as NovoOrientador,
@@ -119,7 +120,8 @@ export default  function AddPauta( {reuniao, assuntos, indices, tiposAttrCredito
       estagio: (itemReuniaoObject && itemReuniaoObject.ds_EstagioDisciplina) ? { ds_EstagioDisciplina: itemReuniaoObject.ds_EstagioDisciplina, dt_EstagioPeriodoInicio: itemReuniaoObject.dt_EstagioPeriodoInicio, dt_EstagioPeriodoFim: itemReuniaoObject.dt_EstagioPeriodoFim, qt_EstagioCreditos: Number(itemReuniaoObject.qt_EstagioCreditos) } as Estagio : { ds_EstagioDisciplina: '', dt_EstagioPeriodoInicio: '', dt_EstagioPeriodoFim: '', qt_EstagioCreditos: 0 } as Estagio,
       prazo: (itemReuniaoObject && itemReuniaoObject.Cd_TipoSolicitacaoPrazo) ? { Cd_TipoSolicitacaoPrazo: Number(itemReuniaoObject.Cd_TipoSolicitacaoPrazo), qt_SolicitacaoPrazoDiasSolicitados: Number(itemReuniaoObject.qt_SolicitacaoPrazoDiasSolicitados) } as Prazo : { Cd_TipoSolicitacaoPrazo: 0, qt_SolicitacaoPrazoDiasSolicitados: 0 } as Prazo,
       creditos: (itemReuniaoObject) ? itemReuniaoObject.creditos : [] as Credito[],
-      disciplinaEspecial: (itemReuniaoObject) ? itemReuniaoObject.disciplinaEspecial : [] as DisciplinaEspecial[]
+      disciplinaEspecial: (itemReuniaoObject) ? itemReuniaoObject.disciplinaEspecial : [] as DisciplinaEspecial[],
+      cd_ReuniaoOrigem: (itemReuniaoObject) ? itemReuniaoObject.cd_ReuniaoOrigem : ''
   });
 mylog ("ERROR",filename, 'AddPauta', 'creditos = ', formData.creditos);
 
@@ -303,6 +305,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         <input type="hidden" id="cd_reuniao" name="cd_reuniao" value={reuniao} />
         <input type="hidden" id="Cd_ItemReuniao" name="Cd_ItemReuniao" value={cd_itemReuniao} />
         <input type="hidden" id="cd_AssuntoReuniao" name="cd_AssuntoReuniao" value={formData.cd_AssuntoReuniao.cd_AssuntoReuniao} />
+        <input type="hidden" id="cd_ReuniaoOrigem" name="cd_ReuniaoOrigem" value={formData.cd_ReuniaoOrigem} />
         
         <SelectAssunto assuntos={assuntos} data={formData.cd_AssuntoReuniao}  onChange={handleAssuntoChange} />
         {/* DONE Assunto Reuniao */}

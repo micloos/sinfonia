@@ -63,7 +63,8 @@ const ItemAssunto = z.object ({
     qt_EstagioCreditos: z.string().regex(/^\d+$/).default('0'),
     Cd_TipoSolicitacaoPrazo: z.string().regex(/^\d+$/).default('0'),
     qt_SolicitacaoPrazoDiasSolicitados: z.string().regex(/^\d+$/).default('0'),
-    qt_SolicitacaoPrazoDiasConcedidos: z.string().regex(/^\d+$/).default('0')
+    qt_SolicitacaoPrazoDiasConcedidos: z.string().regex(/^\d+$/).default('0'),
+    cd_ReuniaoOrigem: z.string().regex(/^\d*$/).default('')
 })
 
 export async function getNextItem () {
@@ -249,7 +250,8 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             ds_EstagioDisciplina = ${essentialFields.data.ds_EstagioDisciplina.length>0?"'"+essentialFields.data.ds_EstagioDisciplina+"'":null},
             dt_EstagioPeriodoInicio = ${essentialFields.data.dt_EstagioPeriodoInicio==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoInicio+"'"},
             dt_EstagioPeriodoFim = ${essentialFields.data.dt_EstagioPeriodoFim==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoFim+"'"},
-            qt_EstagioCreditos = ${Number(essentialFields.data.qt_EstagioCreditos)===0?null:essentialFields.data.qt_EstagioCreditos}`;
+            qt_EstagioCreditos = ${Number(essentialFields.data.qt_EstagioCreditos)===0?null:essentialFields.data.qt_EstagioCreditos},
+            cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null}`;
         const add1 = essentialFields.data.Cd_TipoSolicitacaoPrazo === '0' ? '' :`
             , Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},

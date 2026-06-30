@@ -25,6 +25,7 @@ export type PautaRed = {
 export type Assuntos = {
 	id: number;
 	assunto: string;
+	Cd_AssuntoReuniaoRetornavel: string;
 }
 
 export type AssuntoParameters	 = {
@@ -188,6 +189,7 @@ export interface BancaCompleta  {
 }
 
 export interface AttrCreditos {
+	Cd_ItemReuniao: string;
 	cd_AtribuidorCredito: number;
 	ds_TituloTrabalho: string;
 	ds_TituloPeriodicoLivroCongresso: string;
@@ -210,6 +212,10 @@ export interface DiscEspecial {
 	ds_Conceito: string;
 }
 
+export type TipoPrazos = {
+	nm_TipoSolicitacaoPrazo: string
+}
+
 export interface ImprimirData {
 	tipo: string;
 	reuniao: Reunioes;
@@ -219,7 +225,7 @@ export interface ImprimirData {
 	items: ItemReuniao[];
 	assuntoParameters: AssuntoParameters[];
 	bancas: BancaCompleta[];
-	tipoPrazos: string[];
+	tipoPrazos: TipoPrazos[];
 	tipoAttrCreditos: AtribuidorName[];
 	attrCreditos: AttrCreditos[];
 	discEspecial: DisciplinaEspeciais[];

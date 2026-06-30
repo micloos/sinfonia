@@ -70,7 +70,7 @@ ind_planotrabalho='S'  // 7886
 ind_relator='S'  // 5671
     nm_Relator : string
     ds_ObservacaoRelator : string
-    ds_lotRelator : string
+    ds_LotRelator : string
 [DONE Relator]
 
 ind_bancaexaminadora='S'  // 6233

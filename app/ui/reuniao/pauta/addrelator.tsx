@@ -49,7 +49,7 @@ export default function AddRelator ({ data, onChange }: RelatorSubformProps) {
                         <input id="ds_LotRelator" name="ds_LotRelator" 
                             type="string"
                             className="peer inline w-full rounded-md border-gray-400 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                            value={data.ds_LotRelator}
+                            value={(data.ds_LotRelator)?data.ds_LotRelator:''}
                             onChange={handleChange}
                             placeholder="Lotação do Relator" 
                         />
@@ -66,7 +66,7 @@ export default function AddRelator ({ data, onChange }: RelatorSubformProps) {
                             type="string"
                             className="peer inline w-full rounded-md border-gray-400 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                             placeholder="Observação Relator" 
-                            value={data.ds_ObservacaoRelator}
+                            value={(data.ds_ObservacaoRelator)?data.ds_ObservacaoRelator:''}
                             onChange={handleChange} 
                         />
                     </div>

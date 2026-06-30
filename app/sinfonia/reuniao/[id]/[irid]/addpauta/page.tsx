@@ -42,6 +42,10 @@ export default async function Page(props: {
   const indices = await fetchIndices();
   const tipoAtrrCreditos = await fetchTipoAtribuidorCredito();
   const itemReuniaoObject = irid > 0 ? await fetchItemObject(irid) as ItemReuniaoResponse : await fetchItemObject(afrom) as ItemReuniaoResponse;
+  if (afrom > 0) {
+    itemReuniaoObject.Cd_AssuntoReuniao = assuntos.filter(retorno => (retorno.id===Number(itemReuniaoObject.Cd_AssuntoReuniao)))[0].Cd_AssuntoReuniaoRetornavel;
+    itemReuniaoObject.cd_ReuniaoOrigem = itemReuniaoObject.cd_Reuniao;
+  }
   // mylog("DBG",filename, 'Page' , "assuntos=", assuntos);
   // mylog("DBG",filename, 'Page' , "indices=", indices);
   // mylog("DBG",filename, 'Page' , "itemReuniao=", itemReuniaoObject);

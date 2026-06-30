@@ -27,7 +27,7 @@ export default function AddNovoOrientador ({ data, onChange }: { data: NovoOrien
                             type="string"
                             placeholder="Orientador"     
                             onChange={handleChange}
-                            value={data.nm_NovoOrientador}
+                            value={(data.nm_NovoOrientador)?data.nm_NovoOrientador:''}
                             className="peer inline w-full rounded-md border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"      
                         />
                     </div>

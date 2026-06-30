@@ -142,6 +142,7 @@ export interface AddPautaFormData {
   prazo: Prazo;
   creditos: Credito[];
   disciplinaEspecial: DisciplinaEspecial[]; 
+  cd_ReuniaoOrigem: string;
 }
 
 export type ItemReuniaoResponse = {
@@ -293,7 +294,7 @@ export type ItemReuniao = {
     // Relator
         nm_Relator?: string;
         ds_ObservacaoRelator?: string;
-        ds_lotRelator?: string;
+        ds_LotRelator?: string;
     // Atribuicao de Creditos (TBD)
     // Credenciamento de Disciplina
         ds_CredenciamentoDisciplina?: string;
