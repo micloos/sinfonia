@@ -14,6 +14,7 @@ export default function RootLayout({
     <html lang="en">
       <head> 
         <title> Sinfonia </title>
+         
       </head>
       <body className="h-screen">
         <header className="w-full flex-none" id="imageHeader">

@@ -256,7 +256,7 @@ export type ItemReuniaoState = {
 
 export type ItemReuniao = {
     Cd_ItemReuniao: string;
-    cd_reuniao: string;
+    cd_Reuniao: string;
     Cd_AssuntoReuniao?: string;
     dt_Apresentacao?: string;
     // Interessado

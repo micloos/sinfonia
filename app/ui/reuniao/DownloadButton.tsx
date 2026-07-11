@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import { ImprimirDocument } from '@/app/ui/imprimirDocument';
-import type { ImprimirData, AttrCreditos, Reunioes, Participantes, OrdemDia, BancaCompleta, TipoPrazos } from '@/app/lib/definitions';
+import type { ImprimirData, AttrCreditos, Reunioes, Participantes, OrdemDia, BancaCompleta, TipoPrazos, TipoDeliberacao } from '@/app/lib/definitions';
 import { fetchAssuntos, fetchPauta, fetchBancas, fetchOrdemDia, fetchTipoPrazos, fetchTipoAtribuidorCredito,
   fetchParticipantesByReuniao, fetchReuniaoById, fetchAssuntoParameters, 
   fetchDisciplinasEspeciais,
-  fetchAtribuidorCredito} from '@/app/lib/reuniao/data';
+  fetchAtribuidorCredito,
+  fetchTipoDeliberacao} from '@/app/lib/reuniao/data';
 import { DisciplinaEspeciais, ItemReuniao } from '@/app/lib/reuniao/definitions';
 import Tooltip from '@mui/material/Tooltip';
 import { PrinterIcon } from '@heroicons/react/24/outline';
@@ -50,7 +51,8 @@ export const DownloadButton = ({
     tipoPrazos:[],
     tipoAttrCreditos:[],
     attrCreditos:[],
-    discEspecial:[]
+    discEspecial:[],
+    tipoDeliberacao:[]
 };
   const generateAndDownloadPdf = async (): Promise<void> => {
     setStatus('generating');
@@ -93,6 +95,7 @@ export const DownloadButton = ({
       data.tipoPrazos = await fetchTipoPrazos() as TipoPrazos[];
       data.tipoAttrCreditos = await fetchTipoAtribuidorCredito();
       data.attrCreditos = await fetchAtribuidorCredito(listaItems) as AttrCreditos[];
+      data.tipoDeliberacao = await fetchTipoDeliberacao() as TipoDeliberacao[];
       console.log("data=",data);
       const blob = await pdf(<ImprimirDocument data={data} />).toBlob();
 

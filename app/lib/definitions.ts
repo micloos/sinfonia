@@ -154,6 +154,11 @@ export type AdminAssuntoType = {
 	modeloDespacho: number,
 }
 
+export type TipoDeliberacao = {
+	id: number,
+	nome: string,
+}
+
 export type AdminAssuntoParametersType = {
 	id: number,
 	ind_interessado: bool_br,
@@ -216,6 +221,11 @@ export type TipoPrazos = {
 	nm_TipoSolicitacaoPrazo: string
 }
 
+export type RelatReuniao = {
+	cd_reuniao: number;
+	dt_reuniao: number;
+}
+
 export interface ImprimirData {
 	tipo: string;
 	reuniao: Reunioes;
@@ -229,4 +239,5 @@ export interface ImprimirData {
 	tipoAttrCreditos: AtribuidorName[];
 	attrCreditos: AttrCreditos[];
 	discEspecial: DisciplinaEspeciais[];
+	tipoDeliberacao: TipoDeliberacao[];
 }
