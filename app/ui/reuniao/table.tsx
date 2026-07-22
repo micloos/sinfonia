@@ -1,5 +1,5 @@
 import { AddAssuntosPendente, UpdateReuniao, DeleteReuniao, EscParticipantes, EscOrdemDoDia, ReativarReuniao, 
-   ComporPauta   } from '@/app/ui/reuniao/buttons';
+   ComporPauta, ExecutarReuniao   } from '@/app/ui/reuniao/buttons';
 import { fetchFilteredReunioes } from '@/app/lib/reuniao/data';
 import { Reunioes } from '@/app/lib/definitions';
 import * as moment from 'moment-timezone';
@@ -67,6 +67,7 @@ export default async function ReunioesTable({
                       { (reuniao.active === 'N') && <DownloadButton id={reuniao.id.toString()} tipo='pauta'/>}
                       { (reuniao.active === 'S') && <DownloadButton id={reuniao.id.toString()} tipo='ata' />}
                       { (reuniao.active === 'S') && <DownloadButton id={reuniao.id.toString()} tipo='deliberacao'/>}
+                      { (reuniao.active === 'N') && <ExecutarReuniao id={reuniao.id.toString()}  active={reuniao.active} />}
                     </div>
                     
                   </td>

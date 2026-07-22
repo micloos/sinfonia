@@ -20,6 +20,13 @@ export type PautaRed = {
 	interessado: string;
 	area: string;
 	assuntoRetornavel: number;
+	deliberacao?: string;
+}
+
+export type ValoresDeliberacao = {
+	cd_AssuntoReuniao: number;
+	Cd_ClassificacaoDeliberacao: number;
+	Ind_DeliberacaoValor: string;
 }
 
 export type Assuntos = {

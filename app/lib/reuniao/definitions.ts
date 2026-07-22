@@ -252,7 +252,7 @@ export type ItemReuniaoState = {
         nm_Interessado?: string[];
     };
     message?: string | null;
-}
+} | undefined
 
 export type ItemReuniao = {
     Cd_ItemReuniao: string;

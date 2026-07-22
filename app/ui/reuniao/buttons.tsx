@@ -1,8 +1,11 @@
-import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, 
-          BoltIcon, DocumentDuplicateIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, PlayIcon,
+          BoltIcon, DocumentDuplicateIcon, XCircleIcon, 
+          CheckIcon,
+          QuestionMarkCircleIcon,
+          XMarkIcon} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, 
-          comporPauta, escParticipante, deleteOrdemDia, addPendentes
+          comporPauta, escParticipante, deleteOrdemDia, addPendentes, executarReuniao, executarItemReuniao
       } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
 // import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
@@ -147,6 +150,22 @@ export function UpdateReuniao({ id, active }: { id: string, active: string }) {
     </form>
   );
 }
+
+export function ExecutarReuniao({ id, active }: { id: string, active: string }) {
+  mylog("DBG",filename, 'UpdateReuniao' , "active=", active);
+  const executarReuniaoWithId = executarReuniao.bind(null, id);
+  return (
+    <form action={executarReuniaoWithId} >
+    <Tooltip title="Executar">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Executar</span>  
+      <PlayIcon className="w-5" />
+      </button>             
+    </Tooltip>
+    </form>
+  );
+}
+
 
 export function Participantes({ id, active}: { id: string, active: string }) {
 	const participantesWithId = participantes.bind(null, id);
@@ -303,6 +322,52 @@ export function AddAssuntoToReuniao({ reuniao }: { reuniao: number }) {
   );
 }
 
+export function ExecPositivo({ id, reuniao, assunto, selected, toset }: { id: string, reuniao: number, assunto: string, selected: boolean, toset: number }) {
+  const execPositivoWithId = executarItemReuniao.bind(null, reuniao, id, assunto, "positivo", toset);
+  mylog("DBG",filename, 'ExecPositivo' , "id,reuniao,assunto,selected,toset", {id, reuniao, assunto, selected, toset});
+  const classname = selected ? "rounded-md border p-2 hover:bg-gray-100 bg-yellow-300" : "rounded-md border p-2 hover:bg-gray-100";
+  return (
+    <form action={execPositivoWithId}>
+      <Tooltip title="Executar Positivo">
+      <button className={classname}>
+        <span className="sr-only">Executar Positivo</span>
+        <CheckIcon  className="w-5 text-green-600" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+}
+
+export function ExecMedio({ id, reuniao, assunto }: { id: string, reuniao: number, assunto: string }) {
+  const execMedioWithId = executarItemReuniao.bind(null, reuniao, id, assunto, "medio",0);
+  mylog("DBG",filename, 'ExecMedio' , "id=", id);
+  return (
+    <form action={execMedioWithId}>
+      <Tooltip title="Executar Medio">
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Executar Medio</span>
+        <QuestionMarkCircleIcon className="w-5 text-yellow-600" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+}
+
+export function ExecNegativo({ id, reuniao, assunto, selected, toset}: { id: string, reuniao: number, assunto: string , selected?: boolean, toset: number }) {
+  const execNegativoWithId = executarItemReuniao.bind(null, reuniao, id, assunto, "negativo", toset);
+  mylog("DBG",filename, 'ExecNegativo' , "id,reuniao,assunto,selected,toset", {id, reuniao, assunto, selected, toset});
+  const classname = selected ? "rounded-md border p-2 hover:bg-gray-100 bg-yellow-300" : "rounded-md border p-2 hover:bg-gray-100";
+  return (
+    <form action={execNegativoWithId}>
+      <Tooltip title="Executar Negativo">
+      <button className={classname}>
+        <span className="sr-only">Executar Negativo</span>
+        <XMarkIcon className="w-5 text-red-600" />
+      </button>
+      </Tooltip>
+    </form>
+  );
+}
 
 
 // Participantes da Reuniao

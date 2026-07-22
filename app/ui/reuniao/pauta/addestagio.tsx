@@ -27,7 +27,7 @@ export default function AddEstagio ({ data, onChange }: EstagioSubformProps) {
         setEstagio(updatedEstagio);
         onChange(updatedEstagio);
       };
-    mylog("ERROR",'addestagio', 'AddEstagio', 'estagio = ', estagio);
+    mylog("DBG",'addestagio', 'AddEstagio', 'estagio = ', estagio);
     const [docDateIni, setDocDateIni] = useState(data.dt_EstagioPeriodoInicio ? dayjs.utc(data.dt_EstagioPeriodoInicio) : dayjs.utc());
     const [docDateFim, setDocDateFim] = useState(data.dt_EstagioPeriodoFim ? dayjs.utc(data.dt_EstagioPeriodoFim) : dayjs.utc());
     return (

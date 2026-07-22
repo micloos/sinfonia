@@ -371,7 +371,7 @@ export async function fetchPauta (id: number, tipo: string)
 
 export async function fetchFilteredPauta     (id: number, query: string, currentPage: number)
 {
-    mylog("ERROR",filename,"fetchFilteredPauta","{id, query, currentPage}=",{id, query, currentPage})
+    // mylog("ERROR",filename,"fetchFilteredPauta","{id, query, currentPage}=",{id, query, currentPage})
     const offset = currentPage ===0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE;
     const numitens = currentPage ===0 ? 100000 : ITEMS_PER_PAGE;
     if (isNaN(+query) || query.trim() === '') {
@@ -382,7 +382,8 @@ export async function fetchFilteredPauta     (id: number, query: string, current
             ip.Cd_AssuntoReuniao as assuntoId,
             a.Ds_AssuntoAtaReuniao as assunto,
             ip.Ds_AreaInteressado as area,
-            a.Cd_AssuntoReuniaoRetornavel as assuntoRetornavel
+            a.Cd_AssuntoReuniaoRetornavel as assuntoRetornavel,
+            ip.Cd_ClassificacaoDeliberacao as deliberacao
         from 
             Reuniao_T1010_ItemReuniao as ip 
         inner join Reuniao_T0200_AssuntoReuniao as a
@@ -392,7 +393,7 @@ export async function fetchFilteredPauta     (id: number, query: string, current
         offset ${offset} rows fetch next ${numitens} rows only`;
         mylog("DBG",filename,"fetchFilteredPauta","myreq=",myreq.replace(/\s/g," "));
         const pauta = await mssql(myreq);
-        mylog("DBG",filename,"fetchFilteredPauta","pauta=",pauta);
+        // mylog("DBG",filename,"fetchFilteredPauta","pauta=",pauta);
         return (pauta)
     } catch (error) {
         mylog ("ERROR", filename, "fetchFilteredPauta","error=",error);
@@ -425,11 +426,17 @@ export async function fetchFilteredPauta     (id: number, query: string, current
     }
 }
 }
-
-
     
-
-
+export async function fetchDelibValores () {
+    const myreq = `select * from REUNIAO_T4400_DeliberacaoValor`;
+    try {
+        const valores = await mssql(myreq);
+        return(valores);
+    } catch(error) {
+        mylog ("ERROR", filename, "fetchDelibValores","error=",error);
+        throw new Error('Failed to fetch Delib Valores');
+    }
+}
 
 export async function fetchTipoPrazos ()
 {
@@ -585,19 +592,19 @@ export async function fetchItemObject (irid: number) {
         const banca = await mssql(myreq2) as Banca[];
         if (banca && banca.length > 0 && toreturn) {
             toreturn.banca = banca as Banca[];
-            mylog("ERROR",filename,"fetchItemObject","banca = ",banca)
+            mylog("DBG",filename,"fetchItemObject","banca = ",banca)
         }
         const myreq3 = `select * from REUNIAO_T3900_AtribuidorCreditos where Cd_ItemReuniao = ${irid}`;
         const creditos = await mssql(myreq3) as Credito[];
         if (creditos && creditos.length > 0 && toreturn) {
             toreturn.creditos = creditos as Credito[];
-            mylog("ERROR",filename,"fetchItemObject","creditos = ",creditos)
+            mylog("DBG",filename,"fetchItemObject","creditos = ",creditos)
         }
         const myreq4 = `select * from REUNIAO_T3800_DisciplinaEspecial where Cd_ItemReuniao = ${irid}`;
         const disciplinas = await mssql(myreq4) as DisciplinaEspecial[];
         if (disciplinas && disciplinas.length > 0 && toreturn) {
             toreturn.disciplinaEspecial = disciplinas as DisciplinaEspecial[];
-            mylog("ERROR",filename,"fetchItemObject","disciplinas = ",disciplinas)
+            mylog("DBG",filename,"fetchItemObject","disciplinas = ",disciplinas)
         }
 
         return (toreturn)

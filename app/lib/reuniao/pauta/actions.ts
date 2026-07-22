@@ -5,8 +5,11 @@ import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../../mylogger';
 
-import { Banca, Credito, DisciplinaEspecial, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
+import { Banca, Credito, DisciplinaEspecial, ItemReuniao, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
+import * as moment from 'moment-timezone';
+
+const tz ="UTC";
 
 // import { revalidatePath } from 'next/cache';
 
@@ -85,7 +88,7 @@ export  async function getNextBancaItem ()
     
     try {
         const nextitem = await mssql(myreq1) as {n: number }[];
-        mylog("ERROR",filename,"getNextBancaItem","nextitem",nextitem);
+        mylog("DBG",filename,"getNextBancaItem","nextitem",nextitem);
         return (nextitem[0].n)
     } catch (error) {
         mylog("ERROR",filename,"getNextBancaItem","Error",error);
@@ -99,7 +102,7 @@ export  async function getNextCreditosItem ()
     
     try {
         const nextitem = await mssql(myreq1) as {n: number }[];
-        mylog("ERROR",filename,"getNextCreditosItem","nextitem",nextitem);
+        mylog("DBG",filename,"getNextCreditosItem","nextitem",nextitem);
         return (nextitem[0].n)
     } catch (error) {
         mylog("ERROR",filename,"getNextCreditosItem","Error",error);
@@ -113,7 +116,7 @@ export async function getNextDisciplinaEspecialItem ()
     
     try {
         const nextitem = await mssql(myreq1) as {n: number }[];
-        mylog("ERROR",filename,"getNextDisciplinaEspecialItem","nextitem",nextitem);
+        mylog("DBG",filename,"getNextDisciplinaEspecialItem","nextitem",nextitem);
         return (nextitem[0].n)
     } catch (error) {
         mylog("ERROR",filename,"getNextDisciplinaEspecialItem","Error",error);
@@ -164,7 +167,7 @@ export interface SearchResult {
 
 export async function createItem () {
     const Cd_ItemReuniao = await getNextItem();
-    mylog("ERROR",filename,"createItem","Cd_ItemReuniao = ",Cd_ItemReuniao)
+    mylog("DBG",filename,"createItem","Cd_ItemReuniao = ",Cd_ItemReuniao)
     if (Cd_ItemReuniao > 0) {
         try {
             const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao) values (${Cd_ItemReuniao})`
@@ -176,20 +179,89 @@ export async function createItem () {
     }
     return (Cd_ItemReuniao)
 }
- 
+
+export async function criarAssuntoPendente (item: number, assunto: number) {
+    // get all from item
+    const myreq1 = `select * from reuniao_t1010_itemreuniao where Cd_ItemReuniao = ${item}`;
+    const itemdata = await mssql(myreq1) as ItemReuniao[];
+    const banca = await mssql(`select * from REUNIAO_T0900_BancaExaminadoraReuniao where Cd_ItemReuniao = ${item}`) as Banca[];
+    const creditos = await mssql(`select * from REUNIAO_T3900_AtribuidorCreditos where Cd_ItemReuniao = ${item}`) as Credito[];
+    const discesp = await mssql(`select * from REUNIAO_T3800_DisciplinaEspecial where Cd_ItemReuniao = ${item}`) as DisciplinaEspecial[];
+    const pseudoForm: FormData = new FormData();
+
+    const myreq2 = `select count(1) as a from reuniao_t1010_itemreuniao where cd_AssuntoReuniao = ${assunto} and cd_reuniao is null and Nm_Interessado = '${itemdata[0].nm_Interessado}' and cd_ReuniaoOrigem = '${itemdata[0].cd_Reuniao}' `;
+    mylog("DBG",filename,"criarAssuntoPendente","myreq2 = ",myreq2);
+
+    const count = await mssql(myreq2) as {a: number}[];
+
+    mylog("INFO",filename,"criarAssuntoPendente","count = ",count[0].a);
+
+    if (count[0].a === 0) {
+
+    pseudoForm.append('cd_AssuntoReuniao', String(assunto));
+    pseudoForm.append('cd_reuniao', '0');
+    pseudoForm.append('Cd_ItemReuniao', '0');
+    if (itemdata[0].nm_Interessado) {pseudoForm.append('nm_Interessado', itemdata[0].nm_Interessado)};
+    if (itemdata[0].ds_AreaInteressado) {pseudoForm.append('ds_AreaInteressado', itemdata[0].ds_AreaInteressado)};
+    if (itemdata[0].ds_NivelInteressado) {pseudoForm.append('ds_NivelInteressado', itemdata[0].ds_NivelInteressado)};
+    if (itemdata[0].nm_Orientador) {pseudoForm.append('nm_Orientador', itemdata[0].nm_Orientador)};
+    if (itemdata[0].ds_LotOrientador) {pseudoForm.append('ds_LotOrientador', itemdata[0].ds_LotOrientador)};
+    if (itemdata[0].dt_Apresentacao && itemdata[0].dt_Apresentacao !== null) 
+        {pseudoForm.append('dt_Apresentacao', moment.tz(itemdata[0].dt_Apresentacao,tz).toISOString())}
+        else {pseudoForm.append('dt_Apresentacao', '01/01/1970')};
+    if (itemdata[0].Ind_AdReferendum) {pseudoForm.append('Ind_AdReferendum', itemdata[0].Ind_AdReferendum)};
+    if (itemdata[0].ds_AdReferendum) {pseudoForm.append('ds_AdReferendum', itemdata[0].ds_AdReferendum)};
+    if (itemdata[0].ds_TituloPlanoTrabalho) {pseudoForm.append('ds_TituloPlanoTrabalho', itemdata[0].ds_TituloPlanoTrabalho)};
+    if (itemdata[0].ds_ObservacaoItem) {pseudoForm.append('ds_ObservacaoItem', itemdata[0].ds_ObservacaoItem)};
+    if (itemdata[0].ds_ObservacaoNaoPublicavelItem) {pseudoForm.append('ds_ObservacaoNaoPublicavelItem', itemdata[0].ds_ObservacaoNaoPublicavelItem)};
+    if (itemdata[0].nm_Relator) {pseudoForm.append('nm_Relator', itemdata[0].nm_Relator)};
+    if (itemdata[0].ds_LotRelator) {pseudoForm.append('ds_LotRelator', itemdata[0].ds_LotRelator)};
+    if (itemdata[0].ds_ObservacaoRelator) {pseudoForm.append('ds_ObservacaoRelator', itemdata[0].ds_ObservacaoRelator)};
+    if (itemdata[0].ds_TituloDissertacaoTese) {pseudoForm.append('ds_TituloDissertacaoTese', itemdata[0].ds_TituloDissertacaoTese)};
+    if (itemdata[0].ds_MotivoItem) {pseudoForm.append('ds_MotivoItem', itemdata[0].ds_MotivoItem)};
+    if (itemdata[0].nm_NovoOrientador) {pseudoForm.append('nm_NovoOrientador', itemdata[0].nm_NovoOrientador)};
+    if (itemdata[0].ds_TituloPlanoTrabalho_NovoPlano) {pseudoForm.append('ds_TituloPlanoTrabalho_NovoPlano', itemdata[0].ds_TituloPlanoTrabalho_NovoPlano)};
+    if (itemdata[0].Nm_CredNovoProfessor) {pseudoForm.append('nm_CredNovoProfessor', itemdata[0].Nm_CredNovoProfessor)};
+    if (itemdata[0].ds_CredenciamentoDisciplina) {pseudoForm.append('ds_CredenciamentoDisciplina', itemdata[0].ds_CredenciamentoDisciplina)};
+    if (itemdata[0].Nm_CredProfessorResponsavel) {pseudoForm.append('Nm_CredProfessorResponsavel', itemdata[0].Nm_CredProfessorResponsavel)};
+    if (itemdata[0].Dt_Defesa && itemdata[0].Dt_Defesa !== null) {pseudoForm.append('Dt_Defesa', moment.tz(itemdata[0].Dt_Defesa,tz).toISOString())} else 
+        {pseudoForm.append('Dt_Defesa', '01/01/1970')};
+    if (itemdata[0].dt_Deposito && itemdata[0].dt_Deposito !== null) {pseudoForm.append('dt_Deposito', moment.tz(itemdata[0].dt_Deposito,tz).toISOString())} else 
+        {pseudoForm.append('dt_Deposito', '01/01/1970')};
+    if (itemdata[0].ds_EstagioDisciplina) {pseudoForm.append('ds_EstagioDisciplina', itemdata[0].ds_EstagioDisciplina)};
+    if (itemdata[0].dt_EstagioPeriodoInicio) {pseudoForm.append('dt_EstagioPeriodoInicio', moment.tz(itemdata[0].dt_EstagioPeriodoInicio,tz).toISOString())} else 
+        {pseudoForm.append('dt_EstagioPeriodoInicio', '01/01/1970')};
+    if (itemdata[0].dt_EstagioPeriodoFim) {pseudoForm.append('dt_EstagioPeriodoFim', moment.tz(itemdata[0].dt_EstagioPeriodoFim,tz).toISOString())} else 
+        {pseudoForm.append('dt_EstagioPeriodoFim', '01/01/1970')};
+    if (itemdata[0].qt_EstagioCreditos) {pseudoForm.append('qt_EstagioCreditos', String(itemdata[0].qt_EstagioCreditos))};
+    if (itemdata[0].Cd_TipoSolicitacaoPrazo) {pseudoForm.append('Cd_TipoSolicitacaoPrazo', String(itemdata[0].Cd_TipoSolicitacaoPrazo))};
+    if (itemdata[0].qt_SolicitacaoPrazoDiasSolicitados) {pseudoForm.append('qt_SolicitacaoPrazoDiasSolicitados', String(itemdata[0].qt_SolicitacaoPrazoDiasSolicitados))};
+    pseudoForm.append('cd_ReuniaoOrigem', String(itemdata[0].cd_Reuniao));
+    if (creditos.length>0) {pseudoForm.append('creditos_json', JSON.stringify(creditos))};
+    if (discesp.length>0) {pseudoForm.append('disciplinas_json', JSON.stringify(discesp))};
+    if (banca.length>0) {pseudoForm.append('banca_json', JSON.stringify(banca))};
+    const prevState: ItemReuniaoState = {errors: {}, message: ''};
+    mylog("INFO",filename,"criarAssuntoPendente","FormData = ",pseudoForm);
+    createItemObject(prevState, pseudoForm);
+}
+}
+    
+    
+
+
 export async function createItemObject (prevState: ItemReuniaoState, formData:FormData) {
-    mylog("ERROR",filename,"createItemObject","prevState = ",prevState)
-    mylog("ERROR",filename,"createItemObject","formData = ",formData)
+    mylog("INFO",filename,"createItemObject","prevState = ",prevState)
+    mylog("INFO",filename,"createItemObject","formData = ",formData)
     
     const myform = Object.fromEntries(formData.entries());
 
-    mylog("ERROR",filename,"createItemObject","myform = ",myform);
+    mylog("DBG",filename,"createItemObject","myform = ",myform);
 
      
 
     const essentialFields = ItemAssunto.safeParse(myform)
 
-    mylog("ERROR",filename,"createItemObject","essentials = ",essentialFields)
+    mylog("DBG",filename,"createItemObject","essentials = ",essentialFields)
     if(!essentialFields.success) {
 		mylog ("ERROR", "app/lib/actions", "createItemObject", "essentialFields=", essentialFields.error.flatten().fieldErrors);
 		return {
@@ -214,14 +286,14 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         }
     }
 
-    mylog("ERROR",filename,"createItemObject","essentialFields.data after creation = ",essentialFields.data)
+    mylog("DBG",filename,"createItemObject","essentialFields.data after creation = ",essentialFields.data)
 
 // Inserir datos essentials
 
     try {
             const myreq0 = `
             UPDATE REUNIAO_T1010_ItemReuniao set 
-            cd_reuniao = ${essentialFields.data.cd_reuniao},
+            cd_reuniao = ${essentialFields.data.cd_reuniao==='0'?null:essentialFields.data.cd_reuniao},
             Cd_AssuntoReuniao = ${essentialFields.data.cd_AssuntoReuniao},
             nm_Interessado = '${essentialFields.data.nm_Interessado}',
             ds_AreaInteressado = '${essentialFields.data.ds_AreaInteressado}',
@@ -260,9 +332,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             where Cd_ItemReuniao = ${essentialFields.data.Cd_ItemReuniao}
             `;
         const myreq = myreq0 + add1 + fim;
-            mylog ("ERROR",filename,"createItemObject","myreq =",myreq.replace(/\s/g," "));
+            mylog ("DBG",filename,"createItemObject","myreq =",myreq.replace(/\s/g," "));
             const answer = mssql(myreq)
-            mylog ("ERROR",filename,"createItemObject","answer = ", answer);
+            mylog ("DBG",filename,"createItemObject","answer = ", answer);
         } catch(error) {
             mylog ("ERROR",filename,"createItemObject","error = ", error);
             return {
@@ -274,14 +346,14 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
     const banca= myform.banca_json ? JSON.parse(myform.banca_json as string) as Banca[] : [];
 
     if (banca.length > 0) {
-        mylog("ERROR",filename,"createItemObject","banca = ",banca);
+        mylog("DBG",filename,"createItemObject","banca = ",banca);
         const cd_BancaExaminadoraReuniaoInit =  await getNextBancaItem();
-        mylog("ERROR",filename,"createItemObject","next cd_BancaExaminadoraReuniao = ",cd_BancaExaminadoraReuniaoInit);
+        mylog("DBG",filename,"createItemObject","next cd_BancaExaminadoraReuniao = ",cd_BancaExaminadoraReuniaoInit);
         let myreqtotal = "create table TEMPBANCA (cd_BancaExaminadoraReuniao int, Cd_ItemReuniao int, nm_ExaminadorBanca varchar(200), ds_LotExaminadorBanca varchar(200), Cd_TipoExaminador int); ";
         
         for (let i = cd_BancaExaminadoraReuniaoInit; i < cd_BancaExaminadoraReuniaoInit + banca.length; i++) {
             const element = banca[i - cd_BancaExaminadoraReuniaoInit];            
-                    mylog("ERROR",filename,"createItemObject","i = ",i);
+                    mylog("DBG",filename,"createItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO TEMPBANCA 
                         (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
@@ -308,13 +380,16 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             
         } catch (error) {
                     mylog ("ERROR",filename,"createItemObject","Error in banca insertion loop = ", error);
+                    return {
+                        message: "Database Error for Banca" + error
+                    }
         }
     }
 
     const creditos= myform.creditos_json ? JSON.parse(myform.creditos_json as string) as Credito[] : [];
 
     if (creditos.length > 0) {
-        mylog("ERROR",filename,"createItemObject","creditos = ",creditos);
+        mylog("DBG",filename,"createItemObject","creditos = ",creditos);
         const cd_CreditosInit =  await getNextCreditosItem();
         let myreqtotal = `
             CREATE TABLE TEMPCREDITOS (cd_AtribuidorCredito int, ds_TituloTrabalho varchar(1000), ds_TituloPeriodicoLivroCongresso varchar(500),
@@ -326,7 +401,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             if (isNaN(+element.cd_AtribuidorCredito)) {
 
                 
-                    mylog("ERROR",filename,"createItemObject","i = ",i);
+                    mylog("DBG",filename,"createItemObject","i = ",i);
                     element.nu_Volume = element.nu_Volume ? element.nu_Volume : '0';
                      const myreq = `
                         INSERT INTO TEMPCREDITOS 
@@ -335,7 +410,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                         VALUES 
                         (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
                     `;
-                    mylog("ERROR",filename,"createItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
+                    mylog("DBG",filename,"createItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
                     myreqtotal = myreqtotal+myreq
                                  
         }
@@ -359,15 +434,18 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             
         } catch (error) {
                     mylog ("DBG",filename,"createItemObject","Error in creditos insertion loop = ", error);
+                     return {
+                        message: "Database Error for Creditos" + error
+                    }
         }
        
     }
 
     const disciplinaEspecial= myform.disciplinas_json ? JSON.parse(myform.disciplinas_json as string) as DisciplinaEspecial[] : [];
     if (disciplinaEspecial.length > 0) {
-        mylog("ERROR",filename,"createItemObject","disciplinaEspecial = ",disciplinaEspecial);
+        mylog("DBG",filename,"createItemObject","disciplinaEspecial = ",disciplinaEspecial);
         const cd_DisciplinaEspecialInit =  await getNextDisciplinaEspecialItem();
-        mylog("ERROR",filename,"createItemObject","next cd_Creditos = ",cd_DisciplinaEspecialInit);
+        mylog("DBG",filename,"createItemObject","next cd_Creditos = ",cd_DisciplinaEspecialInit);
         let myreqtotal = `create table TEMPESPECIAIS (
             cd_DisciplinaEspecial int,
             nm_DisciplinaEspecial varchar(255), 
@@ -382,7 +460,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             const element = disciplinaEspecial[i - cd_DisciplinaEspecialInit];
             if (isNaN(+element.cd_DisciplinaEspecial)) {
             
-                    mylog("ERROR",filename,"createItemObject","i = ",i);
+                    mylog("DBG",filename,"createItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO TEMPESPECIAIS 
                         (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
@@ -412,9 +490,19 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             
         } catch (error) {
                     mylog ("ERROR",filename,"createItemObject","Error in DisciplinaEspecial insertion loop = ", error);
+                     return {
+                        message: "Database Error for DisciplinaEspecial" + error
+                    }
         }
     }
-
-    revalidatePath("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
-    redirect("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta")
+    if (essentialFields.data.cd_reuniao !== '0') {
+    revalidatePath("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta");
+    redirect("/sinfonia/reuniao/"+essentialFields.data.cd_reuniao+"/pauta");
+    }
+    return {
+        message: "Item created/updated successfully"
+    }
+    
 }
+    
+

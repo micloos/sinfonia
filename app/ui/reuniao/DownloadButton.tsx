@@ -149,11 +149,12 @@ export const DownloadButton = ({
     }
   };
 
+  const tool = (tipo==='ata')?'Ata':(tipo==='deliberacao')?'Deliberação':'Pauta';
 
   return (
     <form>
       
-      <Tooltip title={tipo} >
+      <Tooltip title={tool} >
       <button
         onClick={generateAndDownloadPdf}
         disabled={status === 'generating'}

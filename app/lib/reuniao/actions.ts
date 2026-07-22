@@ -5,8 +5,9 @@ import { mssql } from '@/app/lib/db';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
 import { getNextSequence } from '@/app/lib/reuniao/data';
-import { ReuniaoState, OrdemState } from '@/app/lib/reuniao/definitions';
+import { ReuniaoState, OrdemState, ItemReuniao } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
+import { criarAssuntoPendente } from './pauta/actions';
 
 
 const filename="/app/lib/reuniao/actions";
@@ -403,6 +404,40 @@ export async function comporPauta (id: string)
 	mylog ("DBG", "app/lib/actions", "comporPauta", "id=",id);
 	const goto = "/sinfonia/reuniao/"+id+"/pauta";
 	redirect (goto);
+}
+
+export async function executarReuniao (id: string)
+{
+	mylog ("DBG", "app/lib/actions", "executarReuniao", "id=",id);
+	const goto = "/sinfonia/reuniao/"+id+"/executar";
+	redirect (goto);
+}
+
+export async function executarItemReuniao (reuniao: number, id: string, assunto: string, decisao: string, toset: number)
+{
+	mylog("DBG", "app/lib/actions", "executarItemReuniao", "{reuniao,id,assunto,decisao,toset}=", {reuniao,id,assunto,decisao,toset});
+	if (decisao === 'positivo') {
+		const myreq = `select * from REUNIAO_T1010_ItemReuniao where Cd_ItemReuniao = ${id}`
+		const item = await mssql(myreq) as ItemReuniao[];
+		const myreq2 = `select cd_assuntoreuniaoretornavel from reuniao_t0200_AssuntoReuniao where Cd_AssuntoReuniao = ${item[0].Cd_AssuntoReuniao}`;
+		const assuntoRetornavel = await mssql(myreq2) as {cd_assuntoreuniaoretornavel: number}[];
+		mylog ("DBG", "app/lib/actions", "executarItemReuniao", "item=",item);
+		mylog ("DBG", "app/lib/actions", "executarItemReuniao", "assuntoRetornavel=",assuntoRetornavel);
+		if (assuntoRetornavel[0].cd_assuntoreuniaoretornavel) {
+		await criarAssuntoPendente(Number(item[0].Cd_ItemReuniao), assuntoRetornavel[0].cd_assuntoreuniaoretornavel);
+		
+		}
+	}
+	mylog ("DBG", "app/lib/actions", "executarItemReuniao", "{reuniao,id,assunto,decisao,toset}=", {reuniao,id,assunto,decisao,toset});
+	const myreq = `update reuniao_t1010_itemreuniao set Cd_ClassificacaoDeliberacao = '${toset}' where Cd_ItemReuniao = ${id}`;
+	mylog ("DBG", "app/lib/actions", "executarItemReuniao", "myreq=",myreq);
+	try {
+		const answer = await mssql(myreq);
+		mylog("DBG", "app/lib/actions","executarItemReuniao","answer=",answer)
+	} catch (error) {
+		mylog("ERROR","app/lib/actions","executarItemReuniao","error=",error)
+	}
+	redirect ('/sinfonia/reuniao/'+reuniao.toString()+'/executar');
 }
 
 export async function addPendentes (id: number)

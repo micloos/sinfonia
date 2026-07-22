@@ -6,9 +6,6 @@ import { useEffect, useState } from "react";
 
     const filename = "addpraz.tsx";
 
-//    const prazoNames = fetchPrazoNames();
-//    mylog("ERROR", filename, 'AddPrazo', 'prazoNames = ', prazoNames);
-
 interface PrazoSubformProps {
   data: Prazo;
   onChange: (data: Prazo) => void;
@@ -23,20 +20,18 @@ export default function AddPrazo ({ data, onChange }: PrazoSubformProps) {
         const updatedPrazo = { ...prazo, [name]: value };
         setPrazo(updatedPrazo);
         onChange(updatedPrazo);
- //       console.log("Updated prazo: ", updatedPrazo);
- //       console.log("Current prazoNames: ", prazoNames);
+
       };
     useEffect(() => {
-        mylog("ERROR", filename, 'AddPrazo', 'Component mounted, fetching prazo names...','');
+        mylog("DBG", filename, 'AddPrazo', 'Component mounted, fetching prazo names...','');
         const loadPrazoNames = async () => {
             const prazoNames = await fetchPrazoNames();
             setPrazoNames(prazoNames);
-            mylog("ERROR", filename, 'AddPrazo', 'Loaded prazo names: ', prazoNames);
+            mylog("DBG", filename, 'AddPrazo', 'Loaded prazo names: ', prazoNames);
         };
         loadPrazoNames();
     }, []);
 
-//    mylog("ERROR", filename, 'AddPrazo', 'Rendering component with prazo: ', prazoNames);
 
     return(
         <div className="rounded-md bg-gray-50 p-4 md:p-2">

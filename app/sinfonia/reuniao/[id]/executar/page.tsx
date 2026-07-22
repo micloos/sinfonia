@@ -1,17 +1,16 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
 
 import PautaList from '@/app/ui/reuniao/pautalist';
-import { fetchReuniaoById, fetchAssuntosPages,fetchPendingAssuntosPages } from '@/app/lib/reuniao/data';
+import { fetchReuniaoById, fetchAssuntosPages, fetchDelibValores } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
 import SearchAssunto from '@/app/ui/reuniao/searchassunto';
-import { AddAssunto } from '@/app/ui/reuniao/buttons';
 import { mylog } from '@/app/lib/mylogger';
 import Pagination from '@/app/ui/pagination';
 import { ValoresDeliberacao } from '@/app/lib/definitions';
 
 
  
-const filename = 'app/sinfonia/reuniao/[id]/pauta/page';
+const filename = 'app/sinfonia/reuniao/[id]/executar/page';
 
 
 export default async function Page(props: {
@@ -29,7 +28,7 @@ export default async function Page(props: {
   const sparams = await props.searchParams;
   const query = sparams?.query || '';
   const currentPage = sparams?.page || '1';
-  const pendente = sparams?.pendente || 0;
+  const pendente = sparams?.pendente || 2;
 
 
   mylog('DBG', filename, 'Page', 'sparams=',sparams);
@@ -40,9 +39,10 @@ export default async function Page(props: {
   mylog('DBG', filename, 'Page', 'params=',params);
   mylog('DBG', filename, 'Page', 'sparams=',sparams);
   const id = params?.id || '1';
-  const totalPages = pendente != 1 ? await fetchAssuntosPages(query,id,1): await(fetchPendingAssuntosPages());
+  const totalPages = await fetchAssuntosPages(query,id,1);
+  const valores = await fetchDelibValores() as ValoresDeliberacao[];
   const [reuniao] = await Promise.all([
-	  fetchReuniaoById(id),
+    fetchReuniaoById(id),
   ]);
 
   mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
@@ -54,7 +54,6 @@ const rid=Number(id);
 mylog('DBG',filename,"Page","rid=",rid);
 
 mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
-const valores: ValoresDeliberacao[] = [];
 
 
   if (!reuniao) {
@@ -66,9 +65,8 @@ const valores: ValoresDeliberacao[] = [];
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
       <div className="mt-4 flex w-full items-center justify-between gap-2 md:mt-8">
            <SearchAssunto placeholder="Procurar..." />
-           {pendente == 0 && <AddAssunto reuniao={rid} />}	   
       </div>
-      <PautaList query={query} currentPage={currentPage} reuniao={rid} pendente={pendente} valores={valores}  />
+      <PautaList query={query} currentPage={currentPage} reuniao={rid} pendente={2} valores={valores} />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />
       </div>

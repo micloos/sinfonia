@@ -72,8 +72,8 @@ export default  function AddPauta( {reuniao, assuntos, indices, tiposAttrCredito
   const listaItemReuniao = itemReuniaoObject ? [itemReuniaoObject] : [];
   const tipoAttrCreditos: AtribuidorName[] = tiposAttrCreditos ? tiposAttrCreditos:[];
   console.log("addpauta, tipoAttrCreditos = ",tipoAttrCreditos );
-  mylog("ERROR",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
-  // mylog("ERROR",filename, 'AddPauta Teste' , "listaitemReuniao=", JSON.stringify(listaItemReuniao[0].banca));
+  mylog("INFO",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
+  
 
   useEffect (() => {
         if (itemReuniao) {
@@ -123,7 +123,7 @@ export default  function AddPauta( {reuniao, assuntos, indices, tiposAttrCredito
       disciplinaEspecial: (itemReuniaoObject) ? itemReuniaoObject.disciplinaEspecial : [] as DisciplinaEspecial[],
       cd_ReuniaoOrigem: (itemReuniaoObject) ? itemReuniaoObject.cd_ReuniaoOrigem : ''
   });
-mylog ("ERROR",filename, 'AddPauta', 'creditos = ', formData.creditos);
+mylog ("DBG",filename, 'AddPauta', 'creditos = ', formData.creditos);
 
 
 // const [numAssunto, setNumAssunto] = useState<number>(0);
