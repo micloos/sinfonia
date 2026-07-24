@@ -189,7 +189,7 @@ test('Create Assunto in Administracao', async ({ page }) => {
 test('Navigate to Pauta from  Reuniao', async ({ page }) => {
     await page.goto('/sinfonia/reuniao/');
     
-    await page.getByRole('row', {name:"Excluir Editar Participantes Ordem do Dia Pauta Ativo 1 28/02/25 09:00 Sem"}).getByLabel('Pauta').click();
+    await page.getByTestId('1').locator("button").filter({hasText:"Pauta"}).click();
     await expect(page.getByText("Pauta da Reuniao 1").first()).toBeVisible();
     await expect(page.getByRole('link', {name:"Criar Assunto"})).toBeVisible();
 }
@@ -198,8 +198,7 @@ test('Navigate to Pauta from  Reuniao', async ({ page }) => {
 // Reuniao Add Pauta Tipo 1 
 test('Create Assunto tipo 1', async ({ page }) => {
     await page.goto('/sinfonia/reuniao/');
-    
-    await page.getByRole('row', {name:"Excluir Editar Participantes Ordem do Dia Pauta Ativo 1 28/02/25 09:00 Sem"}).getByLabel('Pauta').click();
+    await page.getByTestId('1').locator("button").filter({hasText:"Pauta"}).click()
     await expect(page.getByText("Pauta da Reuniao 1").first()).toBeVisible();
     await page.getByRole('link', {name:"Criar Assunto"}).click();
     await expect(page.getByText("Adicionar Pauta para Reunião").first()).toBeVisible();

@@ -61,7 +61,7 @@ export default function AddCreditos({
     console.log("AddCreditos - pretipos",tipoAttrCreditos);
     useEffect (()=> {
     setTiposAtribuidorCredito(tipoAttrCreditos);
-    },[])
+    },[tipoAttrCreditos])
     console.log("AddCreditos - tipos",tipos);
 
 

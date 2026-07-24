@@ -1,5 +1,4 @@
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
-
 import PautaList from '@/app/ui/reuniao/pautalist';
 import { fetchReuniaoById, fetchAssuntosPages, fetchDelibValores } from '@/app/lib/reuniao/data';
 import { notFound } from 'next/navigation';
@@ -7,6 +6,8 @@ import SearchAssunto from '@/app/ui/reuniao/searchassunto';
 import { mylog } from '@/app/lib/mylogger';
 import Pagination from '@/app/ui/pagination';
 import { ValoresDeliberacao } from '@/app/lib/definitions';
+import { FecharReuniao } from '@/app/ui/reuniao/buttons';
+// import { useState } from 'react';
 
 
  
@@ -59,12 +60,13 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   if (!reuniao) {
 	  notFound();
   }
+  
   return (
     <main>
       
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
       <div className="mt-4 flex w-full items-center justify-between gap-2 md:mt-8">
-           <SearchAssunto placeholder="Procurar..." />
+           <SearchAssunto placeholder="Procurar..." /><FecharReuniao reuniao={String(rid)} />
       </div>
       <PautaList query={query} currentPage={currentPage} reuniao={rid} pendente={2} valores={valores} />
       <div className="mt-5 flex w-full justify-center">

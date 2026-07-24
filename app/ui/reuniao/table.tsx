@@ -52,7 +52,8 @@ export default async function ReunioesTable({
             <tbody className="bg-white">
               {reunioes?.map((reuniao : Reunioes) => (
                 <tr
-                  key={reuniao.id}
+                  key={String(reuniao.id)}
+                  data-testid={String(reuniao.id)}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

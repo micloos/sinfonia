@@ -1,11 +1,13 @@
+"use client"
 import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupIcon, CalendarIcon, BoltSlashIcon, PlayIcon,
           BoltIcon, DocumentDuplicateIcon, XCircleIcon, 
           CheckIcon,
-          QuestionMarkCircleIcon,
+          
           XMarkIcon} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, 
-          comporPauta, escParticipante, deleteOrdemDia, addPendentes, executarReuniao, executarItemReuniao
+          comporPauta, escParticipante, deleteOrdemDia, addPendentes, executarReuniao, executarItemReuniao,
+          fecharReuniao
       } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
 // import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
@@ -13,6 +15,9 @@ import { deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
 import { participantes } from '@/app/lib/participantes/navigations'; 
 import Tooltip from '@mui/material/Tooltip';
 import { mylog } from '@/app/lib/mylogger';
+import { Button } from '../button';
+import { useState } from 'react';
+
 
 
 const filename = "/app/ui/reuniao/buttons";
@@ -28,6 +33,55 @@ export function CreateReuniao() {
       <PlusIcon className="h-5 md:ml-4" />
     </Link>
   );
+}
+
+
+export function FecharReuniao({reuniao}:{reuniao: string}) {
+
+  mylog("INFO",filename,"FecharReuniao","reuniao",reuniao)
+
+  const [errorMsg,setErrorMsg] = useState<string | null>(null);
+
+  // const fecharReuniaoWithId = fecharReuniao.bind(null, reuniao);
+  
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setErrorMsg(null);
+
+
+    const result = await fecharReuniao(reuniao);
+
+    if (!result.success) {
+      // Trigger the local state popup modal
+      setErrorMsg(result.error || 'Something went wrong.');
+      mylog("INFO",filename,'fecharReuniao',"errorMsg = ",errorMsg)
+    } else {
+      alert('Profile updated successfully!');
+    }
+  };
+
+  return (
+    <div>
+    <form onSubmit={handleSubmit}>
+      <Tooltip title="Fechar Reuniao">
+        <Button type='submit' >
+          <span> Fechar Reuniao </span>
+        </Button>
+      </Tooltip>
+    </form>
+    {errorMsg && (<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-xs shadow-xl text-center">
+            <h3 className="text-red-600 font-bold mb-2">Não foi possivel fechar</h3>
+            <p className="text-gray-700 text-sm mb-4">{errorMsg}</p>
+            <button onClick={() => setErrorMsg(null)} className="bg-gray-800 text-white px-4 py-1.5 rounded text-sm">
+              OK
+            </button>
+          </div>
+        </div>)} 
+    </div>
+    
+    
+  )
 }
 
 export function DeleteAssuntoFromReuniao({ id }: { id: string }) {
@@ -339,17 +393,15 @@ export function ExecPositivo({ id, reuniao, assunto, selected, toset }: { id: st
 }
 
 export function ExecMedio({ id, reuniao, assunto }: { id: string, reuniao: number, assunto: string }) {
-  const execMedioWithId = executarItemReuniao.bind(null, reuniao, id, assunto, "medio",0);
   mylog("DBG",filename, 'ExecMedio' , "id=", id);
+  mylog("DBG",filename,"ExecMedio","assunto = ", assunto)
   return (
-    <form action={execMedioWithId}>
-      <Tooltip title="Executar Medio">
-      <button className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Executar Medio</span>
-        <QuestionMarkCircleIcon className="w-5 text-yellow-600" />
-      </button>
+      <Tooltip title="Editar">
+      <Link href={`/sinfonia/reuniao/${reuniao}/${id}/execpauta`} className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Editar</span>
+        <PencilIcon className="w-5" />
+      </Link>
       </Tooltip>
-    </form>
   );
 }
 

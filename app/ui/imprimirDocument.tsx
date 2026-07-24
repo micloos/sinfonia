@@ -192,7 +192,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
               <Text style={styles.title}> Programa de Technologia Nuclear </Text>
               <Text style={styles.title}> {titulo1} da {reuniao.id.toString()}ª Reunião - {moment.tz(reuniao.d_ini,tz).format('DD/MM/YYYY')} </Text>
             </View>
-            <Image src='/logo.png' style={styles.inlineImage} />          
+            <Image src='/logo.png' style={styles.inlineImage}/>          
           </View>
           <View style={styles.horizontalBar} />
         </View>

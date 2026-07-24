@@ -10,6 +10,7 @@ import { revalidatePath } from 'next/cache';
 import { criarAssuntoPendente } from './pauta/actions';
 
 
+
 const filename="/app/lib/reuniao/actions";
 type numericanswer = { n : number};
 type charanswer = { s : string};
@@ -113,6 +114,9 @@ export async function editAssuntoFromReuniao (id: string, reuniao:number)
 	const goto =  "/sinfonia/reuniao/"+id+"/editassunto";
 	redirect (goto);
 }
+
+
+
 
 export async function deleteAssuntoFromReuniao (id: string) {
 	mylog ("DBG", "app/lib/actions", "deleteAssuntoFromReuniao", "id=",id);
@@ -412,6 +416,30 @@ export async function executarReuniao (id: string)
 	const goto = "/sinfonia/reuniao/"+id+"/executar";
 	redirect (goto);
 }
+
+export async function fecharReuniao (reuniao: string)
+{
+	const myreq  = `select count(1) as n from reuniao_t1010_itemreuniao where cd_reuniao = ${reuniao} and Cd_ClassificacaoDeliberacao is null`
+	mylog("INFO",filename,"fecharReuniao","myreq=",myreq)
+	const num = await mssql(myreq) as numericanswer[]
+	mylog("INFO",filename,"fecharReuniao","Num[0] =",num[0])
+	if (num[0].n != 0)
+	{ 
+		mylog("INFO",filename,"fecharReuniao","Num ","nao e zero")
+		return {success: false, error: 'Tem assuntos não deliberados'}
+	} else {
+		const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'S' where cd_reuniao=${reuniao}`;
+		try {
+			await mssql(myreq);
+			return {success: true, error: null }
+		} catch {
+			return {success: false, error: 'Problema no Banco de Dados'}
+		}
+	}
+
+	
+}
+
 
 export async function executarItemReuniao (reuniao: number, id: string, assunto: string, decisao: string, toset: number)
 {
