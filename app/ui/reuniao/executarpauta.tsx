@@ -1,6 +1,6 @@
 "use client";
 
-import { AssuntoParameters, Assuntos } from "@/app/lib/definitions";
+import { AssuntoParameters, Assuntos, TipoDeliberacao } from "@/app/lib/definitions";
 import { mylog } from "@/app/lib/mylogger";
 // import {useSearchParams} from 'next/navigation';
 import AddPautaInteressado from "./pauta/interessado";    
@@ -25,12 +25,13 @@ import AddTituloTese from "./pauta/addtitulotese";
 import AddDtApresentacao from "./pauta/adddtapresent";
 import AddDisciplina from "./pauta/adddisciplina";
 import AddEstagio from "./pauta/addestagio";
+import ExecDeliberacao from "./pauta/deliberacao";
 
 import { useState, useActionState, useEffect } from 'react';
-import { createItemObject} from "@/app/lib/reuniao/pauta/actions";
+import { execItemObject} from "@/app/lib/reuniao/pauta/actions";
 import { Button } from "../button";
 
-import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferendumType, Apresentacao, Plano, Orientador, 
+import type { ExecutarPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferendumType, Apresentacao, Plano, Orientador, 
    Observacao, ObservacaoNP, ItemReuniaoResponse, Relator, TituloTese, MotivoAssunto,
    Assunto,
    NovoOrientador, NovoProfessor,
@@ -41,7 +42,10 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
    Prazo,
    Credito,
    DisciplinaEspecial,
-   AtribuidorName} from "@/app/lib/reuniao/definitions";
+   AtribuidorName,
+   Deliberacao
+  } from "@/app/lib/reuniao/definitions";
+
 // import { set, string } from "zod";
 // import { create } from "domain";
 // import BancaTable from "./pauta/banca";
@@ -50,29 +54,30 @@ import type { AddPautaFormData, Banca, ItemReuniaoState, Interessado, AdReferend
 
 const filename = 'app/ui/reuniao/addpauta';
 
-export default  function ExecutarPauta( {reuniao, assuntos, indices, tiposAttrCreditos, itemReuniao, itemReuniaoObject}: {  
+export default  function ExecutarPauta( {reuniao, assuntos, indices, tiposAttrCreditos, itemReuniao, itemReuniaoObject,deliberacoes}: {  
     reuniao:number;
     assuntos: Assuntos[];
     indices: AssuntoParameters[];
     tiposAttrCreditos: AtribuidorName[];
     itemReuniao: number;
     itemReuniaoObject: ItemReuniaoResponse;
+    deliberacoes: TipoDeliberacao[];
 }) 
 {
   const initialState : ItemReuniaoState = { message:null};
 //  const sparams = useSearchParams();
   // const cd_assunto =  sparams.get('cd_assunto') || '1';
-  mylog("DBG",filename, 'AddPauta' , "reuniaoNumber=", reuniao);
-  // mylog("DBG",filename, 'AddPauta Teste' , "assuntos[10]=", assuntos[10]);
+  mylog("DBG",filename, 'ExecutarPauta' , "reuniaoNumber=", reuniao);
+  // mylog("DBG",filename, 'ExecutarPauta Teste' , "assuntos[10]=", assuntos[10]);
   
-  mylog("DBG",filename, 'AddPauta Teste' , "itemReuniao=", itemReuniao);
-  mylog("DBG",filename, 'AddPauta Teste' , "itemReuniaoObject=", itemReuniaoObject);
+  mylog("DBG",filename, 'ExecutarPauta Teste' , "itemReuniao=", itemReuniao);
+  mylog("DBG",filename, 'ExecutarPauta Teste' , "itemReuniaoObject=", itemReuniaoObject);
   const [cd_itemReuniao, createItemReuniao] = useState(0);
 
   const listaItemReuniao = itemReuniaoObject ? [itemReuniaoObject] : [];
   const tipoAttrCreditos: AtribuidorName[] = tiposAttrCreditos ? tiposAttrCreditos:[];
-  console.log("addpauta, tipoAttrCreditos = ",tipoAttrCreditos );
-  mylog("INFO",filename, 'AddPauta Teste' , "listaItemReuniao=", listaItemReuniao);
+  console.log("executar ",deliberacoes );
+  mylog("INFO",filename, 'ExecutarPauta Teste' , "listaItemReuniao=", listaItemReuniao);
   
 
   useEffect (() => {
@@ -84,20 +89,22 @@ export default  function ExecutarPauta( {reuniao, assuntos, indices, tiposAttrCr
             createItemReuniao(0)
           }
       createNextItem()
-      console.log(filename, 'AddPauta', 'useEffect createNextItem itemReuniao=', itemReuniao);
+      console.log(filename, 'ExecutarPauta', 'useEffect createNextItem itemReuniao=', itemReuniao);
     }
   },[itemReuniao])
   
 
-  mylog("DBG",filename, 'AddPauta Teste' , "cd_ItemReuniao =", cd_itemReuniao);
+  mylog("DBG",filename, 'ExecutarPauta Teste' , "cd_ItemReuniao =", cd_itemReuniao);
   
 
-  const [state,formaction] = useActionState( createItemObject,initialState)
+  const [state,formaction] = useActionState( execItemObject,initialState)
 
-  mylog("DBG",filename, 'AddPauta Teste','state = ',state);
+  mylog("DBG",filename, 'ExecutarPauta Teste','state = ',state);
 
 
-  const [formData, setFormData] = useState<AddPautaFormData>({
+  const [formData, setFormData] = useState<ExecutarPautaFormData>({
+      Cd_ClassificacaoDeliberacao: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoItem) ? { Cd_ClassificacaoDeliberacao: itemReuniaoObject.Cd_ClassificacaoDeliberacao} as Deliberacao:  {Cd_ClassificacaoDeliberacao: "1"} as Deliberacao,
+      observacao: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoItem) ? { ds_ObservacaoItem: itemReuniaoObject.ds_ObservacaoItem } as Observacao : { ds_ObservacaoItem: '' } as Observacao,
       bancaMembers: itemReuniaoObject ? itemReuniaoObject.banca : [],
       interessado: itemReuniaoObject ? { nm_Interessado: itemReuniaoObject.nm_Interessado, ds_AreaInteressado: itemReuniaoObject.ds_AreaInteressado, ds_NivelInteressado: itemReuniaoObject.ds_NivelInteressado } : { nm_Interessado: '', ds_AreaInteressado: '', ds_NivelInteressado: '' },
       adReferendum: itemReuniaoObject ? { Ind_AdReferendum: itemReuniaoObject.Ind_AdReferendum, ds_AdReferendum: itemReuniaoObject.ds_AdReferendum, dt_AdReferendum: itemReuniaoObject.dt_AdReferendum } : { Ind_AdReferendum: '', ds_AdReferendum: '', dt_AdReferendum: '' } as AdReferendumType,
@@ -105,7 +112,7 @@ export default  function ExecutarPauta( {reuniao, assuntos, indices, tiposAttrCr
       planotrabalho: itemReuniaoObject ? { ds_TituloPlanoTrabalho: itemReuniaoObject.ds_TituloPlanoTrabalho } as Plano : { ds_TituloPlanoTrabalho: '' } as Plano,
       ds_TituloDissertacaoTese: (itemReuniaoObject && itemReuniaoObject.ds_TituloDissertacaoTese) ? { ds_TituloDissertacaoTese : itemReuniaoObject.ds_TituloDissertacaoTese } as TituloTese: {ds_TituloDissertacaoTese: ''} as TituloTese,
       orientador: itemReuniaoObject ? { nm_Orientador: itemReuniaoObject.nm_Orientador, ds_LotOrientador: itemReuniaoObject.ds_LotOrientador } : { nm_Orientador: '', ds_LotOrientador: '' } as Orientador,
-      observacao: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoItem) ? { ds_ObservacaoItem: itemReuniaoObject.ds_ObservacaoItem } as Observacao : { ds_ObservacaoItem: '' } as Observacao,
+      
       observacaoNP: (itemReuniaoObject && itemReuniaoObject.ds_ObservacaoNaoPublicavelItem) ? { ds_ObservacaoNaoPublicavelItem: itemReuniaoObject.ds_ObservacaoNaoPublicavelItem } as ObservacaoNP : { ds_ObservacaoNaoPublicavelItem: '' } as ObservacaoNP,
       relatorData: (itemReuniaoObject && itemReuniaoObject.nm_Relator ) ? { nm_Relator: itemReuniaoObject.nm_Relator, ds_ObservacaoRelator: itemReuniaoObject.ds_ObservacaoRelator, ds_LotRelator: itemReuniaoObject.ds_LotRelator } as Relator : { nm_Relator: '', ds_ObservacaoRelator: '', ds_LotRelator: '' } as Relator,
 
@@ -123,7 +130,7 @@ export default  function ExecutarPauta( {reuniao, assuntos, indices, tiposAttrCr
       disciplinaEspecial: (itemReuniaoObject) ? itemReuniaoObject.disciplinaEspecial : [] as DisciplinaEspecial[],
       cd_ReuniaoOrigem: (itemReuniaoObject) ? itemReuniaoObject.cd_ReuniaoOrigem : ''
   });
-mylog ("DBG",filename, 'AddPauta', 'creditos = ', formData.creditos);
+mylog ("DBG",filename, 'ExecutarPauta', 'creditos = ', formData.creditos);
 
 
 // const [numAssunto, setNumAssunto] = useState<number>(0);
@@ -135,7 +142,7 @@ const handleObservacaoChange = (observacaoData: Observacao) => {
         ...prev,
         observacao: observacaoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
 const handleObservacaoNPChange = (observacaoNPData: ObservacaoNP) => {
@@ -143,7 +150,7 @@ const handleObservacaoNPChange = (observacaoNPData: ObservacaoNP) => {
         ...prev,
         observacaoNP: observacaoNPData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleDepositoChange = (depositoData: Deposito) => {
@@ -151,7 +158,7 @@ const handleObservacaoNPChange = (observacaoNPData: ObservacaoNP) => {
         ...prev,
         deposito: depositoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleNovoOrientadorChange = (novoOrientadorData: NovoOrientador) => {
@@ -159,7 +166,7 @@ const handleObservacaoNPChange = (observacaoNPData: ObservacaoNP) => {
         ...prev,
         novoOrientador: novoOrientadorData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleDissertacaoTeseChange = (dissertacaoTeseData: TituloTese) => {
@@ -167,7 +174,7 @@ const handleObservacaoNPChange = (observacaoNPData: ObservacaoNP) => {
         ...prev,
         ds_TituloDissertacaoTese: dissertacaoTeseData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
 
@@ -177,27 +184,27 @@ const handleOrientadorChange = (orientadorData: Orientador) => {
         ...prev,
         orientador: orientadorData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
 const handleDisciplinaEspecialChange = (disciplinaEspecialData: DisciplinaEspecial[]) => {
     setFormData(prev => ({ ...prev, disciplinaEspecial: disciplinaEspecialData  }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   };
 
   const handleBancaChange = (bancaData: Banca[]) => {
     setFormData(prev => ({ ...prev, bancaMembers: bancaData }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   };
 
 const handleCreditosChange = (creditosData: Credito[]) => {
     setFormData(prev => ({ ...prev, creditos: creditosData }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   };
 
 const handleNovoProfessorChange = (novoProfessorData: NovoProfessor) => {
     setFormData(prev => ({ ...prev, novoProfessor: novoProfessorData }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   };
 
 const handleInteressadoChange = (interessadoData: Interessado ) => {
@@ -205,7 +212,7 @@ const handleInteressadoChange = (interessadoData: Interessado ) => {
         ...prev,
         interessado: interessadoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'HandleInterassodChange shadowData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'HandleInterassodChange shadowData = ', formData);
   }
 
 const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
@@ -213,7 +220,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         adReferendum: adReferendumData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleApresentacaoChange = (apresentacaoData: Apresentacao) => {
@@ -221,7 +228,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         apresentacao: apresentacaoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleDefesaChange = (defesaData: Defesa) => {
@@ -229,7 +236,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         defesa: defesaData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handlePlanoChange = (planoData: Plano) => {
@@ -237,7 +244,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         planotrabalho: planoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleCredenciamentoDisciplinaChange = (credenciamentoDisciplinaData: CredenciamentoDisciplina) => {
@@ -245,24 +252,17 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         credenciamentoDisciplina: credenciamentoDisciplinaData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
-  const handleAssuntoChange = (assunto: Assunto) => {
-    setFormData(prev => ({ 
-        ...prev,
-        cd_AssuntoReuniao: assunto
-    }));
-    // setNumAssunto(Number(assunto.cd_AssuntoReuniao)-1);
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
-  }
+ 
 
   const handleMotivoChange = (motivoData: MotivoAssunto) => {
     setFormData(prev => ({ 
         ...prev,
         ds_MotivoItem: motivoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleNovoPlanoChange = (novoPlanoData: NovoPlano) => {
@@ -270,7 +270,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         novoPlano: novoPlanoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleEstagioChange = (estagioData: Estagio) => {
@@ -278,7 +278,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         estagio: estagioData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handleRelatorChange = (relatorData: Relator) => {
@@ -286,7 +286,7 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         relatorData: relatorData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
 
   const handlePrazoChange = (prazoData: Prazo) => {
@@ -294,19 +294,46 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
         ...prev,
         prazo: prazoData
     }));
-    mylog ("DBG",filename, 'AddPauta', 'formData = ', formData);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
   }
+
+  const handleDeliberacaoChange = (delib: Deliberacao) => {
+    mylog ("INFO",filename, 'ExecutarPauta', 'assunto(delib) = ', delib);
+    setFormData(prev => ({ 
+        ...prev,
+        Cd_ClassificacaoDeliberacao: delib
+    }));
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
+  }
+  
+ const handleAssuntoChange = (assunto: Assunto) => {
+    
+    setFormData(prev => ({ 
+        ...prev,
+        cd_AssuntoReuniao: assunto
+    }));
+    // setNumAssunto(Number(assunto.cd_AssuntoReuniao)-1);
+    mylog ("DBG",filename, 'ExecutarPauta', 'formData = ', formData);
+  }
+
 
   return (
     <main>
-      <h1 className="mb-10 font-bold text-xl">Adicionar Pauta para Reunião {reuniao}  Item {cd_itemReuniao} </h1>
+      <h1 className="mb-10 font-bold text-xl">Executar Item de Pauta {cd_itemReuniao} para Reunião {reuniao} </h1>
      {/* <form  action={handleSubmit}> */}
       <form  action={formaction}> 
         <input type="hidden" id="cd_reuniao" name="cd_reuniao" value={reuniao} />
         <input type="hidden" id="Cd_ItemReuniao" name="Cd_ItemReuniao" value={cd_itemReuniao} />
         <input type="hidden" id="cd_AssuntoReuniao" name="cd_AssuntoReuniao" value={formData.cd_AssuntoReuniao.cd_AssuntoReuniao} />
         <input type="hidden" id="cd_ReuniaoOrigem" name="cd_ReuniaoOrigem" value={formData.cd_ReuniaoOrigem} />
+        <input type="hidden" id="Cd_ClassificacaoDeliberacao" name="Cd_ClassificacaoDeliberacao" value={formData.Cd_ClassificacaoDeliberacao.Cd_ClassificacaoDeliberacao} />
         
+        <ExecDeliberacao assuntos = {deliberacoes} data= {formData.Cd_ClassificacaoDeliberacao} onChange={handleDeliberacaoChange}/> 
+                
+        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_ObservacaoAssunto === 'S' && ( <AddObservacao data= {formData.observacao} onChange={handleObservacaoChange} />)}
+        {/* DONE Observacao Assunto */}
+
+        <Button type="submit">Salvar Deliberaçao</Button>
         <SelectAssunto assuntos={assuntos} data={formData.cd_AssuntoReuniao}  onChange={handleAssuntoChange} />
         {/* DONE Assunto Reuniao */}
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_Interessado === 'S' && (<AddPautaInteressado data={formData.interessado} onChange={handleInteressadoChange}  isRequired />)}
@@ -368,12 +395,11 @@ const handleAdReferendumChange = (adReferendumData: AdReferendumType) => {
 
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_MotivoAssunto === 'S' && ( <AddMotivo data={formData.ds_MotivoItem} onChange={handleMotivoChange} />)}  {/* 9 10 11 12 */}
         {/* DONE Motivo Assunto */}
-        {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_ObservacaoAssunto === 'S' && ( <AddObservacao data= {formData.observacao} onChange={handleObservacaoChange} />)}
-        {/* DONE Observacao Assunto */}
+
         {indices[Number(formData.cd_AssuntoReuniao.cd_AssuntoReuniao)-1].Ind_ObservacaoNaoPublicavel === 'S' && ( <AddObsNaoPub data={formData.observacaoNP} onChange={handleObservacaoNPChange} />)}
         {/* DONE Observacao Nao Publicavel */}
 
-        <Button type="submit">Salvar Pauta</Button>
+       
       </form>
     </main>
   );

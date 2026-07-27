@@ -2,8 +2,8 @@ import ExecutarPauta from '@/app/ui/reuniao/executarpauta';
 import { mylog } from '@/app/lib/mylogger';
 import ReuniaoForm from '@/app/ui/reuniao/edit-form';
 import { fetchReuniaoById } from '@/app/lib/reuniao/data2';
-import { fetchAssuntos, fetchTipoAtribuidorCredito } from '@/app/lib/reuniao/data';
-import { Assuntos } from '@/app/lib/definitions';
+import { fetchAssuntos, fetchTipoAtribuidorCredito, fetchTipoDeliberacao } from '@/app/lib/reuniao/data';
+import { Assuntos, TipoDeliberacao } from '@/app/lib/definitions';
 import { fetchIndices, fetchItemObject } from "@/app/lib/reuniao/data";
 import { ItemReuniaoResponse } from '@/app/lib/reuniao/definitions';
 {/* import { notFound } from 'next/navigation'; */}
@@ -42,6 +42,7 @@ export default async function Page(props: {
   const indices = await fetchIndices();
   const tipoAtrrCreditos = await fetchTipoAtribuidorCredito();
   const itemReuniaoObject = irid > 0 ? await fetchItemObject(irid) as ItemReuniaoResponse : await fetchItemObject(afrom) as ItemReuniaoResponse;
+  const deliberacoes = await fetchTipoDeliberacao() as TipoDeliberacao[];
   if (afrom > 0) {
     itemReuniaoObject.Cd_AssuntoReuniao = assuntos.filter(retorno => (retorno.id===Number(itemReuniaoObject.Cd_AssuntoReuniao)))[0].Cd_AssuntoReuniaoRetornavel;
     itemReuniaoObject.cd_ReuniaoOrigem = itemReuniaoObject.cd_Reuniao;
@@ -55,7 +56,7 @@ export default async function Page(props: {
   return (
 	<main>
     <ReuniaoForm reuniao={reuniao} withsavebutton={0} withbackbutton={1}/>
-	  <ExecutarPauta reuniao={nid} assuntos={assuntos} indices={indices} tiposAttrCreditos={tipoAtrrCreditos} itemReuniao={irid} itemReuniaoObject={itemReuniaoObject} />
+	  <ExecutarPauta deliberacoes={deliberacoes}reuniao={nid} assuntos={assuntos} indices={indices} tiposAttrCreditos={tipoAtrrCreditos} itemReuniao={irid} itemReuniaoObject={itemReuniaoObject} />
 	</main>
   );
 }

@@ -118,6 +118,36 @@ export type Estagio = {
     qt_EstagioCreditos: number;
 }
 
+export type Deliberacao = {
+   Cd_ClassificacaoDeliberacao: string;
+}
+
+export interface ExecutarPautaFormData {
+  Cd_ClassificacaoDeliberacao: Deliberacao;
+  bancaMembers: Banca[];
+  interessado: Interessado;
+  adReferendum: AdReferendumType;
+  apresentacao: Apresentacao;
+  planotrabalho: Plano;
+  orientador: Orientador;
+  observacao: Observacao;
+  observacaoNP: ObservacaoNP;
+  relatorData: Relator;
+  cd_AssuntoReuniao: Assunto;
+  ds_TituloDissertacaoTese: TituloTese;
+  ds_MotivoItem: MotivoAssunto;
+  novoOrientador: NovoOrientador;
+  novoPlano: NovoPlano;
+  novoProfessor: NovoProfessor; 
+  credenciamentoDisciplina: CredenciamentoDisciplina;
+  defesa: Defesa;
+  deposito: Deposito;
+  estagio: Estagio;
+  prazo: Prazo;
+  creditos: Credito[];
+  disciplinaEspecial: DisciplinaEspecial[]; 
+  cd_ReuniaoOrigem: string;
+}
 
 export interface AddPautaFormData {
   bancaMembers: Banca[];
