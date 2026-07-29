@@ -129,7 +129,7 @@ export default function EditReuniaoForm({
           >
           Voltar
           </Link>
-          <Button className = {`${ifsave}`} disabled={Number(reuniao.active) == 0} type="submit">Salvar</Button>
+          {ifsave===""?<Button disabled={Number(reuniao.active) == 0} type="submit">Salvar</Button>:<p></p>}
          </div>
        </div>
        </div>

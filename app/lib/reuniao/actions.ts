@@ -251,6 +251,7 @@ export async function setReuniaoFuncao(pid: number, funcao: string) {
 
 const OrdemFormSchema = z.object ({
 	rid: z.string().regex(/^\d+$/),
+	oid: z.string().regex(/^\d+$/),
 	sequencia: z.string().regex(/^\d+$/),
 	assunto: z.string().min(5),
 	deliberacao: z.string().min(3),
@@ -298,18 +299,18 @@ export async function deleteOrdemDia (id:number,rid: number)
 }
 
 
-export async function addOrdemDia (id: number)
+export async function addOrdemDia (id: number, oid:string)
 {
-	mylog ("DBG", filename, "ordemDoDia", "id=",id);
-	const goto =  "/sinfonia/reuniao/"+id+"/addOrdemDia";
+	mylog ("DBG", filename, "ordemDoDia", "id,oid=",{id,oid});
+	const goto =  "/sinfonia/reuniao/"+id+"/"+oid+"/addOrdemDia";
 	mylog ("DBG", filename, "ordemDoDia", "goto=",goto);
 	redirect (goto);
 }
 
-export async function editOrdemDia (id: number)
+export async function editOrdemDia (id: number, oid:string)
 {
 	mylog ("DBG", filename, "editOrdemDia", "id=",id);
-	const goto =  "/sinfonia/reuniao/"+id+"/editOrdemDia";
+	const goto =  "/sinfonia/reuniao/"+id+"/"+oid+"/editOrdemDia";
 	mylog ("DBG", filename, "editOrdemDia", "goto=",goto);
 	redirect (goto);
 }
@@ -327,7 +328,8 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 	const validatedFields = CreateOrdem.safeParse({
 		rid: formData.get('id'),
 		assunto: formData.get('assunto'),
-		publicavel: formData.get('publicavel')
+		publicavel: formData.get('publicavel'),
+		oid: formData.get('oid')
 	});
 
 	if(!validatedFields.success) {
@@ -339,10 +341,10 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 	}
 
 	const rid = validatedFields.data.rid;
-	
+	const oid = validatedFields.data.oid;
 	const assunto = validatedFields.data.assunto;
 	const publicavel = validatedFields.data.publicavel?"S":"N";
-	mylog("DBG",filename,"createOrdem","validatedFields.data=",validatedFields.data);
+	mylog("INFO",filename,"createOrdem","validatedFields.data=",validatedFields.data);
 	let sequencia = 0;
 	try {
 	  sequencia = await getNextSequence(Number(rid));
@@ -359,6 +361,7 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 ;
 	// get the next Cd_OrdemDia
 	let nextCdOrdemDia = 0;
+	if (oid==='0') {
 	try {
 		const nextCdOrdemDiaArr = await mssql("select max(Cd_OrdemDia) +1 as n FROM REUNIAO_T1500_OrdemDia") as numericanswer[];
 		nextCdOrdemDia = nextCdOrdemDiaArr[0].n;
@@ -384,6 +387,27 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 			message: 'Database Error: Nao crou Ordem do Dia'
 		}
 	}
+} else {
+	try  {
+		const myreq = `
+		UPDATE REUNIAO_T1500_OrdemDia 
+		SET
+			Ds_OrdemDia = '${assunto}'
+		WHERE
+		Cd_OrdemDia = '${oid}'
+		`;
+		mylog("DBG",filename,"createOrdem","myreq=",myreq.replace(/\s/g," "));
+		const answer = await mssql(myreq);
+		mylog("DBG",filename,"createOrdem","answer=",answer)
+	} catch(error) {
+		mylog("INFO",filename,"createOrdem","error=",error);
+		return {
+			message: 'Database Error: Nao crou Ordem do Dia'
+		}
+
+	}
+
+}
 
 	redirect('/sinfonia/reuniao/'+rid.toString()+'/ordemDia');
 }

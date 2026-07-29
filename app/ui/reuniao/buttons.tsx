@@ -367,14 +367,16 @@ export function ImprimirDeliberacao ({id}: {id : string}) {
   )
 }
 */}
+
 export function AddAssuntoToReuniao({ reuniao }: { reuniao: number }) {
-  const addAssuntoToReuniaoWithId = addOrdemDia.bind(null, reuniao);
+  // const addAssuntoToReuniaoWithId = addOrdemDia.bind(null, reuniao);
   mylog("DBG",filename, 'AddAssuntoToReuniao' , "reuniao=", reuniao);
   return (
-    <form action={addAssuntoToReuniaoWithId}>
+    <form >
     </form>
   );
 }
+
 
 export function ExecPositivo({ id, reuniao, assunto, selected, toset }: { id: string, reuniao: number, assunto: string, selected: boolean, toset: number }) {
   const execPositivoWithId = executarItemReuniao.bind(null, reuniao, id, assunto, "positivo", toset);
@@ -465,9 +467,9 @@ export function DeleteParticipantFromReuniao({id, editable, rid}: {id: number, e
 
 // Ordem do Dia da Reuniao
 
-export function AddOrdemDiaToReuniao({ rid, editable }: { rid: number, editable: number }) {
-  const OrdemDoDiaWithId = addOrdemDia.bind(null, rid);
-  mylog("DBG",filename, 'AddOrdemDiaToReuniao' , "rid=", rid);
+export function AddOrdemDiaToReuniao({ rid, editable, oid }: { rid: number, editable: number, oid: string }) {
+  const OrdemDoDiaWithId = addOrdemDia.bind(null, rid, oid);
+  mylog("DBG",filename, 'AddOrdemDiaToReuniao' , "rid,oid=", {rid,oid});
   if (editable==1){
   return (
     <form action={OrdemDoDiaWithId}>
@@ -505,8 +507,8 @@ export function DeleteOrdemDiaFromReuniao({id, editable, rid}: {id: number, edit
 }
 
 export function EditOrdemDia({id, editable, rid}: {id: number, editable: number, rid:number}) {
-  const editOrdemDiaWithId = editOrdemDia.bind(null,id);
-  mylog("DBG",filename, 'EditOrdemDia' , "{id,editable,rid}=", {id,editable,rid});
+  const editOrdemDiaWithId = editOrdemDia.bind(null,rid,String(id));
+  mylog("INFO",filename, 'EditOrdemDia' , "{id,editable,rid}=", {id,editable,rid});
   if (editable==1) {
     return(
       <form action={editOrdemDiaWithId}>

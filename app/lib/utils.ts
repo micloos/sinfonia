@@ -45,3 +45,22 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export function formatDate(dateInput: string): string {
+
+  const partes = dateInput.split(/\s+de\s+/);
+  if (partes.length !== 3) return 'Data Invalida'
+  const months: Record<string, string> = {
+    janeiro: '01', fevereiro: '02', março: '03', abril: '04',
+    maio: '05', junho: '06', julho: '07', agosto: '08',
+    setembro: '09', outubro: '10', novembro: '11', dezembro: '12'
+  };
+  const month = months[partes[1].trim()];
+
+  const toreturn = partes[0]+"/"+month+"/"+partes[2]
+
+  console.log ("Data =", toreturn)
+  
+  // Use the 'en-GB' (British) locale to automatically get the dd/mm/yyyy structure
+  return toreturn;
+}

@@ -79,7 +79,7 @@ export default function OrdemDia({rid, editable, currentPage}: { rid: number, ed
                 Ordem do Dia
             </div>
             <div className="w-1/8 mb-8 inline-block">
-                <AddOrdemDiaToReuniao rid={rid} editable={editable}/>
+                <AddOrdemDiaToReuniao rid={rid} editable={editable} oid='0'/>
             </div>
             </div>
             <div className="rounded-lg bg-gray-50 p-2 md:pt-0">

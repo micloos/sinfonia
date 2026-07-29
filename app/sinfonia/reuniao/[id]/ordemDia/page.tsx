@@ -32,7 +32,8 @@ export default async function OrdemDiaPage(props: {
   mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   
 const withbackbutton = 1;
-const withsavebutton = reuniao.active==='N'?1:0;
+const withsavebutton = 0;
+const editable = 1;
 const rid=Number(id);
 
 mylog('DBG',filename,"Page","rid=",rid);
@@ -46,7 +47,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <OrdemDia rid={Number(id)} currentPage={currentPage} editable={withsavebutton} />
+      <OrdemDia rid={Number(id)} currentPage={currentPage} editable={editable} />
       <div className="mt-5 flex w-full justify-center">
       {/*  <Pagination totalPages={totalPages} /> */}
       </div>

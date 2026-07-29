@@ -11,8 +11,8 @@ import React, { useActionState } from 'react';
 
 const filename="app/ui/reuniao/addordemdia";
 
-export default function CreateOrdemDiaForm ({reuniaoNumber}:{reuniaoNumber:number})  {
-    mylog("DBG",filename,"CreateOrdemDiaForm","reuniaoNumber=",reuniaoNumber);
+export default function CreateOrdemDiaForm ({reuniaoNumber,ordemId}:{reuniaoNumber:number, ordemId: string})  {
+    mylog("INFO",filename,"CreateOrdemDiaForm","reuniaoNumber,ordemId=",{reuniaoNumber,ordemId});
 
     const initialState: OrdemState = { message:null, errors: {}}
     const [state, formAction] = useActionState(createOrdem, initialState);
@@ -22,8 +22,9 @@ export default function CreateOrdemDiaForm ({reuniaoNumber}:{reuniaoNumber:numbe
       <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6 w-full">
       
-         <h1 className="mb-10 font-bold text-xl"> Criar Ordem do Dia para reuniao {reuniaoNumber.toString()} </h1>
+         <h1 className="mb-10 font-bold text-xl"> {ordemId==='0'?"Criar Ordem do Dia": "Editar"} para reuniao {reuniaoNumber.toString()} </h1>
          <input type="hidden" name="id" value={reuniaoNumber} />
+         <input type="hidden" name="oid" value={ordemId} />
  
 
 

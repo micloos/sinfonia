@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import type { ImprimirData } from '@/app/lib/definitions';
+import { formatDate } from '@/app/lib/utils';
 import * as moment from 'moment-timezone';
 
 const tz ="UTC";
@@ -101,8 +102,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   inlineImage: {
-    width: 80,
-    height: 80
+    width: 50,
+    height: 50
   },
   assinatura: {
     width: 120,
@@ -190,7 +191,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
             <View>
               <Text style={styles.title}> INSTITUTO DE PESQUISAS ENERGÉTICAS E NUCLEARES </Text>
               <Text style={styles.title}> Programa de Technologia Nuclear </Text>
-              <Text style={styles.title}> {titulo1} da {reuniao.id.toString()}ª Reunião - {moment.tz(reuniao.d_ini,tz).format('DD/MM/YYYY')} </Text>
+              <Text style={styles.title}> {titulo1} da {reuniao.id.toString()}ª Reunião - {formatDate(reuniao.d_ini)} </Text>
             </View>
             <Image src='/logo.png' style={styles.inlineImage}/>          
           </View>
