@@ -253,8 +253,8 @@ const OrdemFormSchema = z.object ({
 	rid: z.string().regex(/^\d+$/),
 	oid: z.string().regex(/^\d+$/),
 	sequencia: z.string().regex(/^\d+$/),
-	assunto: z.string().min(5),
-	deliberacao: z.string().min(3).nullable(),
+	assunto: z.string().min(3),
+	deliberacao: z.string().nullable(),
 	publicavel: z.enum(['S','N']).nullable(),
 })
 
