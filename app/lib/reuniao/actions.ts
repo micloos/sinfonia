@@ -254,7 +254,7 @@ const OrdemFormSchema = z.object ({
 	oid: z.string().regex(/^\d+$/),
 	sequencia: z.string().regex(/^\d+$/),
 	assunto: z.string().min(5),
-	deliberacao: z.string().min(3),
+	deliberacao: z.string().min(3).nullable(),
 	publicavel: z.enum(['S','N']).nullable(),
 })
 
@@ -262,6 +262,13 @@ export async function escOrdemDoDia (id: string)
 {
 	mylog ("DBG", "app/lib/actions", "escOrdemDoDia", "id=",id);
 	const goto =  "/sinfonia/reuniao/"+id+"/ordemDia";
+	redirect (goto);
+}
+
+export async function execOrdemDoDia (id: string)
+{
+	mylog ("INFO", "app/lib/actions", "escOrdemDoDia", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/execOrdemDia";
 	redirect (goto);
 }
 
@@ -302,7 +309,7 @@ export async function deleteOrdemDia (id:number,rid: number)
 export async function addOrdemDia (id: number, oid:string)
 {
 	mylog ("DBG", filename, "ordemDoDia", "id,oid=",{id,oid});
-	const goto =  "/sinfonia/reuniao/"+id+"/"+oid+"/addOrdemDia";
+	const goto =  "/sinfonia/reuniao/"+id+"/"+oid+"/editOrdemDia";
 	mylog ("DBG", filename, "ordemDoDia", "goto=",goto);
 	redirect (goto);
 }
@@ -315,11 +322,18 @@ export async function editOrdemDia (id: number, oid:string)
 	redirect (goto);
 }
 
+export async function execOrdemDia (id: number, oid:string)
+{
+	mylog ("DBG", filename, "execOrdemDia", "id=",id);
+	const goto =  "/sinfonia/reuniao/"+id+"/"+oid+"/execOrdemDia";
+	mylog ("DBG", filename, "execOrdemDia", "goto=",goto);
+	redirect (goto);
+}
 
 
 
 
-const CreateOrdem = OrdemFormSchema.omit({deliberacao: true, sequencia: true});
+const CreateOrdem = OrdemFormSchema.omit({sequencia: true});
 
 export async function createOrdem (prevState: OrdemState, formData:FormData)
 {
@@ -329,7 +343,8 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 		rid: formData.get('id'),
 		assunto: formData.get('assunto'),
 		publicavel: formData.get('publicavel'),
-		oid: formData.get('oid')
+		oid: formData.get('oid'),
+		deliberacao: formData.get('deliberacao')
 	});
 
 	if(!validatedFields.success) {
@@ -344,6 +359,7 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 	const oid = validatedFields.data.oid;
 	const assunto = validatedFields.data.assunto;
 	const publicavel = validatedFields.data.publicavel?"S":"N";
+	const deliberacao = validatedFields.data.deliberacao;
 	mylog("INFO",filename,"createOrdem","validatedFields.data=",validatedFields.data);
 	let sequencia = 0;
 	try {
@@ -387,7 +403,7 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 			message: 'Database Error: Nao crou Ordem do Dia'
 		}
 	}
-} else {
+} else if (!deliberacao) {
 	try  {
 		const myreq = `
 		UPDATE REUNIAO_T1500_OrdemDia 
@@ -406,10 +422,32 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 		}
 
 	}
+} else {
+	try  {
+		const myreq = `
+		UPDATE REUNIAO_T1500_OrdemDia 
+		SET
+			Ds_OrdemDia = '${assunto}',
+			Ds_DeliberacaoOrdemDia ='${deliberacao}'
+		WHERE
+		Cd_OrdemDia = '${oid}'
+		`;
+		mylog("DBG",filename,"createOrdem","myreq=",myreq.replace(/\s/g," "));
+		const answer = await mssql(myreq);
+		mylog("DBG",filename,"createOrdem","answer=",answer)
+	} catch(error) {
+		mylog("INFO",filename,"createOrdem","error=",error);
+		return {
+			message: 'Database Error: Nao crou Ordem do Dia'
+		}
 
+	}
 }
-
+if (!deliberacao) {
 	redirect('/sinfonia/reuniao/'+rid.toString()+'/ordemDia');
+} else {
+	redirect('/sinfonia/reuniao/'+rid.toString()+'/execOrdemDia');
+}
 }
 
 

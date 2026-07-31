@@ -7,7 +7,9 @@ import { ClipboardDocumentListIcon, PencilIcon,  PlusIcon, TrashIcon, UserGroupI
 import Link from 'next/link';
 import { deleteReuniao, editReuniao, escOrdemDoDia, addOrdemDia, editOrdemDia, reativarReuniao, 
           comporPauta, escParticipante, deleteOrdemDia, addPendentes, executarReuniao, executarItemReuniao,
-          fecharReuniao
+          fecharReuniao,
+          execOrdemDoDia,
+          execOrdemDia
       } from '@/app/lib/reuniao/actions';
 import { escParticipantReuniao, deleteParticipantFromReuniao,  escParticipantForReuniao } from '@/app/lib/participantes/actions';
 // import { editAssuntoFromReuniao, deleteAssuntoFromReuniao } from '@/app/lib/reuniao/actions';
@@ -35,6 +37,19 @@ export function CreateReuniao() {
   );
 }
 
+export function ExecutarOrdem({ reuniao }: { reuniao: string}) {
+  const execOrdemDoDiaWithId = execOrdemDoDia.bind(null, reuniao);
+  return (
+    <form action={execOrdemDoDiaWithId} >
+     <Tooltip title="Executar Ordem do Dia">
+     <Button type='submit' >
+          <span> Executar Ordem </span>
+        </Button>            
+    </Tooltip>
+    </form>
+  );
+}
+ 
 
 export function FecharReuniao({reuniao}:{reuniao: string}) {
 
@@ -468,8 +483,8 @@ export function DeleteParticipantFromReuniao({id, editable, rid}: {id: number, e
 // Ordem do Dia da Reuniao
 
 export function AddOrdemDiaToReuniao({ rid, editable, oid }: { rid: number, editable: number, oid: string }) {
-  const OrdemDoDiaWithId = addOrdemDia.bind(null, rid, oid);
-  mylog("DBG",filename, 'AddOrdemDiaToReuniao' , "rid,oid=", {rid,oid});
+  const OrdemDoDiaWithId = addOrdemDia.bind(null, rid, '0');
+  mylog("INFO",filename, 'AddOrdemDiaToReuniao' , "rid,oid=", {rid,oid});
   if (editable==1){
   return (
     <form action={OrdemDoDiaWithId}>
@@ -516,6 +531,25 @@ export function EditOrdemDia({id, editable, rid}: {id: number, editable: number,
       <button className="rounded-md border p-2 hover:bg-gray-100" >
         <span className="sr-only">OrdemDoDia</span>
         <PencilIcon className="w-5" />
+      </button>
+      </Tooltip>
+      </form>
+    )
+  } else {
+    return (<p/>)
+  }
+}
+
+export function ExecOrdemDia({id, editable, rid}: {id: number, editable: number, rid:number}) {
+  const execOrdemDiaWithId = execOrdemDia.bind(null,rid,String(id));
+  mylog("INFO",filename, 'ExecOrdemDia' , "{id,editable,rid}=", {id,editable,rid});
+  if (editable==1) {
+    return(
+      <form action={execOrdemDiaWithId}>
+      <Tooltip title="Executar">
+      <button className="rounded-md border p-2 hover:bg-gray-100" >
+        <span className="sr-only">OrdemDoDia</span>
+        <PlayIcon className="w-5" />
       </button>
       </Tooltip>
       </form>

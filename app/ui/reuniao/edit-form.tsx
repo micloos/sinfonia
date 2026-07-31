@@ -95,7 +95,7 @@ export default function EditReuniaoForm({
           </div>
         </div>
         <div className="mb-2 inline-block w-1/4">
-          <label htmlFor="dataReuniao" className="mb-2 block text-sm font-medium">
+          <label htmlFor=":r0:" className="mb-2 block text-sm font-medium">
             Data da Reunião:
           </label>
           {/*
@@ -110,7 +110,7 @@ export default function EditReuniaoForm({
         </div>
         
         <div className="mb-2 inline-block w-1/4">
-        <label htmlFor="dataDocumentos" className="mb-2 block text-sm font-medium">
+        <label htmlFor=":r2:" className="mb-2 block text-sm font-medium">
             Data Final para Apresentação de Documentos:
         </label>
             <DatePicker disabled={withsavebutton == 0} defaultValue={docDate}  

@@ -15,7 +15,6 @@ export default async function OrdemDiaPage(props: {
   }>,
   params?: Promise<{
     id:string;
-    tipo:string;
   }>
 }) 
 {
@@ -24,7 +23,6 @@ export default async function OrdemDiaPage(props: {
   mylog('DBG', filename, 'Page', 'params=',params);
   mylog('DBG', filename, 'Page', 'sparams=',sparams);
   const id = params?.id || '1';
-  const tipo = params?.tipo || 'add'
   const currentPage = Number(sparams?.page) || 1;
   // const totalPages = await fetchOrdemDiaPages(id);
   const [reuniao] = await Promise.all([
@@ -49,7 +47,7 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
   return (
     <main>
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
-      <OrdemDia rid={Number(id)} currentPage={currentPage} editable={editable} tipo={tipo}/>
+      <OrdemDia rid={Number(id)} currentPage={currentPage} editable={editable} tipo='delib'/>
       <div className="mt-5 flex w-full justify-center">
       {/*  <Pagination totalPages={totalPages} /> */}
       </div>

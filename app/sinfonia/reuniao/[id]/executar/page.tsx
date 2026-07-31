@@ -6,7 +6,7 @@ import SearchAssunto from '@/app/ui/reuniao/searchassunto';
 import { mylog } from '@/app/lib/mylogger';
 import Pagination from '@/app/ui/pagination';
 import { ValoresDeliberacao } from '@/app/lib/definitions';
-import { FecharReuniao } from '@/app/ui/reuniao/buttons';
+import { FecharReuniao, ExecutarOrdem } from '@/app/ui/reuniao/buttons';
 // import { useState } from 'react';
 
 
@@ -66,7 +66,9 @@ mylog('DBG', filename, 'Page', 'reuniao=',reuniao);
       
       <ReuniaoForm reuniao={reuniao} withsavebutton={withsavebutton} withbackbutton={withbackbutton} />
       <div className="mt-4 flex w-full items-center justify-between gap-2 md:mt-8">
-           <SearchAssunto placeholder="Procurar..." /><FecharReuniao reuniao={String(rid)} />
+           <SearchAssunto placeholder="Procurar..." />
+           <ExecutarOrdem reuniao={String(rid)} /> 
+           <FecharReuniao reuniao={String(rid)} />
       </div>
       <PautaList query={query} currentPage={currentPage} reuniao={rid} pendente={2} valores={valores} />
       <div className="mt-5 flex w-full justify-center">

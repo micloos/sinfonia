@@ -3,7 +3,7 @@
 // import { fetchOrdemDia } from '@/app/lib/reuniao/data';
 import { mylog } from '@/app/lib/mylogger';
 import type { OrdemDia } from '@/app/lib/definitions';
-import { AddOrdemDiaToReuniao, DeleteOrdemDiaFromReuniao, EditOrdemDia } from '../buttons';
+import { AddOrdemDiaToReuniao, DeleteOrdemDiaFromReuniao, EditOrdemDia, ExecOrdemDia } from '../buttons';
 
 import { reorderOrdemDiaDo } from '@/app/lib/reuniao/actions';
 
@@ -29,9 +29,11 @@ const filename = "app/ui/reuniao/ordemdia/tableclient";
  */
 
 
-export default function OrdemDia({rid, editable, currentPage}: { rid: number, editable: number, currentPage:number}) {
+export default function OrdemDia({rid, editable, currentPage, tipo}: { rid: number, editable: number, currentPage:number, tipo:string}) {
 
     const [ordemdia, setOrdemDia] = useState<OrdemDia[]>([]);
+
+    mylog("INFO",filename,"OrdemDia","tipo =", tipo)
 
     function reorderOrdemDia(ordemDia: OrdemDia[]) {
         mylog ("DBG", filename, "OrdemDia", "reoderOrdemDia", ordemDia);
@@ -120,8 +122,9 @@ export default function OrdemDia({rid, editable, currentPage}: { rid: number, ed
                         
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-start ">
-                            <EditOrdemDia id={ordemdia.id} editable={editable} rid={rid} />
-                            <DeleteOrdemDiaFromReuniao id={ordemdia.id} editable={editable} rid={rid} />
+                            {(tipo==='add')?<EditOrdemDia id={ordemdia.id} editable={editable} rid={rid} />:<p></p>}
+                            {(tipo==='add')?<DeleteOrdemDiaFromReuniao id={ordemdia.id} editable={editable} rid={rid} />:<p></p>}
+                            {(tipo==='delib')?<ExecOrdemDia id={ordemdia.id} editable={editable} rid={rid} />:<p></p>}
                         </div>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">

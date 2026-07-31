@@ -11,18 +11,24 @@ import React, { useActionState } from 'react';
 
 const filename="app/ui/reuniao/addordemdia";
 
-export default function CreateOrdemDiaForm ({reuniaoNumber,ordemId}:{reuniaoNumber:number, ordemId: string})  {
-    mylog("INFO",filename,"CreateOrdemDiaForm","reuniaoNumber,ordemId=",{reuniaoNumber,ordemId});
+export default function CreateOrdemDiaForm ({reuniaoNumber,ordemId, tipo, assunto, deliberacao}:{reuniaoNumber:number, ordemId: string, tipo: string, assunto: string, deliberacao: string})  {
+    mylog("INFO",filename,"CreateOrdemDiaForm","reuniaoNumber,ordemId=",{reuniaoNumber,ordemId,tipo,assunto,deliberacao});
+    console.log("tipo:",tipo)
 
     const initialState: OrdemState = { message:null, errors: {}}
     const [state, formAction] = useActionState(createOrdem, initialState);
     mylog("DBG",filename,"CreateOrdemDiaForm","state,formAction=",{state,formAction})
-    
+    const aver=(tipo==='delib')?'':'hidden'
+    const visivel = "mb-4 w-full "+aver;
+    console.log("className:",visivel)
+    const voltar=(tipo==='delib')?"/sinfonia/reuniao/"+reuniaoNumber+"/execOrdemDia":"/sinfonia/reuniao/"+reuniaoNumber+"/ordemDia"
     return (
       <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6 w-full">
       
-         <h1 className="mb-10 font-bold text-xl"> {ordemId==='0'?"Criar Ordem do Dia": "Editar"} para reuniao {reuniaoNumber.toString()} </h1>
+         <h1 className="mb-10 font-bold text-xl"> {ordemId==='0'?
+          "Criar Ordem do Dia": "Editar "} para reuniao {reuniaoNumber.toString()}</h1>
+          <h2> {deliberacao}</h2>
          <input type="hidden" name="id" value={reuniaoNumber} />
          <input type="hidden" name="oid" value={ordemId} />
  
@@ -41,11 +47,11 @@ export default function CreateOrdemDiaForm ({reuniaoNumber,ordemId}:{reuniaoNumb
               className=""
               aria-label="assunto"
               placeholder="Assunto"
-              defaultValue={""}
+              defaultValue={assunto}
             />
             </div>
           </fieldset>
-          <fieldset className="mb-4 w-full hidden">
+          <fieldset className={visivel} >
             <label htmlFor="assunto" className="mb-2 text-sm font-medium">
               Deliberação:
             </label>
@@ -58,8 +64,7 @@ export default function CreateOrdemDiaForm ({reuniaoNumber,ordemId}:{reuniaoNumb
               className=""
               aria-label="deliberacao"
               placeholder="Deliberação"
-              defaultValue={""}
-              disabled={true}
+              defaultValue={deliberacao}
             />
             </div>
           </fieldset>  
@@ -71,7 +76,7 @@ export default function CreateOrdemDiaForm ({reuniaoNumber,ordemId}:{reuniaoNumb
           </div>
           <div className="mt-6 flex justify-end gap-4">
           <Link
-            href="/sinfonia/reuniao"
+            href={voltar}
             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
           >
           Voltar
