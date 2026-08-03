@@ -16,8 +16,8 @@ const linksr = [
   { name: 'Abertas', href: '/sinfonia/reuniao', icon: UserGroupIcon,  pname: 'Aberta', },
   { name: 'Fechadas', href: '/sinfonia/reuniao/fechadas', icon: UserGroupIcon,  pname: 'Fechada', },
 //  { name: 'Pauta', href: '/sinfonia/reuniao/pauta', icon: PencilSquareIcon, pname: 'Administração', },
-  { name: 'Execução', href: '/sinfonia/reuniao/execucao', icon: PencilSquareIcon, pname: 'Administração', },
-  { name: 'Avaliação Plano', href: '/sinfonia/reuniao/plano', icon: PencilSquareIcon, pname: 'Administração', },
+//  { name: 'Execução', href: '/sinfonia/reuniao/execucao', icon: PencilSquareIcon, pname: 'Administração', },
+//  { name: 'Avaliação Plano', href: '/sinfonia/reuniao/plano', icon: PencilSquareIcon, pname: 'Administração', },
   { name: 'Relatorios', href: '/sinfonia/reuniao/relatorios', icon: PencilSquareIcon, pname: 'Administração', },
 ];
 
@@ -28,7 +28,7 @@ const linksd = [
 const linksa = [
   { name: 'Usuários', href: '/sinfonia/administracao/usuarios', icon: UserGroupIcon,  pname: 'Usuários', },
   { name: 'Participantes', href: '/sinfonia/administracao/participantes', icon: UserGroupIcon, pname: 'Participantes Usuais', },
-//  { name: 'Upload', href: '/sinfonia/administracao/upload', icon: DocumentDuplicateIcon,  pname: 'Upload de Documentos', },
+  { name: 'Upload', href: '/sinfonia/administracao/upload', icon: DocumentDuplicateIcon,  pname: 'Upload de Documentos', },
   { name: 'Assuntos', href: '/sinfonia/administracao/assuntos', icon: UserGroupIcon,  pname: 'Assuntos da Reunião', },
   { name: 'Reunioes', href: '/sinfonia/reuniao/fechadas', icon: UserGroupIcon,  pname: 'Reabrir Reunião', },
 ];
