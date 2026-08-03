@@ -66,7 +66,7 @@ export async function createUser (prevState: UserState, formData: FormData)
 	
 	const cpf = validatedFields.data.cpf;
 	const nome = validatedFields.data.nome.toString();
-	const password = md5(validatedFields.data.password).substr(0,20);
+	const password = md5(validatedFields.data.password).slice(0,20);
 	const username = validatedFields.data.username.toString();
 	const nivel = validatedFields.data.nivel;
 		
