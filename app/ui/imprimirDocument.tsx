@@ -64,8 +64,7 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: 'bold',
-    lineHeight: 1.5,
-    bottomMargin: 10,
+    lineHeight: 1.01,
   },
   viewcenter: {
     marginTop: 50,
