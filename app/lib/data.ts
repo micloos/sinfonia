@@ -1,5 +1,5 @@
 import { mssql } from '@/app/lib/db';
-import { UserType, Niveis, Numres, Reunioes, ParticipanteType, OrdemDia, SystemUser } from '@/app/lib/definitions';
+import { UserType, Niveis, Numres,  ParticipanteType,  SystemUser } from '@/app/lib/definitions';
 import { mylog } from './mylogger';
 
 
