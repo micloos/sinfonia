@@ -15,7 +15,7 @@ export default async function PautaList(
     {
     mylog("DBG",fileName,'PautaList','pendente = ', pendente);
     mylog("DBG",fileName,'PautaList','query=',query)
-    const pautaItems =  pendente != 1 ? await fetchFilteredPauta(reuniao,query,Number(currentPage)) as PautaRed[] : await fetchFilteredPendingAssuntos(query,Number(currentPage)) as PautaRed[] ;
+    const pautaItems =  pendente != 1 ? await fetchFilteredPauta(reuniao,query,0) as PautaRed[] : await fetchFilteredPendingAssuntos(query,Number(currentPage)) as PautaRed[] ;
     // mylog("DBG",fileName,'PautaList','pautaItems=',pautaItems);
     // mylog("DBG",fileName,'PautaList','valores=',valores);
     const positivos = valores.filter(v => v.Ind_DeliberacaoValor === 'P').map(v => v.Cd_ClassificacaoDeliberacao);
