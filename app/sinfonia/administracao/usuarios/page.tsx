@@ -5,6 +5,7 @@ import Search from '@/app/ui/search';
 {/* import { Suspense } from 'react'; */}
 import { fetchUsersPages } from '@/app/lib/data';
 import { CreateUser } from '@/app/ui/administracao/buttons';
+import { requireAuth} from '@/app/lib/auth/authorization';
 
 
 export default async function Page(props: {
@@ -14,6 +15,11 @@ export default async function Page(props: {
 				  }>;
 				}) 
 				  {
+					try {
+					const session = await requireAuth('1'); // Require at least 'admin' role
+
+					const { user } = session;
+
 					  const searchParams = await props.searchParams;
 					  
 					  const query = searchParams?.query || ''; 
@@ -41,5 +47,12 @@ export default async function Page(props: {
 		</div>
 		
 </div>
-	)
+)
+					} catch (error: any) {
+						return (
+							<div className="text-red-500">
+								{error.message}
+							</div>
+						);
+					}
 }

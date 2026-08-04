@@ -2,14 +2,20 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+
+
+export default  function LoginPage(props: { searchParams?: { from?: string } }) {
+
+    const sparams = useSearchParams() || {};
+    const from = sparams.get('from') || '/sinfonia'; // Default redirect path after login
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,7 +33,7 @@ export default function LoginPage() {
 
             if (response.ok) {
                 // Redirect to dashboard or home
-                router.push('/sinfonia');
+                router.push(from);
                 router.refresh();
             } else {
                 setError(data.error || 'Login failed');

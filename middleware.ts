@@ -4,11 +4,11 @@ import type { NextRequest } from 'next/server';
 
 // Public paths that don't require authentication
 const PUBLIC_PATHS = ['/login', '/api/auth/login', '/api/auth/register'];
-const PUBLIC_STARTS_WITH = ['/_next', '/favicon.ico', '/public'];
+const PUBLIC_STARTS_WITH = ['/favicon.ico', '/public'];
 
 export function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
-    
+    console.log('Middleware triggered for path:', path);
     // Skip public paths
     if (PUBLIC_PATHS.includes(path) || PUBLIC_STARTS_WITH.some(p => path.startsWith(p))) {
         return NextResponse.next();
