@@ -124,12 +124,17 @@ export async function updateParticipante (id: string, formData:FormData) {
 	}
 	const nome = validatedFields.data.nome;
 	const nid = Number(id);
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 
 	try {
 		const myreq =`
 		UPDATE REUNIAO_T4000_Participantes 
 		SET
-		   Nm_Participante = '${nome}'
+		   Nm_Participante = '${nome}',
+		   Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 		WHERE
 		   Cd_Participante = ${nid}
 		`

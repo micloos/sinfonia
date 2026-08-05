@@ -333,7 +333,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             dt_EstagioPeriodoInicio = ${essentialFields.data.dt_EstagioPeriodoInicio==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoInicio+"'"},
             dt_EstagioPeriodoFim = ${essentialFields.data.dt_EstagioPeriodoFim==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoFim+"'"},
             qt_EstagioCreditos = ${Number(essentialFields.data.qt_EstagioCreditos)===0?null:essentialFields.data.qt_EstagioCreditos},
-            cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null}`;
+            cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null},
+            Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
+            `;
         const add1 = essentialFields.data.Cd_TipoSolicitacaoPrazo === '0' ? '' :`
             , Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},
@@ -595,7 +597,9 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
             dt_EstagioPeriodoFim = ${essentialFields.data.dt_EstagioPeriodoFim==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoFim+"'"},
             qt_EstagioCreditos = ${Number(essentialFields.data.qt_EstagioCreditos)===0?null:essentialFields.data.qt_EstagioCreditos},
             cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null},
-            Cd_ClassificacaoDeliberacao = ${essentialFields.data.Cd_ClassificacaoDeliberacao.length>0?essentialFields.data.Cd_ClassificacaoDeliberacao:null}`
+            Cd_ClassificacaoDeliberacao = ${essentialFields.data.Cd_ClassificacaoDeliberacao.length>0?essentialFields.data.Cd_ClassificacaoDeliberacao:null},
+            Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
+        `
         const add1 = essentialFields.data.Cd_TipoSolicitacaoPrazo === '0' ? '' :`
             , Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},

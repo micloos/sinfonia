@@ -72,6 +72,10 @@ const AdminAssuntoFormSchema = z.object({
 
 export async function updateAssunto(id: string, formData: FormData) {
   const filename = "app/lib/assunto/actions.tsx";
+    const session = await requireAuth('2'); // Require at least 'secretaria' role
+    const { user } = session;
+    mylog("INFO", filename, "createUser", "user=", user);
+
   mylog("DBG", filename, "updateAssunto", "id=", id);
   mylog("DBG", filename, "updateAssunto", "formData=", formData);
   const validatedFields = AdminAssuntoFormSchema.safeParse ({
@@ -117,7 +121,8 @@ export async function updateAssunto(id: string, formData: FormData) {
         Ds_AssuntoAtaReuniao = '${validatedFields.data.nome}',
         Ds_AssuntoDeliberacao = '${validatedFields.data.descricao}',
         Cd_AssuntoReuniaoRetornavel = ${validatedFields.data.retornavel} ,
-        Cd_ModeloDespacho = ${validatedFields.data.modeloDespacho} 
+        Cd_ModeloDespacho = ${validatedFields.data.modeloDespacho},
+        Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
       Where Cd_AssuntoReuniao = ${id}
     `;
     mylog("DBG", filename, "updateAssunto", "myreq=", myreq.replace(/\s/g, " "));

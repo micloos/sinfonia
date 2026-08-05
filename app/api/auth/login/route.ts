@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { login } from '@/app/lib/auth/auth-service';
 
 export async function POST(request: NextRequest) {
+    console.log('Login API called');
     try {
         const body = await request.json();
         const { username, password } = body;
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
         }
 
         const result = await login(username, password);
-
+        console.log('Login result:', result);
         if (!result.success) {
             return NextResponse.json(
                 { error: result.error },
