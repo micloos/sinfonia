@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 
 // Public paths that don't require authentication
 const PUBLIC_PATHS = ['/login', '/api/auth/login', '/api/auth/register'];
-const PUBLIC_STARTS_WITH = ['/favicon.ico', '/public'];
+const PUBLIC_STARTS_WITH = ['/favicon.ico', '/public','/_next'];
 
 export function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;

@@ -24,7 +24,7 @@ export async function requireAuth(requiredRole?: UserRole) {
     }
 
     if (requiredRole && !hasRole(session.user.Cd_NivelUsuarioSistema.toString(), requiredRole)) {
-        throw new Error(`Forbidden: Requires ${requiredRole} role`);
+        throw new Error(`Você não tem permissão para acessar esta página.`);
     }
 
     return session;

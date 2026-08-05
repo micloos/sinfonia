@@ -8,6 +8,7 @@ import { getNextSequence } from '@/app/lib/reuniao/data';
 import { ReuniaoState, OrdemState, ItemReuniao } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
 import { criarAssuntoPendente } from './pauta/actions';
+import { requireAuth } from '../auth/authorization';
 
 
 
@@ -33,6 +34,10 @@ const CreateReuniao = ReuniaoFormSchema.omit({active: true, d_end: true});
 
 export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog ("DBG", "app/lib/actions", "createReuniao", "formdata=",formData);
 	
 	const validatedFields = CreateReuniao.safeParse({
@@ -64,8 +69,8 @@ export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 	try {
 		const myreq = `
 		INSERT INTO REUNIAO_T1000_Reuniao 
-		    (Cd_Reuniao, Dt_inicialReuniao, Dt_LimiteInclusaoItemReuniao, Ds_SalaReuniao, Ds_PredioSalaReuniao, Ind_ReaberturaReuniao)
-			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N')
+		    (Cd_Reuniao, Dt_inicialReuniao, Dt_LimiteInclusaoItemReuniao, Ds_SalaReuniao, Ds_PredioSalaReuniao, Ind_ReaberturaReuniao, Id_Usuario)
+			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
 		`;
 		const answer =  mssql(myreq);
 		mylog ("DBG", filename, "createReuniao", "answer=",answer);
@@ -217,6 +222,10 @@ export async function escParticipante (id: string)
 
 
 export async function addParticipanteToReuniao (id: number, rid: number ){
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog("DBG",filename,"addParticipantesToReuniao","{id,rid}=",{id,rid} );
 	const nextCdArr = await mssql("select max(Cd_ParticipanteReuniao) +1 as n FROM REUNIAO_T1600_ParticipanteReuniao") as numericanswer[];
 	const nextCd = nextCdArr[0].n;
@@ -228,7 +237,7 @@ export async function addParticipanteToReuniao (id: number, rid: number ){
 	const vazio = await mssql (myreq) as charanswer[];
 	if (vazio.length==0) {
 		mylog("DBG",filename,'addParticipanteToReuniao',"Pronto para inserir o participante ",userName[0].s);
-		const myreq = `insert into REUNIAO_T1600_ParticipanteReuniao (Cd_Reuniao,Nm_ParticipanteReuniao,Cd_ParticipanteReuniao,Ds_PosicaoParticipanteReuniao) values (${rid},'${userName[0].s}',${nextCd},'Default')`;
+		const myreq = `insert into REUNIAO_T1600_ParticipanteReuniao (Cd_Reuniao,Nm_ParticipanteReuniao,Cd_ParticipanteReuniao,Ds_PosicaoParticipanteReuniao, Id_Usuario) values (${rid},'${userName[0].s}',${nextCd},'Default', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')`;
 		mylog("DBG",filename,'addParticipanteToReuniao',"myreq=",myreq);
 		const ans = await mssql(myreq);
 		mylog("DBG",filename,'addParticipanteToReuniao',"ans=",ans);
@@ -338,6 +347,10 @@ const CreateOrdem = OrdemFormSchema.omit({sequencia: true});
 export async function createOrdem (prevState: OrdemState, formData:FormData)
 {
 	mylog ("DBG",filename,"createOrdem","formData=",formData);
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 
 	const validatedFields = CreateOrdem.safeParse({
 		rid: formData.get('id'),
@@ -391,8 +404,8 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 	try {
 		const myreq = `
 		INSERT INTO REUNIAO_T1500_OrdemDia
-			(Cd_OrdemDia, Cd_Reuniao,Cd_SequenciaOrdemDia,Ds_OrdemDia,Ind_OrdemDiaPublicavel)
-			VALUES (${nextCdOrdemDia},${rid},${sequencia},'${assunto}','${publicavel}')
+			(Cd_OrdemDia, Cd_Reuniao,Cd_SequenciaOrdemDia,Ds_OrdemDia,Ind_OrdemDiaPublicavel,Id_Usuario)
+			VALUES (${nextCdOrdemDia},${rid},${sequencia},'${assunto}','${publicavel}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
 		`;
 		mylog("DBG",filename,"createOrdem","myreq=",myreq.replace(/\s/g," "));
 		const answer = await mssql(myreq);

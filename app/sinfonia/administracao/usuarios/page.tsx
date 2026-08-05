@@ -6,6 +6,8 @@ import Search from '@/app/ui/search';
 import { fetchUsersPages } from '@/app/lib/data';
 import { CreateUser } from '@/app/ui/administracao/buttons';
 import { requireAuth} from '@/app/lib/auth/authorization';
+import { mylog } from '@/app/lib/mylogger';
+const filename = 'app/sinfonia/administracao/usuarios/page';
 
 
 export default async function Page(props: {
@@ -19,6 +21,7 @@ export default async function Page(props: {
 					const session = await requireAuth('1'); // Require at least 'admin' role
 
 					const { user } = session;
+					if(user) { mylog('INFO', filename, 'Page', 'user', user.Ds_LoginAcessoUsuarioSistemaReuniao); }
 
 					  const searchParams = await props.searchParams;
 					  

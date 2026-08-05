@@ -5,6 +5,7 @@ import { mssql } from '@/app/lib/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
+import { requireAuth } from '../auth/authorization';
 
 const filename = 'app/lib/participantes/actions'
 
@@ -35,7 +36,11 @@ export async function deleteFromParticipantesList (id: number)
 const CreateParticipante = ParticipanteFormSchema.omit({id: true})
 
 export async function createParticipante (prevState: ParticipanteState, formData:FormData)
-{
+{	
+		const session = await requireAuth('1'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog("DBG",filename,"createParticipantes","formdata=",formData);
 	const validatedFields = CreateParticipante.safeParse({
 		nome: formData.get('nome'),
@@ -58,8 +63,8 @@ export async function createParticipante (prevState: ParticipanteState, formData
 	try {
 		const myreq = `
 		INSERT INTO REUNIAO_T4000_Participantes
-		(Nm_Participante)
-		VALUES ('${nome}')
+		(Nm_Participante, Id_Usuario)
+		VALUES ('${nome}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
 		`;
 		mylog ("DBG", filename, "createParticipante","myreq=",myreq.replace(/\s/g," "));
 		const answer = await mssql(myreq);

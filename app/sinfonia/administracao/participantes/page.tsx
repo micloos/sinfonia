@@ -7,6 +7,8 @@ import { fetchParticipantesPages } from '@/app/lib/data';
 import { CreateParticipante } from '@/app/ui/administracao/buttons';
 import { mylog } from '@/app/lib/mylogger';
 
+import { requireAuth} from '@/app/lib/auth/authorization';
+
 const filename = 'app/sinfonia/administracao/participantes/page';
 
 export default async function Page(props:  {
@@ -17,7 +19,10 @@ export default async function Page(props:  {
 				  }>;
 				}) 
 				  {
-					  
+					try {
+					const session = await requireAuth('1'); // Require at least 'admin' role
+					const { user } = session;
+					if (user) { mylog('INFO', filename, 'Page', 'user', user.Ds_LoginAcessoUsuarioSistemaReuniao); }
 					  const searchParams = await props.searchParams;
 					  
 
@@ -55,4 +60,11 @@ export default async function Page(props:  {
 		
 </div>
 	)
+} catch(error:any) {
+						return (
+							<div className="text-red-500">
+								{error.message}
+							</div>
+						);
+					}
 }

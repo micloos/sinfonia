@@ -155,7 +155,7 @@ export async function verifyToken(token: string): Promise<User | null> {
 // Invalidate session (logout)
 export async function invalidateSession(token: string) {
     await mssql(`
-            UPDATE UserSessions 
+            UPDATE REUNIAO_T4100_Sessoes
             SET IsActive = 0 
             WHERE Token = '${token}'
         `);

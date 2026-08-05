@@ -1,27 +1,30 @@
 // app/login/page.tsx
 'use client';
 
-import { useState } from 'react';
-import { useRouter,useSearchParams } from 'next/navigation';
+import { useState, use } from 'react';
+import { redirect } from 'next/navigation';
+// import { isRedirectError } from 'next/dist/client/components/redirect-error';
+// import { redirect, useRouter } from 'next/navigation';
 
 
-
-export default  function LoginPage(props: { searchParams?: { from?: string } }) {
-
-    const sparams = useSearchParams() || {};
-    const from = sparams.get('from') || '/sinfonia'; // Default redirect path after login
+export default  function LoginPage({searchParams}: { searchParams:  Promise <{from?: string }>}) {
+// export default  function LoginPage() {
+//    console.log('LoginPage props:', props);
+    const sparams = use(searchParams) || {};
+    const from = sparams.from || '/sinfonia/reuniao'; // Default redirect path after login
+    console.log('LoginPage from:', from);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
+//    const router = useRouter();
 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
-
+        let success = false;
         try {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -30,11 +33,12 @@ export default  function LoginPage(props: { searchParams?: { from?: string } }) 
             });
 
             const data = await response.json();
-
+            console.log('Login response:', data);
+            console.log('Redirecting to:', from);
             if (response.ok) {
-                // Redirect to dashboard or home
-                router.push(from);
-                router.refresh();
+                success = true;
+
+                 
             } else {
                 setError(data.error || 'Login failed');
                 console.log('Login failed:', data.error);
@@ -44,6 +48,9 @@ export default  function LoginPage(props: { searchParams?: { from?: string } }) 
             console.log('Login error:', err);
         } finally {
             setLoading(false);
+            if (success) {
+                redirect(from);
+            }
         }
     };
 
@@ -88,7 +95,7 @@ export default  function LoginPage(props: { searchParams?: { from?: string } }) 
                             />
                         </div>
                     </div>
-
+                    
                     {error && (
                         <div className="text-red-500 text-sm text-center">
                             {error}
