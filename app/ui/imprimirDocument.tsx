@@ -276,7 +276,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
                   < View key={'pauta'+item.id+'.'+index} wrap={false} style={styles.section}>
                     <Text style={styles.bold} > {item.id.toString()}.{(index+1).toString()} {assunto.nm_Interessado} - {assunto.ds_AreaInteressado} </Text>
                     {(data.assuntoParameters[Number(item.id)-1].Ind_Orientador==='S')?<Text style={styles.text}>Orientador(a): Prof(a) Dr(a) {assunto.nm_Orientador} - {assunto.ds_LotOrientador} </Text>:<Text></Text>}
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoOrientador==='S')?<Text style={styles.text}>Novo Orientador(a): Prof(a) Dr(a) {assunto.nm_NovoOrientador}  </Text>:<Text></Text>}
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_NovoOrientador==='S')?<Text style={styles.text}>Coorientador(a)/Novo Orientador(a): Prof(a) Dr(a) {assunto.nm_NovoOrientador}  </Text>:<Text></Text>}
                     <Text style={styles.text}> Nivel: {assunto.ds_NivelInteressado} </Text>
                     {(data.assuntoParameters[Number(item.id)-1].Ind_DataApresentacao==='S')? <Text style={styles.text}> Data de Apresentação: {moment.tz(assunto.dt_Apresentacao, tz).format('DD/MM/YYYY')} </Text>:<Text></Text>}
                     {(data.assuntoParameters[Number(item.id)-1].Ind_Defesa)==='S'? <Text style={styles.text}> Data da Defesa: {moment.tz(assunto.Dt_Defesa, tz).format('DD/MM/YYYY')} </Text>:<Text></Text>}
@@ -337,7 +337,7 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
 
 
 
-                    {(data.assuntoParameters[Number(item.id)-1].Ind_Relator==='S') ? <View key={'relator'+assunto.Cd_ItemReuniao}>
+                    {(data.assuntoParameters[Number(item.id)-1].Ind_Relator==='S' && tipo !== 'deliberacao') ? <View key={'relator'+assunto.Cd_ItemReuniao}>
                       {(assunto.nm_Relator && assunto.nm_Relator.length>0)?
                       <Text style={styles.text}>Relator Indicado: {assunto.nm_Relator} - {assunto.ds_LotRelator} </Text>: <Text></Text>}
                       {(assunto.ds_ObservacaoRelator && assunto.ds_ObservacaoRelator.length>0)?
