@@ -490,7 +490,7 @@ export async function fecharReuniao (reuniao: string)
 		mylog("INFO",filename,"fecharReuniao","Num ","nao e zero")
 		return {success: false, error: 'Tem assuntos não deliberados'}
 	} else {
-		const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'S' where cd_reuniao=${reuniao}`;
+		const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'S', Dt_FinalReuniao = GETDATE() where cd_reuniao=${reuniao}`;
 		try {
 			await mssql(myreq);
 			return {success: true, error: null }
