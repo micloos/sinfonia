@@ -409,13 +409,13 @@ export const ImprimirDocument = ({ data }: ImprimirProps) => {
           <Text style={{ fontWeight: 'bold' }}>Total: ${total.toFixed(2)}</Text>
         </View>
 */}
-{/* Assinatura 
+
           <View key='assinatura' style={styles.viewcenter}>
             <Image src='/assinatura.png' style={styles.assinatura}/>
             <Text style={[styles.bold,styles.section]}> {data.participantes.filter(user => (user.title==='Presidente'))[0].name}</Text>
             <Text style={styles.section}>Presidente </Text>
             <Text style={styles.section}> Comissão de Pós-Graduação </Text>
-          </View> */} 
+          </View>
 
 
       </Page>
