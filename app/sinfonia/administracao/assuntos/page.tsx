@@ -8,6 +8,7 @@ import { mylog } from '@/app/lib/mylogger';
 const filename = 'app/sinfonia/administracao/assuntos/page';
 
 import { fetchAssuntosPages } from '@/app/lib/data';
+import { requireAuth } from '@/app/lib/auth/authorization';
 
 export default async function AdmAssuntosPage(props:  {
 				  searchParams?: Promise<{
@@ -15,6 +16,10 @@ export default async function AdmAssuntosPage(props:  {
 				  page?: string;
 				  }>;
 				}) {
+                    try {
+                    const session = await requireAuth('1'); // Require at least 'admin' role
+                    const { user } = session;
+                    if (user) { mylog('INFO', filename, 'Page', 'user', user.Ds_LoginAcessoUsuarioSistemaReuniao); }
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
@@ -35,4 +40,11 @@ export default async function AdmAssuntosPage(props:  {
       </div>
     </main>
   );
+} catch (error: any) {
+    return (
+      <div className="text-red-500">
+        {error.message}
+      </div>
+    );
+  }
 }

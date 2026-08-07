@@ -4,7 +4,7 @@ import { mylog } from '@/app/lib/mylogger';
 
 export default async function Page() {
   const niveis = await fetchNiveis();
-  mylog("DBG",'/app/ui/administracao/usuarios/create-form', 'Page' , "niveis=",niveis);
+  mylog("DBG",'/app/sinfonia/administracao/usuarios/page', 'Page' , "niveis=",niveis);
   
   return (
     <main>

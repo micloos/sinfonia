@@ -8,6 +8,7 @@ import { mylog } from '../../mylogger';
 import { Banca, Credito, DisciplinaEspecial, ItemReuniao, ItemReuniaoState } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
 import * as moment from 'moment-timezone';
+import { requireAuth } from '../../auth/authorization';
 
 const tz ="UTC";
 
@@ -167,11 +168,15 @@ export interface SearchResult {
 
 
 export async function createItem () {
+    const session = await requireAuth('2'); // Require at least 'admin' role
+    const { user } = session;
+    mylog("INFO", filename, "createUser", "user=", user);
+
     const Cd_ItemReuniao = await getNextItem();
     mylog("DBG",filename,"createItem","Cd_ItemReuniao = ",Cd_ItemReuniao)
     if (Cd_ItemReuniao > 0) {
         try {
-            const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao) values (${Cd_ItemReuniao})`
+            const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao, Id_Usuario) values (${Cd_ItemReuniao}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')`
             mssql (myreq)
         } catch (error) {
             mylog ("ERROR",filename,"createItem","Error",error)
@@ -251,6 +256,10 @@ export async function criarAssuntoPendente (item: number, assunto: number) {
 
 
 export async function createItemObject (prevState: ItemReuniaoState, formData:FormData) {
+    const session = await requireAuth('1'); // Require at least 'admin' role
+    const { user } = session;
+    mylog("INFO", filename, "createUser", "user=", user);
+
     mylog("INFO",filename,"createItemObject","prevState = ",prevState)
     mylog("INFO",filename,"createItemObject","formData = ",formData)
     
@@ -275,7 +284,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         const Cd_ItemReuniao = await getNextItem();
         if (Cd_ItemReuniao > 0) {
             try {
-                const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao) values (${Cd_ItemReuniao})`
+                const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao, Id_Usuario) values (${Cd_ItemReuniao}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')`
                 mssql (myreq)
                 essentialFields.data.Cd_ItemReuniao = String(Cd_ItemReuniao);
             } catch (error) {
@@ -324,7 +333,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             dt_EstagioPeriodoInicio = ${essentialFields.data.dt_EstagioPeriodoInicio==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoInicio+"'"},
             dt_EstagioPeriodoFim = ${essentialFields.data.dt_EstagioPeriodoFim==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoFim+"'"},
             qt_EstagioCreditos = ${Number(essentialFields.data.qt_EstagioCreditos)===0?null:essentialFields.data.qt_EstagioCreditos},
-            cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null}`;
+            cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null},
+            Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
+            `;
         const add1 = essentialFields.data.Cd_TipoSolicitacaoPrazo === '0' ? '' :`
             , Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},
@@ -350,16 +361,16 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         mylog("DBG",filename,"createItemObject","banca = ",banca);
         const cd_BancaExaminadoraReuniaoInit =  await getNextBancaItem();
         mylog("DBG",filename,"createItemObject","next cd_BancaExaminadoraReuniao = ",cd_BancaExaminadoraReuniaoInit);
-        let myreqtotal = "create table TEMPBANCA (cd_BancaExaminadoraReuniao int, Cd_ItemReuniao int, nm_ExaminadorBanca varchar(200), ds_LotExaminadorBanca varchar(200), Cd_TipoExaminador int); ";
+        let myreqtotal = "create table TEMPBANCA (cd_BancaExaminadoraReuniao int, Cd_ItemReuniao int, nm_ExaminadorBanca varchar(200), ds_LotExaminadorBanca varchar(200), Cd_TipoExaminador int, Id_Usuario varchar(200)); ";
         
         for (let i = cd_BancaExaminadoraReuniaoInit; i < cd_BancaExaminadoraReuniaoInit + banca.length; i++) {
             const element = banca[i - cd_BancaExaminadoraReuniaoInit];            
                     mylog("DBG",filename,"createItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO TEMPBANCA 
-                        (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
+                        (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador, Id_Usuario)
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador})
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
                     ; `;
                     myreqtotal = myreqtotal + myreq
         }
@@ -369,9 +380,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                 ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
                 AND Target.Nm_ExaminadorBanca = Source.Nm_ExaminadorBanca
             WHEN NOT MATCHED BY TARGET THEN
-                INSERT (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
+                INSERT (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador, Id_Usuario)
                 VALUES (Source.cd_BancaExaminadoraReuniao, Source.Cd_ItemReuniao, Source.nm_ExaminadorBanca, 
-                Source.ds_LotExaminadorBanca, Source.Cd_TipoExaminador);
+                Source.ds_LotExaminadorBanca, Source.Cd_TipoExaminador, Source.Id_Usuario);
 
             DROP TABLE TEMPBANCA;
 `;
@@ -395,7 +406,7 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
         let myreqtotal = `
             CREATE TABLE TEMPCREDITOS (cd_AtribuidorCredito int, ds_TituloTrabalho varchar(1000), ds_TituloPeriodicoLivroCongresso varchar(500),
             ds_Pais varchar(100), dt_PeriodoInicial datetime, dt_PeriodoFinal datetime, nu_Volume int, ds_Paginas varchar(20), ds_Ano int,
-            Cd_ItemReuniao int, Cd_TipoAtribuidorCredito int); 
+            Cd_ItemReuniao int, Cd_TipoAtribuidorCredito int, Id_Usuario varchar(200)); 
         `
         for (let i = cd_CreditosInit; i < cd_CreditosInit + creditos.length; i++) {
             const element = creditos[i - cd_CreditosInit];
@@ -406,10 +417,10 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                     element.nu_Volume = element.nu_Volume ? element.nu_Volume : '0';
                      const myreq = `
                         INSERT INTO TEMPCREDITOS 
-                        (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                        (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal, Id_Usuario) 
                         
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
                     `;
                     mylog("DBG",filename,"createItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
                     myreqtotal = myreqtotal+myreq
@@ -422,10 +433,10 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                 ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
                 AND Target.ds_TituloTrabalho = Source.ds_TituloTrabalho
             WHEN NOT MATCHED BY TARGET THEN
-                INSERT (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                INSERT (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal, Id_Usuario) 
                 VALUES (Source.cd_AtribuidorCredito, Source.Cd_ItemReuniao, Source.Cd_TipoAtribuidorCredito, Source.ds_titulotrabalho, 
                         Source.ds_tituloperiodicolivrocongresso, Source.ds_pais, Source.ds_paginas, Source.ds_ano, Source.nu_volume, 
-                        Source.dt_periodoinicial, Source.dt_periodofinal) ;
+                        Source.dt_periodoinicial, Source.dt_periodofinal, Source.Id_Usuario) ;
 
                 DROP TABLE TEMPCREDITOS;
         `;
@@ -455,7 +466,8 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
             dt_PeriodoFinal datetime,
             ds_Frequencia varchar(50),
             ds_Conceito varchar(50),
-            Cd_ItemReuniao int
+            Cd_ItemReuniao int,
+            id_Usuario varchar(200)
             )`
         for (let i = cd_DisciplinaEspecialInit; i < cd_DisciplinaEspecialInit + disciplinaEspecial.length; i++) {
             const element = disciplinaEspecial[i - cd_DisciplinaEspecialInit];
@@ -464,9 +476,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                     mylog("DBG",filename,"createItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO TEMPESPECIAIS 
-                        (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                        (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito, id_Usuario)
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}');
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}');
 
                     `;
                     
@@ -479,9 +491,9 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
                 ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
                 AND Target.nm_DisciplinaEspecial = Source.nm_DisciplinaEspecial
             WHEN NOT MATCHED BY TARGET THEN
-                INSERT (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                INSERT (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito, id_Usuario)
                 VALUES (Source.cd_DisciplinaEspecial,Source.Cd_ItemReuniao, Source.nm_DisciplinaEspecial, Source.qt_Creditos, 
-                Source.dt_PeriodoInicial, Source.dt_PeriodoFinal, Source.ds_Frequencia, Source.ds_Conceito);
+                Source.dt_PeriodoInicial, Source.dt_PeriodoFinal, Source.ds_Frequencia, Source.ds_Conceito, Source.Id_Usuario);
 
             DROP TABLE TEMPESPECIAIS;
         `
@@ -507,6 +519,10 @@ export async function createItemObject (prevState: ItemReuniaoState, formData:Fo
 }
     
 export async function execItemObject (prevState: ItemReuniaoState, formData:FormData) {
+        const session = await requireAuth('2'); // Require at least 'admin' role
+        const { user } = session;
+        mylog("INFO", filename, "createUser", "user=", user);
+    
     mylog("INFO",filename,"execItemObject","prevState = ",prevState)
     mylog("INFO",filename,"execItemObject","formData = ",formData)
     
@@ -531,7 +547,7 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
         const Cd_ItemReuniao = await getNextItem();
         if (Cd_ItemReuniao > 0) {
             try {
-                const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao) values (${Cd_ItemReuniao})`
+                const myreq = `insert into reuniao_t1010_itemreuniao (Cd_ItemReuniao, Id_Usuario) values (${Cd_ItemReuniao}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')`
                 mssql (myreq)
                 essentialFields.data.Cd_ItemReuniao = String(Cd_ItemReuniao);
             } catch (error) {
@@ -581,7 +597,9 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
             dt_EstagioPeriodoFim = ${essentialFields.data.dt_EstagioPeriodoFim==='01/01/1970'?null:"'"+essentialFields.data.dt_EstagioPeriodoFim+"'"},
             qt_EstagioCreditos = ${Number(essentialFields.data.qt_EstagioCreditos)===0?null:essentialFields.data.qt_EstagioCreditos},
             cd_ReuniaoOrigem = ${essentialFields.data.cd_ReuniaoOrigem.length>0?"'"+essentialFields.data.cd_ReuniaoOrigem+"'":null},
-            Cd_ClassificacaoDeliberacao = ${essentialFields.data.Cd_ClassificacaoDeliberacao.length>0?essentialFields.data.Cd_ClassificacaoDeliberacao:null}`
+            Cd_ClassificacaoDeliberacao = ${essentialFields.data.Cd_ClassificacaoDeliberacao.length>0?essentialFields.data.Cd_ClassificacaoDeliberacao:null},
+            Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
+        `
         const add1 = essentialFields.data.Cd_TipoSolicitacaoPrazo === '0' ? '' :`
             , Cd_TipoSolicitacaoPrazo = ${essentialFields.data.Cd_TipoSolicitacaoPrazo},
             qt_SolicitacaoPrazoDiasSolicitados = ${essentialFields.data.qt_SolicitacaoPrazoDiasSolicitados},
@@ -607,16 +625,16 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
         mylog("DBG",filename,"execItemObject","banca = ",banca);
         const cd_BancaExaminadoraReuniaoInit =  await getNextBancaItem();
         mylog("DBG",filename,"execItemObject","next cd_BancaExaminadoraReuniao = ",cd_BancaExaminadoraReuniaoInit);
-        let myreqtotal = "create table TEMPBANCA (cd_BancaExaminadoraReuniao int, Cd_ItemReuniao int, nm_ExaminadorBanca varchar(200), ds_LotExaminadorBanca varchar(200), Cd_TipoExaminador int); ";
+        let myreqtotal = "create table TEMPBANCA (cd_BancaExaminadoraReuniao int, Cd_ItemReuniao int, nm_ExaminadorBanca varchar(200), ds_LotExaminadorBanca varchar(200), Cd_TipoExaminador int, Id_Usuario varchar(200)); ";
         
         for (let i = cd_BancaExaminadoraReuniaoInit; i < cd_BancaExaminadoraReuniaoInit + banca.length; i++) {
             const element = banca[i - cd_BancaExaminadoraReuniaoInit];            
                     mylog("DBG",filename,"execItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO TEMPBANCA 
-                        (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
+                        (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador, Id_Usuario)
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador})
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_ExaminadorBanca}', '${element.ds_LotExaminadorBanca}', ${element.Cd_TipoExaminador}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
                     ; `;
                     myreqtotal = myreqtotal + myreq
         }
@@ -626,9 +644,9 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
                 ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
                 AND Target.Nm_ExaminadorBanca = Source.Nm_ExaminadorBanca
             WHEN NOT MATCHED BY TARGET THEN
-                INSERT (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador)
+                INSERT (cd_BancaExaminadoraReuniao, Cd_ItemReuniao, nm_ExaminadorBanca, ds_LotExaminadorBanca, Cd_TipoExaminador, Id_Usuario)
                 VALUES (Source.cd_BancaExaminadoraReuniao, Source.Cd_ItemReuniao, Source.nm_ExaminadorBanca, 
-                Source.ds_LotExaminadorBanca, Source.Cd_TipoExaminador);
+                Source.ds_LotExaminadorBanca, Source.Cd_TipoExaminador, Source.Id_Usuario);
 
             DROP TABLE TEMPBANCA;
 `;
@@ -652,7 +670,7 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
         let myreqtotal = `
             CREATE TABLE TEMPCREDITOS (cd_AtribuidorCredito int, ds_TituloTrabalho varchar(1000), ds_TituloPeriodicoLivroCongresso varchar(500),
             ds_Pais varchar(100), dt_PeriodoInicial datetime, dt_PeriodoFinal datetime, nu_Volume int, ds_Paginas varchar(20), ds_Ano int,
-            Cd_ItemReuniao int, Cd_TipoAtribuidorCredito int); 
+            Cd_ItemReuniao int, Cd_TipoAtribuidorCredito int, Id_Usuario varchar(200)); 
         `
         for (let i = cd_CreditosInit; i < cd_CreditosInit + creditos.length; i++) {
             const element = creditos[i - cd_CreditosInit];
@@ -663,10 +681,10 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
                     element.nu_Volume = element.nu_Volume ? element.nu_Volume : '0';
                      const myreq = `
                         INSERT INTO TEMPCREDITOS 
-                        (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                        (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal, Id_Usuario) 
                         
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}')
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.Cd_TipoAtribuidorCredito}', '${element.ds_TituloTrabalho}', '${element.ds_TituloPeriodicoLivroCongresso}', '${element.ds_Pais}', '${element.ds_Paginas}', '${element.ds_Ano}', ${element.nu_Volume}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
                     `;
                     mylog("DBG",filename,"execItemObject","myreq for creditos = ",myreq.replace(/\s/g," "));
                     myreqtotal = myreqtotal+myreq
@@ -679,10 +697,10 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
                 ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
                 AND Target.ds_TituloTrabalho = Source.ds_TituloTrabalho
             WHEN NOT MATCHED BY TARGET THEN
-                INSERT (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal) 
+                INSERT (cd_AtribuidorCredito, Cd_ItemReuniao, Cd_TipoAtribuidorCredito, ds_titulotrabalho, ds_tituloperiodicolivrocongresso, ds_pais, ds_paginas, ds_ano, nu_volume, dt_periodoinicial, dt_periodofinal, Id_Usuario) 
                 VALUES (Source.cd_AtribuidorCredito, Source.Cd_ItemReuniao, Source.Cd_TipoAtribuidorCredito, Source.ds_titulotrabalho, 
                         Source.ds_tituloperiodicolivrocongresso, Source.ds_pais, Source.ds_paginas, Source.ds_ano, Source.nu_volume, 
-                        Source.dt_periodoinicial, Source.dt_periodofinal) ;
+                        Source.dt_periodoinicial, Source.dt_periodofinal, Source.Id_Usuario) ;
 
                 DROP TABLE TEMPCREDITOS;
         `;
@@ -712,7 +730,8 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
             dt_PeriodoFinal datetime,
             ds_Frequencia varchar(50),
             ds_Conceito varchar(50),
-            Cd_ItemReuniao int
+            Cd_ItemReuniao int,
+            Id_Usuario varchar(200)
             )`
         for (let i = cd_DisciplinaEspecialInit; i < cd_DisciplinaEspecialInit + disciplinaEspecial.length; i++) {
             const element = disciplinaEspecial[i - cd_DisciplinaEspecialInit];
@@ -721,9 +740,9 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
                     mylog("DBG",filename,"execItemObject","i = ",i);
                      const myreq = `
                         INSERT INTO TEMPESPECIAIS 
-                        (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                        (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito, Id_Usuario)
                         VALUES 
-                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}');
+                        (${i}, ${essentialFields.data.Cd_ItemReuniao}, '${element.nm_DisciplinaEspecial}', ${element.qt_Creditos}, '${element.dt_PeriodoInicial}', '${element.dt_PeriodoFinal}', '${element.ds_Frequencia}', '${element.ds_Conceito}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}');
 
                     `;
                     
@@ -736,9 +755,9 @@ export async function execItemObject (prevState: ItemReuniaoState, formData:Form
                 ON Target.Cd_ItemReuniao = Source.Cd_ItemReuniao
                 AND Target.nm_DisciplinaEspecial = Source.nm_DisciplinaEspecial
             WHEN NOT MATCHED BY TARGET THEN
-                INSERT (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito)
+                INSERT (cd_DisciplinaEspecial, Cd_ItemReuniao, nm_DisciplinaEspecial, qt_Creditos, dt_PeriodoInicial, dt_PeriodoFinal, ds_Frequencia, ds_Conceito, Id_Usuario)
                 VALUES (Source.cd_DisciplinaEspecial,Source.Cd_ItemReuniao, Source.nm_DisciplinaEspecial, Source.qt_Creditos, 
-                Source.dt_PeriodoInicial, Source.dt_PeriodoFinal, Source.ds_Frequencia, Source.ds_Conceito);
+                Source.dt_PeriodoInicial, Source.dt_PeriodoFinal, Source.ds_Frequencia, Source.ds_Conceito, Source.Id_Usuario);
 
             DROP TABLE TEMPESPECIAIS;
         `

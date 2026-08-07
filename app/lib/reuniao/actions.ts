@@ -8,6 +8,7 @@ import { getNextSequence } from '@/app/lib/reuniao/data';
 import { ReuniaoState, OrdemState, ItemReuniao } from '@/app/lib/reuniao/definitions';
 import { revalidatePath } from 'next/cache';
 import { criarAssuntoPendente } from './pauta/actions';
+import { requireAuth } from '../auth/authorization';
 
 
 
@@ -33,6 +34,10 @@ const CreateReuniao = ReuniaoFormSchema.omit({active: true, d_end: true});
 
 export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog ("DBG", "app/lib/actions", "createReuniao", "formdata=",formData);
 	
 	const validatedFields = CreateReuniao.safeParse({
@@ -64,8 +69,8 @@ export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 	try {
 		const myreq = `
 		INSERT INTO REUNIAO_T1000_Reuniao 
-		    (Cd_Reuniao, Dt_inicialReuniao, Dt_LimiteInclusaoItemReuniao, Ds_SalaReuniao, Ds_PredioSalaReuniao, Ind_ReaberturaReuniao)
-			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N')
+		    (Cd_Reuniao, Dt_inicialReuniao, Dt_LimiteInclusaoItemReuniao, Ds_SalaReuniao, Ds_PredioSalaReuniao, Ind_ReaberturaReuniao, Id_Usuario)
+			VALUES (${id}, '${d_ini}','${d_lim}','${sala}','${predio}','N', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
 		`;
 		const answer =  mssql(myreq);
 		mylog ("DBG", filename, "createReuniao", "answer=",answer);
@@ -81,6 +86,10 @@ export async function createReuniao (prevState: ReuniaoState, formData:FormData)
 
 export async function updateReuniao (id: string, formData:FormData)
 {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog ("DBG", "app/lib/reuniao/actions", "updateReuniao", "id=",id);
 	mylog ("DBG", "app/lib/reuniao/actions", "updateReuniao", "formData=",formData);
 	{/* Fast */}
@@ -88,7 +97,8 @@ export async function updateReuniao (id: string, formData:FormData)
 			Dt_inicialReuniao='${formData.get('d_ini')}',
 			Dt_LimiteInclusaoItemReuniao='${formData.get('d_lim')}',
 			Ds_SalaReuniao='${formData.get('sala')}',
-			Ds_PredioSalaReuniao='${formData.get('predio')}'
+			Ds_PredioSalaReuniao='${formData.get('predio')}',
+			Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 			Where Cd_Reuniao = ${id}`;
 	mylog ("DBG", "app/lib/reuniao/actions", "updateReuniao", "myreq=",myreq);
 	try {
@@ -217,6 +227,10 @@ export async function escParticipante (id: string)
 
 
 export async function addParticipanteToReuniao (id: number, rid: number ){
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog("DBG",filename,"addParticipantesToReuniao","{id,rid}=",{id,rid} );
 	const nextCdArr = await mssql("select max(Cd_ParticipanteReuniao) +1 as n FROM REUNIAO_T1600_ParticipanteReuniao") as numericanswer[];
 	const nextCd = nextCdArr[0].n;
@@ -228,7 +242,7 @@ export async function addParticipanteToReuniao (id: number, rid: number ){
 	const vazio = await mssql (myreq) as charanswer[];
 	if (vazio.length==0) {
 		mylog("DBG",filename,'addParticipanteToReuniao',"Pronto para inserir o participante ",userName[0].s);
-		const myreq = `insert into REUNIAO_T1600_ParticipanteReuniao (Cd_Reuniao,Nm_ParticipanteReuniao,Cd_ParticipanteReuniao,Ds_PosicaoParticipanteReuniao) values (${rid},'${userName[0].s}',${nextCd},'Default')`;
+		const myreq = `insert into REUNIAO_T1600_ParticipanteReuniao (Cd_Reuniao,Nm_ParticipanteReuniao,Cd_ParticipanteReuniao,Ds_PosicaoParticipanteReuniao, Id_Usuario) values (${rid},'${userName[0].s}',${nextCd},'Default', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')`;
 		mylog("DBG",filename,'addParticipanteToReuniao',"myreq=",myreq);
 		const ans = await mssql(myreq);
 		mylog("DBG",filename,'addParticipanteToReuniao',"ans=",ans);
@@ -240,8 +254,12 @@ redirect ("/sinfonia/reuniao/"+rid.toString()+"/editparticipante")
 }
 
 export async function setReuniaoFuncao(pid: number, funcao: string) {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog("DBG",filename,'setReuniaoFuncao','{pid, funcao}=',{pid,funcao});
-	const myreq = `UPDATE REUNIAO_T1600_ParticipanteReuniao SET Ds_PosicaoParticipanteReuniao = '${funcao}' WHERE Cd_ParticipanteReuniao=${pid}`;
+	const myreq = `UPDATE REUNIAO_T1600_ParticipanteReuniao SET Ds_PosicaoParticipanteReuniao = '${funcao}', Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}' WHERE Cd_ParticipanteReuniao=${pid}`;
 	const ans = await mssql(myreq);
 	mylog("DBG",filename,'setReuniaoFuncao','ans=',ans);
 }
@@ -276,6 +294,10 @@ export async function execOrdemDoDia (id: string)
 
 export async function deleteOrdemDia (id:number,rid: number)
 {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
    mylog("DBG",filename,"deleteOrdemDia","{rid,id}=",{rid,id});
    
    try {
@@ -293,7 +315,8 @@ export async function deleteOrdemDia (id:number,rid: number)
 	   (select cd_sequenciaordemdia, row_number() over (order by cd_sequenciaordemdia) 
 	   as id_new from reuniao_t1500_OrdemDia
 	   where cd_reuniao=${rid}) 
-	   update newseq set cd_sequenciaordemdia = id_new
+	   update newseq set cd_sequenciaordemdia = id_new,
+	   Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 	   `
 	const answer = await mssql(myreq);
 	mylog ("DBG",filename,"deleteOrdemDia","answer=",answer);
@@ -338,6 +361,10 @@ const CreateOrdem = OrdemFormSchema.omit({sequencia: true});
 export async function createOrdem (prevState: OrdemState, formData:FormData)
 {
 	mylog ("DBG",filename,"createOrdem","formData=",formData);
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 
 	const validatedFields = CreateOrdem.safeParse({
 		rid: formData.get('id'),
@@ -391,8 +418,8 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 	try {
 		const myreq = `
 		INSERT INTO REUNIAO_T1500_OrdemDia
-			(Cd_OrdemDia, Cd_Reuniao,Cd_SequenciaOrdemDia,Ds_OrdemDia,Ind_OrdemDiaPublicavel)
-			VALUES (${nextCdOrdemDia},${rid},${sequencia},'${assunto}','${publicavel}')
+			(Cd_OrdemDia, Cd_Reuniao,Cd_SequenciaOrdemDia,Ds_OrdemDia,Ind_OrdemDiaPublicavel,Id_Usuario)
+			VALUES (${nextCdOrdemDia},${rid},${sequencia},'${assunto}','${publicavel}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
 		`;
 		mylog("DBG",filename,"createOrdem","myreq=",myreq.replace(/\s/g," "));
 		const answer = await mssql(myreq);
@@ -408,7 +435,8 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 		const myreq = `
 		UPDATE REUNIAO_T1500_OrdemDia 
 		SET
-			Ds_OrdemDia = '${assunto}'
+			Ds_OrdemDia = '${assunto}',
+			Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 		WHERE
 		Cd_OrdemDia = '${oid}'
 		`;
@@ -428,7 +456,8 @@ export async function createOrdem (prevState: OrdemState, formData:FormData)
 		UPDATE REUNIAO_T1500_OrdemDia 
 		SET
 			Ds_OrdemDia = '${assunto}',
-			Ds_DeliberacaoOrdemDia ='${deliberacao}'
+			Ds_DeliberacaoOrdemDia ='${deliberacao}',
+			Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 		WHERE
 		Cd_OrdemDia = '${oid}'
 		`;
@@ -453,8 +482,12 @@ if (!deliberacao) {
 
 export async function reativarReuniao (id: string)
 {
+		const session = await requireAuth('1'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog ("DBG", "app/lib/actions", "reativarReuniao", "id=",id);
-	const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'N' where Cd_Reuniao = ${id}`;
+	const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'N', Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}' where Cd_Reuniao = ${id}`;
 	mylog ("DBG", "app/lib/actions", "reativarReuniao", "myreq=",myreq);
 	try {
 		const answer = await mssql(myreq);
@@ -480,7 +513,10 @@ export async function executarReuniao (id: string)
 }
 
 export async function fecharReuniao (reuniao: string)
-{
+{	const session = await requireAuth('2'); // Require at least 'admin' role
+	const { user } = session;
+	mylog("INFO", filename, "createUser", "user=", user);
+
 	const myreq  = `select count(1) as n from reuniao_t1010_itemreuniao where cd_reuniao = ${reuniao} and Cd_ClassificacaoDeliberacao is null`
 	mylog("INFO",filename,"fecharReuniao","myreq=",myreq)
 	const num = await mssql(myreq) as numericanswer[]
@@ -490,7 +526,9 @@ export async function fecharReuniao (reuniao: string)
 		mylog("INFO",filename,"fecharReuniao","Num ","nao e zero")
 		return {success: false, error: 'Tem assuntos não deliberados'}
 	} else {
-		const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'S', Dt_FinalReuniao = GETDATE() where cd_reuniao=${reuniao}`;
+
+		const myreq = `update reuniao_t1000_reuniao set Ind_ReaberturaReuniao = 'S', Dt_FinalReuniao = GETDATE(), Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}' where cd_reuniao=${reuniao}`;
+
 		try {
 			await mssql(myreq);
 			return {success: true, error: null }
@@ -505,6 +543,10 @@ export async function fecharReuniao (reuniao: string)
 
 export async function executarItemReuniao (reuniao: number, id: string, assunto: string, decisao: string, toset: number)
 {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog("DBG", "app/lib/actions", "executarItemReuniao", "{reuniao,id,assunto,decisao,toset}=", {reuniao,id,assunto,decisao,toset});
 	if (decisao === 'positivo') {
 		const myreq = `select * from REUNIAO_T1010_ItemReuniao where Cd_ItemReuniao = ${id}`
@@ -519,7 +561,7 @@ export async function executarItemReuniao (reuniao: number, id: string, assunto:
 		}
 	}
 	mylog ("DBG", "app/lib/actions", "executarItemReuniao", "{reuniao,id,assunto,decisao,toset}=", {reuniao,id,assunto,decisao,toset});
-	const myreq = `update reuniao_t1010_itemreuniao set Cd_ClassificacaoDeliberacao = '${toset}' where Cd_ItemReuniao = ${id}`;
+	const myreq = `update reuniao_t1010_itemreuniao set Cd_ClassificacaoDeliberacao = '${toset}', Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}' where Cd_ItemReuniao = ${id}`;
 	mylog ("DBG", "app/lib/actions", "executarItemReuniao", "myreq=",myreq);
 	try {
 		const answer = await mssql(myreq);
@@ -539,6 +581,10 @@ export async function addPendentes (id: number)
 
 export async function reorderOrdemDiaDo (newSeq: {id: number, seq: number}[])
 {
+		const session = await requireAuth('2'); // Require at least 'admin' role
+		const { user } = session;
+		mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog ("DBG", filename, "reorderOrdemDia", "ordemDia}", newSeq);
 	if (newSeq.length === 0) {
 		mylog ("ERROR", filename, "reorderOrdemDia", "ordemDia", "is empty");
@@ -547,7 +593,7 @@ export async function reorderOrdemDiaDo (newSeq: {id: number, seq: number}[])
 	
 	try {
 		for (const item of newSeq) {
-			const myreq = `UPDATE REUNIAO_T1500_OrdemDia SET Cd_SequenciaOrdemDia = ${item.seq} WHERE Cd_OrdemDia = ${item.id}`;
+			const myreq = `UPDATE REUNIAO_T1500_OrdemDia SET Cd_SequenciaOrdemDia = ${item.seq}, Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}' WHERE Cd_OrdemDia = ${item.id}`;
 			mylog ("DBG", filename, "reorderOrdemDia", "myreq=", myreq);
 			await mssql(myreq);
 		}

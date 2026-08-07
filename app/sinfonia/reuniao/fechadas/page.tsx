@@ -6,6 +6,9 @@ import { CreateReuniao } from '@/app/ui/reuniao/buttons';
 import { mylog } from '@/app/lib/mylogger';
 
 
+const filename = 'app/sinfonia/reuniao/fechadas/page';
+import { requireAuth } from '@/app/lib/auth/authorization';
+
 export default async function Page(props: {
 		searchParams?: Promise<{
 		query?: string;
@@ -13,6 +16,10 @@ export default async function Page(props: {
 		}>;
 	}) 
 {
+						try {
+						const session = await requireAuth('1'); // Require at least 'admin' role
+						const { user } = session;
+						if (user) { mylog('INFO', filename, 'Page', 'user', user.Ds_LoginAcessoUsuarioSistemaReuniao); }
 	const searchParams = await props.searchParams;
 	mylog("DBG",'/app/sinfonia/reuniao/fechadas/page', 'Page' , "searchParams=", searchParams);
 	const query = searchParams?.query || ''; 
@@ -32,4 +39,11 @@ export default async function Page(props: {
 	</div>
 </div>
 	)
+} catch (error: any) {
+		return (
+			<div className="text-red-500">
+				{error.message}
+			</div>
+		);
+	}
 }

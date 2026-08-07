@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('Landing Page', async ({ page }) => {
-    await page.goto('/');
-  
+    await page.goto('/sinfonia');
+    await expect(page.getByRole('heading', { name: 'Entrar na sua conta' })).toBeVisible();
     // Expect a title "to contain" a substring.
     await expect(page).toHaveTitle(/Sinfonia/);
     await expect(page.getByTestId('Ipen')).toBeVisible();
@@ -10,6 +10,13 @@ test('Landing Page', async ({ page }) => {
     await expect(page.getByTestId('Reunião')).toHaveCount(1);
     await expect(page.getByTestId('Documentos')).toHaveCount(1);
     await expect(page.getByTestId('Administração')).toHaveCount(1);
+  });
+
+  test('Login As Admin', async ({ page }) => {
+    await page.goto('/sinfonia/reuniao');
+    await page.getByRole('textbox', { name: 'Usuario' }).fill('mloos');
+    await page.getByRole('textbox', { name: 'Senha' }).fill('M#rc0607');
+    await page.getByRole('button', { name: 'Entrar' }).click();
   });
 
 

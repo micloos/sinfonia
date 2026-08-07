@@ -5,6 +5,8 @@ import { mylog } from '@/app/lib/mylogger';
 
 import {type NextRequest} from 'next/server';
 
+import { requireAuth } from '@/app/lib/auth/authorization';
+
 const filename='/api/getordemlist';
 const ITEMS_PER_PAGE = 100;
 
@@ -36,12 +38,16 @@ export async function GET (request: NextRequest)
 
 export async function POST (request: NextRequest)
 {
+    const session = await requireAuth('3'); // Require at least 'admin' role
+    const { user } = session;
+    mylog("INFO", filename, "createUser", "user=", user);
+
     const searchParams = request.nextUrl.searchParams;
     const id = searchParams.get("id");
     mylog ("DBG", filename, "postOrdemList", "id=",id);
     const body = await request.json();
     mylog ("DBG", filename, "postOrdemList", "body=",body);
-    const myreq = `update REUNIAO_T1500_OrdemDia set Cd_SequenciaOrdemDia = ${body.seq} 
+    const myreq = `update REUNIAO_T1500_OrdemDia set Cd_SequenciaOrdemDia = ${body.seq}, Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
         where Cd_OrdemDia = ${id}`;
     mylog ("DBG", filename, "postOrdemList", "myreq=",myreq.replace(/\s/g," "));
     await mssql(myreq);

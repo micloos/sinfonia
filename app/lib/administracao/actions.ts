@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { mylog } from '../mylogger';
 import { mssql } from '@/app/lib/db';
 import { z } from 'zod';
+import { requireAuth } from '../auth/authorization';
 
 
 export async function deleteAssunto(id: number) {
@@ -71,6 +72,10 @@ const AdminAssuntoFormSchema = z.object({
 
 export async function updateAssunto(id: string, formData: FormData) {
   const filename = "app/lib/assunto/actions.tsx";
+    const session = await requireAuth('2'); // Require at least 'secretaria' role
+    const { user } = session;
+    mylog("INFO", filename, "createUser", "user=", user);
+
   mylog("DBG", filename, "updateAssunto", "id=", id);
   mylog("DBG", filename, "updateAssunto", "formData=", formData);
   const validatedFields = AdminAssuntoFormSchema.safeParse ({
@@ -116,7 +121,8 @@ export async function updateAssunto(id: string, formData: FormData) {
         Ds_AssuntoAtaReuniao = '${validatedFields.data.nome}',
         Ds_AssuntoDeliberacao = '${validatedFields.data.descricao}',
         Cd_AssuntoReuniaoRetornavel = ${validatedFields.data.retornavel} ,
-        Cd_ModeloDespacho = ${validatedFields.data.modeloDespacho} 
+        Cd_ModeloDespacho = ${validatedFields.data.modeloDespacho},
+        Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
       Where Cd_AssuntoReuniao = ${id}
     `;
     mylog("DBG", filename, "updateAssunto", "myreq=", myreq.replace(/\s/g, " "));
@@ -160,7 +166,12 @@ export async function updateAssunto(id: string, formData: FormData) {
 }
 
   export async function createAssunto(prevState: AssuntoState, formData: FormData) {
-    const filename = "app/lib/assunto/actions.tsx";
+    const filename = "app/lib/administracao/actions.tsx";
+    
+    const session = await requireAuth('1'); // Require at least 'admin' role
+    const { user } = session;
+    mylog("INFO", filename, "createUser", "user=", user);
+    
     mylog("DBG", filename, "createAssunto", "formData=", formData);
     mylog("DBG", filename, "createAssunto", "prevState=", prevState);
     const validatedFields = AdminAssuntoFormSchema.safeParse ({
@@ -202,8 +213,8 @@ export async function updateAssunto(id: string, formData: FormData) {
       let myreq = "";
  
         myreq = `
-        INSERT INTO REUNIAO_T0200_AssuntoReuniao (CD_AssuntoReuniao, Ds_AssuntoAtaReuniao, Ds_AssuntoDeliberacao, Cd_AssuntoReuniaoRetornavel, Cd_ModeloDespacho)
-        VALUES (${validatedFields.data.id},  '${validatedFields.data.nome}','${validatedFields.data.descricao}', ${validatedFields.data.retornavel}, ${validatedFields.data.modeloDespacho})
+        INSERT INTO REUNIAO_T0200_AssuntoReuniao (CD_AssuntoReuniao, Ds_AssuntoAtaReuniao, Ds_AssuntoDeliberacao, Cd_AssuntoReuniaoRetornavel, Cd_ModeloDespacho, Id_Usuario)
+        VALUES (${validatedFields.data.id},  '${validatedFields.data.nome}','${validatedFields.data.descricao}', ${validatedFields.data.retornavel}, ${validatedFields.data.modeloDespacho}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
       `;
       
       mylog("DBG", filename, "createAssunto", "myreq=", myreq.replace(/\s/g, " "));
@@ -216,8 +227,8 @@ export async function updateAssunto(id: string, formData: FormData) {
 
     try {
       const myreq = `
-        INSERT INTO REUNIAO_T1200_ParametroAssuntoReuniao (Cd_AssuntoReuniao, Ind_Interessado, Ind_Orientador, Ind_Defesa, Ind_PlanoTrabalho, Ind_BancaExaminadora, Ind_Relator, Ind_AtribuiCreditos, Ind_CredenciamentoDisciplina, Ind_SolicitaPrazo, Ind_ADReferendum, Ind_Deliberacao, Ind_ObservacaoNaoPublicavel, Ind_ObservacaoAssunto, Ind_MotivoAssunto, Ind_NovoPlano, Ind_NovoOrientador, Ind_NovoProfessor, Ind_DataDeposito, Ind_DissertacaoTese, Ind_DataApresentacao, Ind_Estagio, Ind_DisciplinaEspecial)
-        VALUES ('${validatedFields.data.id}',  '${validatedFields.data.ind_interessado}', '${validatedFields.data.ind_orientador}', '${validatedFields.data.ind_defesa}', '${validatedFields.data.ind_plano}', '${validatedFields.data.ind_banca}', '${validatedFields.data.ind_relator}', '${validatedFields.data.ind_a_creditos}', '${validatedFields.data.ind_cred_disc}', '${validatedFields.data.ind_sol_praz}', '${validatedFields.data.ind_addref}', '${validatedFields.data.ind_deliber}', '${validatedFields.data.ind_nao_pub}', '${validatedFields.data.ind_obs}', '${validatedFields.data.ind_motivo}', '${validatedFields.data.ind_novo_plan}', '${validatedFields.data.ind_novo_orient}', '${validatedFields.data.ind_novo_prof}', '${validatedFields.data.ind_data_dep}', '${validatedFields.data.ind_disser_tese}', '${validatedFields.data.ind_data_apres}', '${validatedFields.data.ind_estagio}', '${validatedFields.data.ind_disc_esp}')
+        INSERT INTO REUNIAO_T1200_ParametroAssuntoReuniao (Cd_AssuntoReuniao, Ind_Interessado, Ind_Orientador, Ind_Defesa, Ind_PlanoTrabalho, Ind_BancaExaminadora, Ind_Relator, Ind_AtribuiCreditos, Ind_CredenciamentoDisciplina, Ind_SolicitaPrazo, Ind_ADReferendum, Ind_Deliberacao, Ind_ObservacaoNaoPublicavel, Ind_ObservacaoAssunto, Ind_MotivoAssunto, Ind_NovoPlano, Ind_NovoOrientador, Ind_NovoProfessor, Ind_DataDeposito, Ind_DissertacaoTese, Ind_DataApresentacao, Ind_Estagio, Ind_DisciplinaEspecial, Id_Usuario)
+        VALUES ('${validatedFields.data.id}',  '${validatedFields.data.ind_interessado}', '${validatedFields.data.ind_orientador}', '${validatedFields.data.ind_defesa}', '${validatedFields.data.ind_plano}', '${validatedFields.data.ind_banca}', '${validatedFields.data.ind_relator}', '${validatedFields.data.ind_a_creditos}', '${validatedFields.data.ind_cred_disc}', '${validatedFields.data.ind_sol_praz}', '${validatedFields.data.ind_addref}', '${validatedFields.data.ind_deliber}', '${validatedFields.data.ind_nao_pub}', '${validatedFields.data.ind_obs}', '${validatedFields.data.ind_motivo}', '${validatedFields.data.ind_novo_plan}', '${validatedFields.data.ind_novo_orient}', '${validatedFields.data.ind_novo_prof}', '${validatedFields.data.ind_data_dep}', '${validatedFields.data.ind_disser_tese}', '${validatedFields.data.ind_data_apres}', '${validatedFields.data.ind_estagio}', '${validatedFields.data.ind_disc_esp}', '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
       `;
       mylog("DBG", filename, "createAssunto", "myreq=", myreq.replace(/\s/g, " "));
       const answer = await mssql(myreq);

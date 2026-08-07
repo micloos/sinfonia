@@ -6,6 +6,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import md5 from 'md5';
 import { mylog } from '../mylogger';
+import { requireAuth} from '@/app/lib/auth/authorization';
+
 
 const filename = 'app/lib/usuarios/actions';
 
@@ -46,6 +48,10 @@ export type UserState = {
 const CreateUser = UserFormSchema.omit({id: true}); 
 export async function createUser (prevState: UserState, formData: FormData) 
 { 
+	const session = await requireAuth('1'); // Require at least 'admin' role
+	const { user } = session;
+	mylog("INFO", filename, "createUser", "user=", user);
+	
 	mylog ("DBG", filename, "createUser","formData=",formData);
 	const validatedFields = CreateUser.safeParse({
 		cpf: formData.get('cpf'),
@@ -66,14 +72,14 @@ export async function createUser (prevState: UserState, formData: FormData)
 	
 	const cpf = validatedFields.data.cpf;
 	const nome = validatedFields.data.nome.toString();
-	const password = md5(validatedFields.data.password).substr(0,20);
+	const password = md5(validatedFields.data.password).slice(0,20);
 	const username = validatedFields.data.username.toString();
 	const nivel = validatedFields.data.nivel;
 		
 	try {
 		const myreq = `
-		INSERT INTO REUNIAO_T3100_UsuarioSistemaReuniao (Cd_UsuarioSistemaReuniao, Nm_UsuarioSistemaReuniao, Nr_SenhaAcessoUsuarioSistemaReuniao, Ds_LoginAcessoUsuarioSistemaReuniao, Cd_NivelUsuarioSistema)
-		VALUES (${cpf}, '${nome}', '${password}', '${username}',${nivel})
+		INSERT INTO REUNIAO_T3100_UsuarioSistemaReuniao (Cd_UsuarioSistemaReuniao, Nm_UsuarioSistemaReuniao, Nr_SenhaAcessoUsuarioSistemaReuniao, Ds_LoginAcessoUsuarioSistemaReuniao, Cd_NivelUsuarioSistema, Id_Usuario)
+		VALUES (${cpf}, '${nome}', '${password}', '${username}',${nivel}, '${user.Ds_LoginAcessoUsuarioSistemaReuniao}')
 		`;
 	mylog ("DBG", filename, "createUser", "myreq=",myreq.replace(/\s/g," "));
 	const answer = await mssql(myreq);
@@ -94,6 +100,11 @@ const UpdateUserWithPassword = UserFormSchema.omit({ id: true, cpf: true});
 const UpdateUserWithoutPassword = UserFormSchema.omit({ id: true, cpf: true, password: true});
 export async function updateUser (cpf: string, formData: FormData) 
 {
+	const session = await requireAuth('1'); // Require at least 'admin' role
+	const { user } = session;
+	mylog("INFO", filename, "createUser", "user=", user);
+
+
 	mylog ("DBG", filename, "updateUser", "formData=",formData);
 
 	if (formData.get('password') === '******') {
@@ -122,7 +133,8 @@ export async function updateUser (cpf: string, formData: FormData)
 				SET
 					Nm_UsuarioSistemaReuniao = '${nome}',
 					Ds_LoginAcessoUsuarioSistemaReuniao = '${username}',
-					Cd_NivelUsuarioSistema = ${nivel}
+					Cd_NivelUsuarioSistema = ${nivel},
+					Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 				WHERE
 					Cd_UsuarioSistemaReuniao = ${cpf}
 	
@@ -164,7 +176,8 @@ export async function updateUser (cpf: string, formData: FormData)
 				Nm_UsuarioSistemaReuniao = '${nome}',
 				Nr_SenhaAcessoUsuarioSistemaReuniao ='${password}',
 				Ds_LoginAcessoUsuarioSistemaReuniao = '${username}',
-				Cd_NivelUsuarioSistema = ${nivel}
+				Cd_NivelUsuarioSistema = ${nivel},
+				Id_Usuario = '${user.Ds_LoginAcessoUsuarioSistemaReuniao}'
 			WHERE
 				Cd_UsuarioSistemaReuniao = ${cpf}
 
