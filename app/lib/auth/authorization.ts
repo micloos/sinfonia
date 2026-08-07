@@ -20,7 +20,7 @@ export async function requireAuth(requiredRole?: UserRole) {
     const session = await getServerSession();
     
     if (!session) {
-        throw new Error('Unauthorized: Please login');
+        throw new Error('Por favor fazer login para acessar esta página.');
     }
 
     if (requiredRole && !hasRole(session.user.Cd_NivelUsuarioSistema.toString(), requiredRole)) {

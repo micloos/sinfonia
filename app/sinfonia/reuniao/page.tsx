@@ -4,6 +4,7 @@ import Search from '@/app/ui/search';
 import { fetchReunioesPages } from '@/app/lib/reuniao/data';
 import { CreateReuniao } from '@/app/ui/reuniao/buttons';
 import { mylog } from '@/app/lib/mylogger';
+import { requireAuth } from '@/app/lib/auth/authorization';
 
 
 export default async function Page(props: {
@@ -20,6 +21,12 @@ export default async function Page(props: {
 	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "query=", query);
 	const totalPages = await fetchReunioesPages(query,0);
 	mylog("DBG",'/app/sinfonia/reuniao/page', 'Page' , "totalPages=", totalPages);
+	try {
+	const session = await requireAuth('2'); // Require at least 'admin' role
+	const { user } = session;
+	if (user) {
+		mylog('INFO', '/app/sinfonia/reuniao/page', 'Page', 'user', user.Ds_LoginAcessoUsuarioSistemaReuniao);
+	}
 	return (
 <div className="w-full">
 	<div className="mt-4 flex  items-center justify-between gap-2 md:mt-8">
@@ -32,4 +39,11 @@ export default async function Page(props: {
 	</div>
 </div>
 	)
+}	catch (error: any) {
+		return (
+			<div className="text-red-500">
+				{error.message}
+			</div>
+		);
+	}
 }

@@ -4,6 +4,9 @@ import { fetchFilteredReunioes } from '@/app/lib/reuniao/data';
 import { Reunioes } from '@/app/lib/definitions';
 import * as moment from 'moment-timezone';
 import { DownloadButton } from './DownloadButton';
+import { requireAuth } from '@/app/lib/auth/authorization';
+import { mylog } from '@/app/lib/mylogger';
+const fileName = 'app/ui/reuniao/table';
 
 const tz ="UTC";
 
@@ -16,6 +19,12 @@ export default async function ReunioesTable({
   currentPage: number;
   activer: string;
 }) {
+try {
+  const session = await requireAuth('3'); // Require at least 'admin' role
+  const { user } = session;
+  if (user) {
+    mylog('INFO', fileName, 'ReunioesTable', 'user', user.Ds_LoginAcessoUsuarioSistemaReuniao);
+  }
   const reunioes = await fetchFilteredReunioes(query, currentPage, activer ) as Reunioes[];
   return (
     <div className="mt-6 flow-root">
@@ -104,4 +113,11 @@ export default async function ReunioesTable({
       </div>
     </div>
   );
+} catch (error: any) {
+  return (
+    <div className="text-red-500">
+      {error.message}
+    </div>
+  );
+}
 }

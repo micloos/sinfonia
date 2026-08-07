@@ -38,7 +38,7 @@ export async function GET (request: NextRequest)
 
 export async function POST (request: NextRequest)
 {
-    const session = await requireAuth('1'); // Require at least 'admin' role
+    const session = await requireAuth('3'); // Require at least 'admin' role
     const { user } = session;
     mylog("INFO", filename, "createUser", "user=", user);
 

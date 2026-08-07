@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Public paths that don't require authentication
-const PUBLIC_PATHS = ['/login', '/api/auth/login', '/api/auth/register'];
+const PUBLIC_PATHS = ['/login', '/api/auth/login', '/api/auth/register','/'];
 const PUBLIC_STARTS_WITH = ['/favicon.ico', '/public','/_next'];
 
 export function middleware(request: NextRequest) {
@@ -11,6 +11,7 @@ export function middleware(request: NextRequest) {
     console.log('Middleware triggered for path:', path);
     // Skip public paths
     if (PUBLIC_PATHS.includes(path) || PUBLIC_STARTS_WITH.some(p => path.startsWith(p))) {
+        console.log('Public path accessed, skipping auth check:', path);
         return NextResponse.next();
     }
 
